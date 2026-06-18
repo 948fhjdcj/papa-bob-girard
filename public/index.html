@@ -2294,10 +2294,9 @@ function renderTreeFallback(nodes) {
   fallback.style.display = 'block';
   treeContainer.style.display = 'none';
 
-  // Always show Bob at the top
-  let html = '<div style="text-align:center;margin-bottom:2rem;">'
-    + '<div style="display:inline-block;width:80px;height:80px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;">'
-    + '<span style="color:var(--bg);font-weight:600;font-size:1rem;line-height:80px;">PaPa Bob</span></div>'
+  // Always show Bob at the top, matching the same card style as everyone else
+  let html = '<div class="tree-fallback-grid" style="justify-content:center;margin-bottom:1.5rem;">'
+    + '<div class="tree-fallback-card"><h4>PaPa Bob Girard</h4><p>The man himself</p></div>'
     + '</div>';
 
   const categories = { family: [], friend: [], other: [] };
