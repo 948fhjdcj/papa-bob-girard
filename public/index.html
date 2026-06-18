@@ -1,0 +1,2482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaPa Bob Girard</title>
+<meta name="description" content="A celebration of PaPa Bob Girard — share photos, messages, and memories.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0d0d;
+  --surface: #161616;
+  --surface-el: #1f1f1f;
+  --gold: #c9a84c;
+  --gold-muted: #8a6f2e;
+  --text: #f0ece0;
+  --text-sec: #9a9080;
+  --border: #2a2620;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--gold);
+}
+
+textarea { resize: vertical; min-height: 100px; }
+
+/* ============================================
+   UTILITY
+   ============================================ */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.section-header p {
+  color: var(--text-sec);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: #0d0d0d;
+}
+
+.btn-gold:hover { background: #d4b35a; }
+
+.btn-outline {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+}
+
+.btn-outline:hover {
+  background: rgba(201, 168, 76, 0.1);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-sec);
+  padding: 3rem 1rem;
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text-sec);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+/* ============================================
+   NAV
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--gold);
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--text-sec);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); text-decoration: none; }
+
+.nav-hamburger {
+  display: none;
+  font-size: 1.5rem;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(13, 13, 13, 0.97);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.nav-mobile.open { display: flex; }
+
+.nav-mobile a {
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+.nav-mobile-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: block; }
+}
+
+/* ============================================
+   HERO
+   ============================================ */
+#hero {
+  position: relative;
+  height: 100vh;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.hero-slideshow {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.hero-slide.active { opacity: 1; }
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 13, 13, 0.7);
+  z-index: 1;
+}
+
+/* CSS grain texture */
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+.hero-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--gold);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-content p {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--text-sec);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+<!-- BOB BIO: insert here — Phase 2: Short paragraph about who PaPa Bob is -->
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  animation: bobScroll 2s ease-in-out infinite;
+  color: var(--gold-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+@keyframes bobScroll {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================
+   PHOTO GALLERY
+   ============================================ */
+.gallery-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.gallery-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.gallery-toggle button {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  background: var(--surface);
+  color: var(--text-sec);
+  border: none;
+  transition: all 0.2s;
+}
+
+.gallery-toggle button.active {
+  background: var(--gold);
+  color: #0d0d0d;
+}
+
+.name-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.name-chip {
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  color: var(--text-sec);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.name-chip:hover, .name-chip.active {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 600px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.photo-card {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.photo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.photo-card:hover img { transform: scale(1.05); }
+
+.photo-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.25s;
+  padding: 0.75rem;
+}
+
+.photo-card:hover .photo-card-overlay,
+.photo-card.touched .photo-card-overlay {
+  opacity: 1;
+}
+
+.photo-card-meta {
+  color: var(--text);
+  font-size: 0.82rem;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.photo-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.photo-card-actions button,
+.photo-card-actions a {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s;
+}
+
+.photo-card-actions button:hover,
+.photo-card-actions a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: var(--surface);
+  border-radius: var(--radius);
+  aspect-ratio: 1;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ============================================
+   UPLOAD SECTION
+   ============================================ */
+#upload {
+  background: var(--surface);
+}
+
+.upload-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.upload-form {
+  display: none;
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--surface-el);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+}
+
+.upload-form.visible { display: block; }
+
+.file-info {
+  color: var(--text-sec);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background: var(--border);
+  border-radius: 4px;
+  height: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+  display: none;
+}
+
+.progress-bar-container.visible { display: block; }
+
+.progress-bar {
+  height: 100%;
+  background: var(--gold);
+  width: 0%;
+  transition: width 0.3s;
+  border-radius: 4px;
+}
+
+/* ============================================
+   GUESTBOOK
+   ============================================ */
+.guestbook-feed {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.guestbook-card {
+  background: var(--surface-el);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.guestbook-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+
+.guestbook-card-name {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.guestbook-card-date {
+  font-size: 0.8rem;
+  color: var(--text-sec);
+}
+
+.guestbook-card-message {
+  margin-bottom: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.guestbook-card-signature {
+  max-height: 80px;
+  margin-top: 0.5rem;
+  filter: invert(0.9);
+}
+
+.guestbook-card-photo {
+  max-width: 200px;
+  border-radius: var(--radius-sm);
+  margin-top: 0.75rem;
+}
+
+/* Signature pad */
+.signature-area {
+  margin-bottom: 1rem;
+}
+
+.signature-canvas {
+  width: 100%;
+  height: 150px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* ============================================
+   FUN FACTS
+   ============================================ */
+#funfacts { background: var(--surface); }
+
+.facts-grid {
+  columns: 1;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) { .facts-grid { columns: 2; } }
+@media (min-width: 1024px) { .facts-grid { columns: 3; } }
+
+.fact-card {
+  break-inside: avoid;
+  background: var(--surface-el);
+  border: 1px solid var(--gold-muted);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.fact-card-text {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.fact-card-meta {
+  font-size: 0.8rem;
+  color: var(--text-sec);
+}
+
+/* ============================================
+   FAMILY TREE
+   ============================================ */
+.tree-container {
+  width: 100%;
+  min-height: 500px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.tree-svg {
+  width: 100%;
+  height: 600px;
+}
+
+@media (max-width: 768px) {
+  .tree-svg { height: 450px; }
+}
+
+.tree-fallback {
+  display: none;
+}
+
+.tree-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.tree-fallback-card {
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  text-align: center;
+}
+
+.tree-fallback-card h4 {
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+
+.tree-fallback-card p {
+  font-size: 0.85rem;
+  color: var(--text-sec);
+}
+
+.tree-fallback-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+/* D3 node styles */
+.tree-node circle { cursor: pointer; }
+.tree-node text { font-family: var(--font-body); pointer-events: none; }
+
+.tree-tooltip {
+  position: absolute;
+  background: var(--surface-el);
+  border: 1px solid var(--gold-muted);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  max-width: 250px;
+  z-index: 10;
+  display: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.tree-tooltip.visible { display: block; }
+
+.tree-tooltip h4 { color: var(--gold); margin-bottom: 0.25rem; }
+.tree-tooltip p { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 0.25rem; }
+.tree-tooltip img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-top: 0.5rem; }
+
+/* ============================================
+   SLIDESHOW
+   ============================================ */
+.slideshow-fullscreen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.slideshow-fullscreen.active { display: flex; }
+
+.slideshow-image {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slideshow-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  position: absolute;
+}
+
+.slideshow-image img.active { opacity: 1; }
+
+.slideshow-title-slide {
+  display: none;
+  text-align: center;
+  z-index: 1;
+}
+
+.slideshow-title-slide.active { display: block; }
+
+.slideshow-title-slide h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.slideshow-title-slide p {
+  color: var(--text-sec);
+  font-size: 1.25rem;
+}
+
+.slideshow-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: rgba(0,0,0,0.6);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-sec);
+  z-index: 2;
+}
+
+.slideshow-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.slideshow-controls.hidden { opacity: 0; pointer-events: none; }
+
+.slideshow-controls button, .slideshow-controls select {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: auto;
+}
+
+.slideshow-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  font-size: 2rem;
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.slideshow-nav.hidden { opacity: 0; pointer-events: none; }
+.slideshow-nav.prev { left: 1rem; }
+.slideshow-nav.next { right: 1rem; }
+
+/* ============================================
+   MODAL
+   ============================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 5000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: var(--text-sec);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ============================================
+   MAGIC WORD GATE
+   ============================================ */
+.magic-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 13, 13, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9000;
+  align-items: center;
+  justify-content: center;
+}
+
+.magic-gate.open { display: flex; }
+
+.magic-gate-card {
+  text-align: center;
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+}
+
+.magic-gate-card h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.magic-gate-card input {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.magic-gate-error {
+  color: #e8785a;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake { animation: shake 0.4s ease; }
+
+/* ============================================
+   TOAST
+   ============================================ */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 11000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.toast {
+  padding: 0.75rem 1.5rem;
+  background: var(--surface-el);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  animation: toastIn 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast.error { border-color: #e8785a; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   CONFETTI
+   ============================================ */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 11000;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: confettiFall 3s ease-in forwards;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+footer .tribute-line {
+  color: var(--text-sec);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+footer .footer-divider {
+  width: 200px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto 2rem;
+}
+
+footer h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+footer .service-info {
+  color: var(--text-sec);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  nav, #hero, #gallery, #upload, #tree, .slideshow-fullscreen, footer,
+  .btn, .modal-overlay, .magic-gate, .toast-container, .section-header .btn,
+  .gallery-controls, .upload-buttons, .name-chips { display: none !important; }
+
+  .section-container { padding: 1rem 0; }
+
+  .section-header h2 { color: #000 !important; font-size: 24pt; }
+  .section-header p { color: #333 !important; }
+
+  .guestbook-card, .fact-card {
+    background: #fff !important;
+    border: 1px solid #ccc !important;
+    color: #000 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .guestbook-card-name, .fact-card-meta { color: #333 !important; }
+  .guestbook-card-date { color: #666 !important; }
+  .guestbook-card-message, .fact-card-text { color: #000 !important; }
+  .guestbook-card-signature { filter: none !important; }
+
+  @page { margin: 1in; }
+
+  /* Print header */
+  #guestbook::before, #funfacts::before {
+    display: block;
+    text-align: center;
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  #guestbook::before { content: "PaPa Bob Girard - Messages"; }
+  #funfacts::before { content: "PaPa Bob Girard - Fun Facts"; }
+
+  /* Show the right section based on print target */
+  body.print-guestbook #funfacts { display: none !important; }
+  body.print-funfacts #guestbook { display: none !important; }
+}
+
+/* ============================================
+   SPINNER
+   ============================================ */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Section backgrounds alternating */
+section:nth-of-type(even) { background: var(--surface); }
+</style>
+</head>
+<body>
+
+<!-- ==========================================
+     NAVIGATION
+     ========================================== -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo" onclick="scrollToSection('hero')">PaPa Bob Girard</span>
+    <div class="nav-links">
+      <a href="#gallery" onclick="scrollToSection('gallery')">Photos</a>
+      <a href="#guestbook" onclick="scrollToSection('guestbook')">Messages</a>
+      <a href="#funfacts" onclick="scrollToSection('funfacts')">Fun Facts</a>
+      <a href="#tree" onclick="scrollToSection('tree')">His World</a>
+      <button class="btn btn-outline btn-sm" onclick="startSlideshow()">&#9654; Slideshow</button>
+    </div>
+    <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="mobileNav">
+  <button class="nav-mobile-close" onclick="toggleMobileNav()">&times;</button>
+  <a href="#gallery" onclick="toggleMobileNav(); scrollToSection('gallery')">Photos</a>
+  <a href="#guestbook" onclick="toggleMobileNav(); scrollToSection('guestbook')">Messages</a>
+  <a href="#funfacts" onclick="toggleMobileNav(); scrollToSection('funfacts')">Fun Facts</a>
+  <a href="#tree" onclick="toggleMobileNav(); scrollToSection('tree')">His World</a>
+  <button class="btn btn-outline" onclick="toggleMobileNav(); startSlideshow()">&#9654; Slideshow</button>
+</div>
+
+<!-- ==========================================
+     MAGIC WORD GATE
+     ========================================== -->
+<div class="magic-gate" id="magicGate">
+  <div class="magic-gate-card">
+    <h3>What's the magic word?</h3>
+    <div class="magic-gate-error" id="magicError">Try again &#x1F49B;</div>
+    <input type="text" id="magicInput" placeholder="Type it here..." autocomplete="off">
+    <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:0.5rem;" onclick="checkMagicWord()">Unlock</button>
+  </div>
+</div>
+
+<!-- ==========================================
+     HERO
+     ========================================== -->
+<section id="hero">
+  <div class="hero-grain"></div>
+  <div class="hero-slideshow" id="heroSlideshow"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>PaPa Bob Girard</h1>
+    <!-- BOB BIO: insert here — Phase 2: Short bio paragraph about PaPa Bob -->
+    <p>Share your love. Share your memories. He'd love to see them.</p>
+  </div>
+  <div class="hero-scroll" onclick="scrollToSection('gallery')">&#x25BC;</div>
+</section>
+
+<!-- ==========================================
+     PHOTO GALLERY
+     ========================================== -->
+<section id="gallery">
+  <div class="section-container">
+    <div class="section-header">
+      <h2>Photos of PaPa Bob</h2>
+      <p>Every photo tells a story. Here are some of the best ones.</p>
+    </div>
+
+    <div class="gallery-controls">
+      <div class="gallery-toggle">
+        <button class="active" onclick="setGalleryView('all', this)">All Photos</button>
+        <button onclick="setGalleryView('person', this)">By Person</button>
+      </div>
+      <div class="gallery-toggle">
+        <button class="active" onclick="setGallerySort('newest', this)">Newest First</button>
+        <button onclick="setGallerySort('year', this)">By Year</button>
+      </div>
+    </div>
+
+    <div class="name-chips" id="nameChips" style="display:none;"></div>
+
+    <div class="photo-grid" id="photoGrid">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     UPLOAD PHOTOS
+     ========================================== -->
+<section id="upload">
+  <div class="section-container">
+    <div class="section-header">
+      <h2>Share a Photo of PaPa Bob</h2>
+      <p>Got a photo of Bob on your phone? From an old album? Upload it here.</p>
+    </div>
+
+    <div class="upload-buttons">
+      <button class="btn btn-gold" onclick="triggerUpload(false)">Upload a Photo</button>
+      <button class="btn btn-outline" onclick="triggerUpload(true)">Upload a Folder</button>
+    </div>
+
+    <input type="file" id="filePickerSingle" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" multiple style="display:none;" onchange="handleFileSelection(this.files)">
+    <input type="file" id="filePickerFolder" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" webkitdirectory style="display:none;" onchange="handleFileSelection(this.files)">
+
+    <div class="upload-form" id="uploadForm">
+      <div class="file-info" id="fileInfo"></div>
+      <div class="form-group">
+        <label for="uploaderName">Your name</label>
+        <input type="text" id="uploaderName" placeholder="e.g. Sarah Girard" required>
+      </div>
+      <div class="form-group">
+        <label for="photoYear">When was this taken? (optional)</label>
+        <input type="text" id="photoYear" placeholder="e.g. 1987, Summer '92, Not sure">
+      </div>
+      <div class="progress-bar-container" id="uploadProgress">
+        <div class="progress-bar" id="uploadProgressBar"></div>
+      </div>
+      <button class="btn btn-gold" style="width:100%;justify-content:center;" id="uploadSubmitBtn" onclick="submitUpload()">Share these photos</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     GUESTBOOK
+     ========================================== -->
+<section id="guestbook">
+  <div class="section-container">
+    <div class="section-header">
+      <h2>Leave Bob a Message</h2>
+      <p>Tell him what he means to you. He'll read every single one.</p>
+      <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('guestbookModal'))">Leave a Message</button>
+        <button class="btn btn-outline btn-sm" onclick="printSection('guestbook')">&#x1F5A8; Print Guestbook</button>
+      </div>
+    </div>
+    <div class="guestbook-feed" id="guestbookFeed">
+      <div class="empty-state">Loading messages...</div>
+    </div>
+  </div>
+</section>
+
+<!-- Guestbook Modal -->
+<div class="modal-overlay" id="guestbookModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('guestbookModal')">&times;</button>
+    <h3>Leave Bob a Message</h3>
+    <div class="form-group">
+      <label for="gbName">Your name</label>
+      <input type="text" id="gbName" placeholder="e.g. Sarah" required>
+    </div>
+    <div class="form-group">
+      <label for="gbMessage">Your message</label>
+      <textarea id="gbMessage" placeholder="Tell PaPa Bob what he means to you..." rows="4"></textarea>
+    </div>
+    <div class="form-group signature-area">
+      <label>Sign your name (draw with your finger)</label>
+      <canvas class="signature-canvas" id="signatureCanvas"></canvas>
+      <button class="btn btn-outline btn-sm" style="margin-top:0.5rem;" onclick="clearSignature()">Clear</button>
+    </div>
+    <div class="form-group">
+      <label>Add a photo of you and Bob (optional)</label>
+      <input type="file" id="gbPhoto" accept="image/jpeg,image/png,image/gif,image/webp,.heic">
+    </div>
+    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="gbSubmitBtn" onclick="submitGuestbook()">Send Bob Your Message &#x1F49B;</button>
+  </div>
+</div>
+
+<!-- ==========================================
+     FUN FACTS
+     ========================================== -->
+<section id="funfacts">
+  <div class="section-container">
+    <div class="section-header">
+      <h2>Things You Might Not Know About PaPa Bob</h2>
+      <p>Drop a fun fact. A story. Something only you know about him.</p>
+      <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('funfactModal'))">Share a Fun Fact</button>
+        <button class="btn btn-outline btn-sm" onclick="printSection('funfacts')">&#x1F5A8; Print Fun Facts</button>
+      </div>
+    </div>
+    <div class="facts-grid" id="factsGrid">
+      <div class="empty-state">Loading fun facts...</div>
+    </div>
+  </div>
+</section>
+
+<!-- Fun Fact Modal -->
+<div class="modal-overlay" id="funfactModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('funfactModal')">&times;</button>
+    <h3>Share a Fun Fact</h3>
+    <div class="form-group">
+      <label for="ffName">Your name</label>
+      <input type="text" id="ffName" placeholder="e.g. Sarah" required>
+    </div>
+    <div class="form-group">
+      <label for="ffFact">The fun fact</label>
+      <textarea id="ffFact" placeholder="e.g. Bob once drove 14 hours to see the Stones and never told anyone..." rows="4"></textarea>
+    </div>
+    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="ffSubmitBtn" onclick="submitFunFact()">Add This Fact &#x1F49B;</button>
+  </div>
+</div>
+
+<!-- ==========================================
+     FAMILY TREE
+     ========================================== -->
+<section id="tree">
+  <div class="section-container">
+    <div class="section-header">
+      <h2>PaPa Bob's World</h2>
+      <p>Show him where you fit. Every person here is someone whose life he touched.</p>
+      <button class="btn btn-gold" style="margin-top:1rem;" onclick="requireMagicWord(() => openModal('treeModal'))">Add Yourself</button>
+    </div>
+    <div class="tree-container" id="treeContainer">
+      <svg class="tree-svg" id="treeSvg"></svg>
+      <div class="tree-tooltip" id="treeTooltip"></div>
+    </div>
+    <div class="tree-fallback" id="treeFallback"></div>
+  </div>
+</section>
+
+<!-- Tree Modal -->
+<div class="modal-overlay" id="treeModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('treeModal')">&times;</button>
+    <h3>Add Yourself to PaPa Bob's World</h3>
+    <div class="form-group">
+      <label for="trName">Your name</label>
+      <input type="text" id="trName" placeholder="e.g. Sarah Girard" required>
+    </div>
+    <div class="form-group">
+      <label for="trRelationship">What's your relationship to Bob?</label>
+      <input type="text" id="trRelationship" placeholder="e.g. Granddaughter, Best friend since 1978">
+    </div>
+    <div class="form-group">
+      <label for="trCategory">Relationship category</label>
+      <select id="trCategory">
+        <option value="Family">Family</option>
+        <option value="Friend">Friend</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="trNote">Anything you want to add? (optional)</label>
+      <textarea id="trNote" placeholder="A favorite memory, a message..." rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Optional photo of you</label>
+      <input type="file" id="trPhoto" accept="image/jpeg,image/png,image/gif,image/webp,.heic">
+    </div>
+    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="trSubmitBtn" onclick="submitTreeNode()">Add Me to PaPa Bob's World &#x1F49B;</button>
+  </div>
+</div>
+
+<!-- ==========================================
+     SLIDESHOW SECTION
+     ========================================== -->
+<section id="slideshowSection">
+  <div class="section-container" style="text-align:center;">
+    <div class="section-header">
+      <h2>Watch the Slideshow</h2>
+      <p>Play a fullscreen photo slideshow — perfect for a gathering or just to enjoy.</p>
+    </div>
+    <button class="btn btn-gold" onclick="startSlideshow()">&#9654; Start Slideshow</button>
+  </div>
+</section>
+
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
+<footer>
+  <p class="tribute-line">Made with love for PaPa Bob Girard</p>
+  <div class="footer-divider"></div>
+  <!-- PHASE 2: SERVICE/CEREMONY DETAILS — Replace this block with full service info section including date, time, location, RSVP -->
+  <h3>Service Information</h3>
+  <p class="service-info">Details will be posted here soon.<br>Check back for updates on gathering and celebration arrangements.</p>
+</footer>
+
+<!-- ==========================================
+     SLIDESHOW FULLSCREEN
+     ========================================== -->
+<div class="slideshow-fullscreen" id="slideshowFullscreen">
+  <div class="slideshow-title-slide" id="slideshowTitle">
+    <h1>PaPa Bob Girard</h1>
+    <p>A life well lived. A man well loved.</p>
+  </div>
+  <div class="slideshow-image" id="slideshowImageContainer"></div>
+  <div class="slideshow-caption" id="slideshowCaption"></div>
+  <button class="slideshow-nav prev" id="ssNavPrev" onclick="slideshowPrev()">&#8249;</button>
+  <button class="slideshow-nav next" id="ssNavNext" onclick="slideshowNext()">&#8250;</button>
+  <div class="slideshow-controls" id="slideshowControls">
+    <button onclick="slideshowTogglePause()" id="ssPauseBtn">&#x23F8;</button>
+    <select id="ssSpeed" onchange="slideshowSetSpeed(this.value)">
+      <option value="8000">Slow (8s)</option>
+      <option value="5000" selected>Medium (5s)</option>
+      <option value="3000">Fast (3s)</option>
+    </select>
+    <button onclick="exitSlideshow()">&#x2715; Exit</button>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- D3.js for tree visualization -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+<script>
+// ============================================
+// CONFIG
+// ============================================
+const API_BASE = 'https://papa-bob-api.dan-fcc.workers.dev/api';
+let isUnlocked = sessionStorage.getItem('unlocked') === 'true';
+let pendingAction = null;
+let allPhotos = [];
+let galleryView = 'all';
+let gallerySort = 'newest';
+let activeUploaderFilter = null;
+let selectedFiles = [];
+let heroSlideInterval = null;
+let slideshowInterval = null;
+let slideshowPaused = false;
+let slideshowSpeed = 5000;
+let slideshowPhotos = [];
+let slideshowIndex = -1;
+let controlsTimeout = null;
+let d3Available = typeof d3 !== 'undefined';
+
+// ============================================
+// MAGIC WORD
+// ============================================
+function requireMagicWord(callback) {
+  if (isUnlocked) {
+    callback();
+    return;
+  }
+  pendingAction = callback;
+  document.getElementById('magicGate').classList.add('open');
+  setTimeout(() => document.getElementById('magicInput').focus(), 100);
+}
+
+function checkMagicWord() {
+  const input = document.getElementById('magicInput');
+  const val = input.value.trim();
+  if (val.toLowerCase() === 'loveyou') {
+    isUnlocked = true;
+    sessionStorage.setItem('unlocked', 'true');
+    document.getElementById('magicGate').classList.remove('open');
+    input.value = '';
+    document.getElementById('magicError').style.display = 'none';
+    if (pendingAction) {
+      pendingAction();
+      pendingAction = null;
+    }
+  } else {
+    document.getElementById('magicError').style.display = 'block';
+    input.classList.add('shake');
+    setTimeout(() => input.classList.remove('shake'), 400);
+    input.value = '';
+    input.focus();
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.getElementById('magicGate').classList.contains('open')) {
+    checkMagicWord();
+  }
+});
+
+function getMagicHeader() {
+  return { 'X-Magic-Word': 'LoveYou' };
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const navH = document.querySelector('nav').offsetHeight;
+    const top = el.offsetTop - navH;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+// ============================================
+// TOAST
+// ============================================
+function showToast(message, isError = false) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast' + (isError ? ' error' : '');
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// ============================================
+// CONFETTI
+// ============================================
+function showConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#c9a84c', '#f0ece0', '#e8785a', '#5ab8e8', '#5ae87a', '#e85ab8'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 4000);
+}
+
+// ============================================
+// MODALS
+// ============================================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close modal on overlay click
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+
+// ============================================
+// PHOTO GALLERY
+// ============================================
+async function loadPhotos() {
+  try {
+    const params = new URLSearchParams();
+    if (gallerySort === 'person') params.set('sort', 'person');
+
+    const res = await fetch(`${API_BASE}/photos?${params}`);
+    const data = await res.json();
+    allPhotos = data;
+    renderGallery();
+    updateHeroSlideshow();
+  } catch (err) {
+    document.getElementById('photoGrid').innerHTML = '<div class="empty-state">Could not load photos right now. Try refreshing.</div>';
+  }
+}
+
+function renderGallery() {
+  const grid = document.getElementById('photoGrid');
+  const chipsContainer = document.getElementById('nameChips');
+
+  let photos = [...allPhotos];
+
+  if (activeUploaderFilter) {
+    photos = photos.filter(p => p.uploader_name === activeUploaderFilter);
+  }
+
+  if (photos.length === 0 && allPhotos.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Be the first to share a photo of PaPa Bob — he\'d love it &#x1F49B;</div>';
+    chipsContainer.style.display = 'none';
+    return;
+  }
+
+  if (photos.length === 0 && activeUploaderFilter) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">No photos from this person yet.</div>';
+    return;
+  }
+
+  // Show name chips if in person view
+  if (galleryView === 'person') {
+    const uploaders = {};
+    allPhotos.forEach(p => {
+      if (!uploaders[p.uploader_name]) uploaders[p.uploader_name] = 0;
+      uploaders[p.uploader_name]++;
+    });
+    chipsContainer.innerHTML = Object.entries(uploaders)
+      .map(([name, count]) =>
+        `<button class="name-chip ${activeUploaderFilter === name ? 'active' : ''}" onclick="filterByUploader('${name.replace(/'/g, "\\'")}')">${name} (${count})</button>`
+      ).join('');
+    chipsContainer.style.display = 'flex';
+  } else {
+    chipsContainer.style.display = 'none';
+    activeUploaderFilter = null;
+  }
+
+  grid.innerHTML = photos.map(p => {
+    const siteUrl = window.location.origin + p.url;
+    const yearLabel = p.year ? ` &middot; ${p.year}` : '';
+    return `
+      <div class="photo-card" onclick="togglePhotoCard(this)" ontouchstart="">
+        <img src="${p.url}" alt="Photo by ${p.uploader_name}" loading="lazy">
+        <div class="photo-card-overlay">
+          <div class="photo-card-meta">${p.uploader_name}${yearLabel}</div>
+          <div class="photo-card-actions">
+            <a href="${API_BASE}/photos/download/${p.key}" title="Download">Download</a>
+            <button onclick="event.stopPropagation();copyLink('${siteUrl}')">Copy Link</button>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">FB</a>
+            <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(siteUrl)}&text=PaPa%20Bob%20Girard" target="_blank" rel="noopener" onclick="event.stopPropagation()">X</a>
+            <a href="https://wa.me/?text=${encodeURIComponent('Check out this photo of PaPa Bob! ' + siteUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">WhatsApp</a>
+            <a href="sms:?body=${encodeURIComponent('Check out this photo of PaPa Bob! ' + siteUrl)}" onclick="event.stopPropagation()">SMS</a>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function togglePhotoCard(card) {
+  // For mobile tap support
+  document.querySelectorAll('.photo-card.touched').forEach(c => {
+    if (c !== card) c.classList.remove('touched');
+  });
+  card.classList.toggle('touched');
+}
+
+function filterByUploader(name) {
+  activeUploaderFilter = activeUploaderFilter === name ? null : name;
+  renderGallery();
+}
+
+function setGalleryView(view, btn) {
+  galleryView = view;
+  activeUploaderFilter = null;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery();
+}
+
+function setGallerySort(sort, btn) {
+  gallerySort = sort;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadPhotos();
+}
+
+function copyLink(url) {
+  navigator.clipboard.writeText(url).then(() => showToast('Copied! \u{1F49B}'));
+}
+
+// Auto-refresh every 60s
+setInterval(loadPhotos, 60000);
+
+// ============================================
+// HERO SLIDESHOW
+// ============================================
+function updateHeroSlideshow() {
+  const container = document.getElementById('heroSlideshow');
+  if (allPhotos.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  // Pick up to 10 random photos
+  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5).slice(0, 10);
+  container.innerHTML = shuffled.map((p, i) =>
+    `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${p.url}')"></div>`
+  ).join('');
+
+  // Clear old interval
+  if (heroSlideInterval) clearInterval(heroSlideInterval);
+
+  if (shuffled.length > 1) {
+    let current = 0;
+    heroSlideInterval = setInterval(() => {
+      const slides = container.querySelectorAll('.hero-slide');
+      if (slides.length === 0) return;
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 4000);
+  }
+}
+
+// ============================================
+// UPLOAD PHOTOS
+// ============================================
+function triggerUpload(isFolder) {
+  requireMagicWord(() => {
+    if (isFolder) {
+      document.getElementById('filePickerFolder').click();
+    } else {
+      document.getElementById('filePickerSingle').click();
+    }
+  });
+}
+
+function handleFileSelection(fileList) {
+  const files = Array.from(fileList).filter(f => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'gif', 'heic', 'webp'].includes(ext);
+  });
+
+  if (files.length === 0) {
+    showToast('No supported image files found.', true);
+    return;
+  }
+
+  selectedFiles = files;
+  const totalSize = files.reduce((s, f) => s + f.size, 0);
+  const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
+
+  document.getElementById('fileInfo').textContent = `${files.length} photo${files.length > 1 ? 's' : ''} selected (${sizeMB} MB)`;
+  document.getElementById('uploadForm').classList.add('visible');
+}
+
+async function processImage(file) {
+  return new Promise((resolve) => {
+    const ext = file.name.split('.').pop().toLowerCase();
+
+    // For HEIC, try to load heic2any, but if unavailable just pass through
+    if (ext === 'heic') {
+      // Try basic passthrough for HEIC — browser may not support it natively
+      resolve(file);
+      return;
+    }
+
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      img.onload = () => {
+        const maxDim = 1600;
+        let { width, height } = img;
+
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height / width) * maxDim);
+            width = maxDim;
+          } else {
+            width = Math.round((width / height) * maxDim);
+            height = maxDim;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          resolve(blob || file);
+        }, 'image/jpeg', 0.85);
+      };
+
+      img.onerror = () => resolve(file);
+      img.src = e.target.result;
+    };
+
+    reader.onerror = () => resolve(file);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function submitUpload() {
+  const name = document.getElementById('uploaderName').value.trim();
+  const year = document.getElementById('photoYear').value.trim();
+
+  if (!name) {
+    showToast('Please enter your name.', true);
+    return;
+  }
+
+  if (selectedFiles.length === 0) {
+    showToast('No files selected.', true);
+    return;
+  }
+
+  const submitBtn = document.getElementById('uploadSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+
+  const progressContainer = document.getElementById('uploadProgress');
+  const progressBar = document.getElementById('uploadProgressBar');
+  progressContainer.classList.add('visible');
+
+  try {
+    const formData = new FormData();
+    formData.append('uploader_name', name);
+    if (year) formData.append('year', year);
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const processed = await processImage(selectedFiles[i]);
+      formData.append('photo', processed, selectedFiles[i].name);
+      const pct = Math.round(((i + 1) / selectedFiles.length) * 80);
+      progressBar.style.width = pct + '%';
+    }
+
+    progressBar.style.width = '90%';
+
+    const res = await fetch(`${API_BASE}/photos/upload`, {
+      method: 'POST',
+      headers: getMagicHeader(),
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Upload failed');
+    }
+
+    progressBar.style.width = '100%';
+
+    showConfetti();
+    showToast('Thank you! Your photos are up \u{1F49B}');
+
+    // Reset
+    document.getElementById('uploadForm').classList.remove('visible');
+    progressContainer.classList.remove('visible');
+    progressBar.style.width = '0%';
+    document.getElementById('uploaderName').value = '';
+    document.getElementById('photoYear').value = '';
+    selectedFiles = [];
+    document.getElementById('filePickerSingle').value = '';
+    document.getElementById('filePickerFolder').value = '';
+
+    loadPhotos();
+  } catch (err) {
+    showToast(err.message || 'Upload failed. Please try again.', true);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Share these photos';
+  }
+}
+
+// ============================================
+// GUESTBOOK
+// ============================================
+async function loadGuestbook() {
+  try {
+    const res = await fetch(`${API_BASE}/guestbook`);
+    const entries = await res.json();
+    const feed = document.getElementById('guestbookFeed');
+
+    if (entries.length === 0) {
+      feed.innerHTML = '<div class="empty-state">Be the first to leave Bob a message &#x1F49B;</div>';
+      return;
+    }
+
+    feed.innerHTML = entries.map(e => {
+      const date = new Date(e.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      let html = `
+        <div class="guestbook-card">
+          <div class="guestbook-card-header">
+            <span class="guestbook-card-name">${escapeHtml(e.name)}</span>
+            <span class="guestbook-card-date">${date}</span>
+          </div>
+          <div class="guestbook-card-message">${escapeHtml(e.message)}</div>`;
+
+      if (e.signature_data) {
+        html += `<img class="guestbook-card-signature" src="${e.signature_data}" alt="Signature">`;
+      }
+      if (e.photo_url) {
+        html += `<img class="guestbook-card-photo" src="${e.photo_url}" alt="Photo with Bob" loading="lazy">`;
+      }
+
+      html += '</div>';
+      return html;
+    }).join('');
+  } catch {
+    document.getElementById('guestbookFeed').innerHTML = '<div class="empty-state">Could not load messages right now.</div>';
+  }
+}
+
+// Signature Pad
+let sigCanvas, sigCtx, sigDrawing = false;
+
+function initSignaturePad() {
+  sigCanvas = document.getElementById('signatureCanvas');
+  sigCtx = sigCanvas.getContext('2d');
+
+  function resizeCanvas() {
+    const rect = sigCanvas.getBoundingClientRect();
+    sigCanvas.width = rect.width;
+    sigCanvas.height = rect.height;
+    sigCtx.strokeStyle = '#000';
+    sigCtx.lineWidth = 2;
+    sigCtx.lineCap = 'round';
+  }
+
+  // Observe modal opening to resize
+  const observer = new MutationObserver(() => {
+    if (document.getElementById('guestbookModal').classList.contains('open')) {
+      setTimeout(resizeCanvas, 50);
+    }
+  });
+  observer.observe(document.getElementById('guestbookModal'), { attributes: true });
+
+  resizeCanvas();
+
+  function getPos(e) {
+    const rect = sigCanvas.getBoundingClientRect();
+    const touch = e.touches ? e.touches[0] : e;
+    return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+  }
+
+  function startDraw(e) {
+    e.preventDefault();
+    sigDrawing = true;
+    const pos = getPos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(pos.x, pos.y);
+  }
+
+  function draw(e) {
+    if (!sigDrawing) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    sigCtx.lineTo(pos.x, pos.y);
+    sigCtx.stroke();
+  }
+
+  function endDraw() { sigDrawing = false; }
+
+  sigCanvas.addEventListener('mousedown', startDraw);
+  sigCanvas.addEventListener('mousemove', draw);
+  sigCanvas.addEventListener('mouseup', endDraw);
+  sigCanvas.addEventListener('mouseleave', endDraw);
+  sigCanvas.addEventListener('touchstart', startDraw, { passive: false });
+  sigCanvas.addEventListener('touchmove', draw, { passive: false });
+  sigCanvas.addEventListener('touchend', endDraw);
+}
+
+function clearSignature() {
+  if (sigCtx && sigCanvas) {
+    sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+  }
+}
+
+function getSignatureData() {
+  if (!sigCanvas) return null;
+  const blank = document.createElement('canvas');
+  blank.width = sigCanvas.width;
+  blank.height = sigCanvas.height;
+  if (sigCanvas.toDataURL() === blank.toDataURL()) return null;
+  return sigCanvas.toDataURL('image/png');
+}
+
+async function submitGuestbook() {
+  const name = document.getElementById('gbName').value.trim();
+  const message = document.getElementById('gbMessage').value.trim();
+
+  if (!name || !message) {
+    showToast('Please enter your name and message.', true);
+    return;
+  }
+
+  const btn = document.getElementById('gbSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('message', message);
+
+    const sig = getSignatureData();
+    if (sig) formData.append('signature_data', sig);
+
+    const photoFile = document.getElementById('gbPhoto').files[0];
+    if (photoFile) {
+      const processed = await processImage(photoFile);
+      formData.append('photo', processed, photoFile.name);
+    }
+
+    const res = await fetch(`${API_BASE}/guestbook`, {
+      method: 'POST',
+      headers: getMagicHeader(),
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Failed to submit');
+    }
+
+    closeModal('guestbookModal');
+    showToast("Bob's going to love this \u{1F49B}");
+
+    // Reset form
+    document.getElementById('gbName').value = '';
+    document.getElementById('gbMessage').value = '';
+    document.getElementById('gbPhoto').value = '';
+    clearSignature();
+
+    loadGuestbook();
+  } catch (err) {
+    showToast(err.message || 'Something went wrong. Try again.', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send Bob Your Message \u{1F49B}';
+  }
+}
+
+// ============================================
+// FUN FACTS
+// ============================================
+async function loadFunFacts() {
+  try {
+    const res = await fetch(`${API_BASE}/funfacts`);
+    const facts = await res.json();
+    const grid = document.getElementById('factsGrid');
+
+    if (facts.length === 0) {
+      grid.innerHTML = '<div class="empty-state">Be the first to share something about PaPa Bob that the rest of us don\'t know &#x1F49B;</div>';
+      return;
+    }
+
+    grid.innerHTML = facts.map(f => {
+      const date = new Date(f.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      return `
+        <div class="fact-card">
+          <div class="fact-card-text">${escapeHtml(f.fact)}</div>
+          <div class="fact-card-meta">Shared by ${escapeHtml(f.name)} &middot; ${date}</div>
+        </div>`;
+    }).join('');
+  } catch {
+    document.getElementById('factsGrid').innerHTML = '<div class="empty-state">Could not load fun facts right now.</div>';
+  }
+}
+
+async function submitFunFact() {
+  const name = document.getElementById('ffName').value.trim();
+  const fact = document.getElementById('ffFact').value.trim();
+
+  if (!name || !fact) {
+    showToast('Please enter your name and the fun fact.', true);
+    return;
+  }
+
+  const btn = document.getElementById('ffSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Adding...';
+
+  try {
+    const res = await fetch(`${API_BASE}/funfacts`, {
+      method: 'POST',
+      headers: { ...getMagicHeader(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, fact }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Failed to submit');
+    }
+
+    closeModal('funfactModal');
+    showToast('Fun fact added! &#x1F49B;');
+
+    document.getElementById('ffName').value = '';
+    document.getElementById('ffFact').value = '';
+
+    loadFunFacts();
+  } catch (err) {
+    showToast(err.message || 'Something went wrong. Try again.', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Add This Fact \u{1F49B}';
+  }
+}
+
+// ============================================
+// FAMILY TREE
+// ============================================
+let treeData = null;
+
+async function loadTree() {
+  try {
+    const res = await fetch(`${API_BASE}/tree`);
+    treeData = await res.json();
+    renderTree();
+  } catch {
+    document.getElementById('treeContainer').innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
+  }
+}
+
+function renderTree() {
+  if (!treeData) return;
+
+  const allNodes = [
+    ...treeData.family.map(n => ({ ...n, category: 'family' })),
+    ...treeData.friends.map(n => ({ ...n, category: 'friend' })),
+    ...treeData.other.map(n => ({ ...n, category: 'other' })),
+  ];
+
+  if (allNodes.length === 0 && !d3Available) {
+    document.getElementById('treeContainer').innerHTML = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
+    return;
+  }
+
+  if (!d3Available) {
+    renderTreeFallback(allNodes);
+    return;
+  }
+
+  renderTreeD3(allNodes);
+}
+
+function renderTreeD3(nodes) {
+  const svg = d3.select('#treeSvg');
+  svg.selectAll('*').remove();
+
+  const container = document.getElementById('treeContainer');
+  const width = container.clientWidth;
+  const height = parseInt(getComputedStyle(document.getElementById('treeSvg')).height);
+
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+
+  // Build nodes array with Bob at center
+  const graphNodes = [
+    { id: 'bob', name: 'PaPa Bob', category: 'bob', fx: width / 2, fy: height / 2 },
+    ...nodes.map(n => ({ id: `node-${n.id}`, ...n })),
+  ];
+
+  const graphLinks = nodes.map(n => ({
+    source: 'bob',
+    target: `node-${n.id}`,
+  }));
+
+  if (nodes.length === 0) {
+    // Just draw Bob
+    svg.append('circle')
+      .attr('cx', width / 2).attr('cy', height / 2).attr('r', 40)
+      .attr('fill', '#c9a84c').attr('opacity', 0.9);
+    svg.append('text')
+      .attr('x', width / 2).attr('y', height / 2 + 5)
+      .attr('text-anchor', 'middle').attr('fill', '#0d0d0d')
+      .attr('font-size', '14px').attr('font-weight', '600')
+      .text('PaPa Bob');
+    return;
+  }
+
+  const simulation = d3.forceSimulation(graphNodes)
+    .force('link', d3.forceLink(graphLinks).id(d => d.id).distance(120))
+    .force('charge', d3.forceManyBody().strength(-200))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(40));
+
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(graphLinks)
+    .join('line')
+    .attr('stroke', '#2a2620')
+    .attr('stroke-width', 1.5);
+
+  const nodeGroup = svg.append('g')
+    .selectAll('g')
+    .data(graphNodes)
+    .join('g')
+    .attr('class', 'tree-node')
+    .call(d3.drag()
+      .on('start', (event, d) => {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x; d.fy = d.y;
+      })
+      .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+      .on('end', (event, d) => {
+        if (!event.active) simulation.alphaTarget(0);
+        if (d.id !== 'bob') { d.fx = null; d.fy = null; }
+      })
+    );
+
+  nodeGroup.append('circle')
+    .attr('r', d => d.id === 'bob' ? 40 : 28)
+    .attr('fill', d => {
+      if (d.id === 'bob') return '#c9a84c';
+      if (d.category === 'family') return '#8a6f2e';
+      if (d.category === 'friend') return '#4a6a5a';
+      return '#4a4a5a';
+    })
+    .attr('stroke', d => d.id === 'bob' ? '#f0ece0' : 'none')
+    .attr('stroke-width', 2)
+    .attr('opacity', 0.9)
+    .on('click', (event, d) => {
+      if (d.id === 'bob') return;
+      showTreeTooltip(d, event);
+    });
+
+  nodeGroup.append('text')
+    .attr('dy', d => d.id === 'bob' ? 5 : 4)
+    .attr('text-anchor', 'middle')
+    .attr('fill', d => d.id === 'bob' ? '#0d0d0d' : '#f0ece0')
+    .attr('font-size', d => d.id === 'bob' ? '14px' : '10px')
+    .attr('font-weight', d => d.id === 'bob' ? '600' : '500')
+    .text(d => {
+      const name = d.name;
+      return name.length > 12 ? name.substring(0, 11) + '...' : name;
+    });
+
+  // Relationship label below node
+  nodeGroup.filter(d => d.id !== 'bob').append('text')
+    .attr('dy', 42)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#9a9080')
+    .attr('font-size', '8px')
+    .text(d => {
+      const r = d.relationship || '';
+      return r.length > 20 ? r.substring(0, 19) + '...' : r;
+    });
+
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    nodeGroup.attr('transform', d => `translate(${d.x},${d.y})`);
+  });
+}
+
+function showTreeTooltip(d, event) {
+  const tooltip = document.getElementById('treeTooltip');
+  let html = `<h4>${escapeHtml(d.name)}</h4><p>${escapeHtml(d.relationship)}</p>`;
+  if (d.note) html += `<p style="color:var(--text);margin-top:0.5rem;">${escapeHtml(d.note)}</p>`;
+  if (d.photo_url) html += `<img src="${d.photo_url}" alt="${escapeHtml(d.name)}">`;
+  tooltip.innerHTML = html;
+
+  const container = document.getElementById('treeContainer');
+  const rect = container.getBoundingClientRect();
+  tooltip.style.left = Math.min(event.clientX - rect.left, rect.width - 260) + 'px';
+  tooltip.style.top = (event.clientY - rect.top + 10) + 'px';
+  tooltip.classList.add('visible');
+
+  const close = () => {
+    tooltip.classList.remove('visible');
+    document.removeEventListener('click', close);
+  };
+  setTimeout(() => document.addEventListener('click', close), 10);
+}
+
+function renderTreeFallback(nodes) {
+  const fallback = document.getElementById('treeFallback');
+  fallback.style.display = 'block';
+  document.getElementById('treeContainer').style.display = 'none';
+
+  const categories = { family: [], friend: [], other: [] };
+  nodes.forEach(n => categories[n.category]?.push(n));
+
+  const labels = { family: 'Family', friend: 'Friends', other: 'Other' };
+  let html = '';
+
+  for (const [cat, list] of Object.entries(categories)) {
+    if (list.length === 0) continue;
+    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${labels[cat]}</h3>`;
+    html += '<div class="tree-fallback-grid">';
+    html += list.map(n => {
+      let card = '<div class="tree-fallback-card">';
+      if (n.photo_url) card += `<img src="${n.photo_url}" alt="${escapeHtml(n.name)}">`;
+      card += `<h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>`;
+      if (n.note) card += `<p style="margin-top:0.5rem;color:var(--text);">${escapeHtml(n.note)}</p>`;
+      card += '</div>';
+      return card;
+    }).join('');
+    html += '</div>';
+  }
+
+  if (html === '') {
+    html = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
+  }
+
+  fallback.innerHTML = html;
+}
+
+async function submitTreeNode() {
+  const name = document.getElementById('trName').value.trim();
+  const relationship = document.getElementById('trRelationship').value.trim();
+  const category = document.getElementById('trCategory').value;
+  const note = document.getElementById('trNote').value.trim();
+
+  if (!name || !relationship) {
+    showToast('Please enter your name and relationship.', true);
+    return;
+  }
+
+  const btn = document.getElementById('trSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Adding...';
+
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('relationship', relationship);
+    formData.append('relationship_category', category);
+    if (note) formData.append('note', note);
+
+    const photoFile = document.getElementById('trPhoto').files[0];
+    if (photoFile) {
+      const processed = await processImage(photoFile);
+      formData.append('photo', processed, photoFile.name);
+    }
+
+    const res = await fetch(`${API_BASE}/tree`, {
+      method: 'POST',
+      headers: getMagicHeader(),
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Failed to add');
+    }
+
+    closeModal('treeModal');
+    showToast("You're part of PaPa Bob's world now! \u{1F49B}");
+
+    document.getElementById('trName').value = '';
+    document.getElementById('trRelationship').value = '';
+    document.getElementById('trNote').value = '';
+    document.getElementById('trPhoto').value = '';
+
+    loadTree();
+  } catch (err) {
+    showToast(err.message || 'Something went wrong. Try again.', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Add Me to PaPa Bob's World \u{1F49B}";
+  }
+}
+
+// ============================================
+// SLIDESHOW
+// ============================================
+function startSlideshow() {
+  if (allPhotos.length === 0) {
+    showToast('No photos uploaded yet — add some first!', true);
+    return;
+  }
+
+  slideshowPhotos = [...allPhotos].sort(() => Math.random() - 0.5);
+  slideshowIndex = -1;
+  slideshowPaused = false;
+
+  const fs = document.getElementById('slideshowFullscreen');
+  fs.classList.add('active');
+
+  // Try native fullscreen
+  try {
+    document.documentElement.requestFullscreen?.();
+  } catch {}
+
+  // Show title slide first
+  const titleSlide = document.getElementById('slideshowTitle');
+  titleSlide.classList.add('active');
+  document.getElementById('slideshowCaption').textContent = '';
+
+  // Prepare image container
+  const imgContainer = document.getElementById('slideshowImageContainer');
+  imgContainer.innerHTML = '';
+
+  // After 4 seconds, start photos
+  setTimeout(() => {
+    titleSlide.classList.remove('active');
+    slideshowNext();
+    slideshowInterval = setInterval(() => {
+      if (!slideshowPaused) slideshowNext();
+    }, slideshowSpeed);
+  }, 4000);
+
+  // Controls visibility
+  fs.addEventListener('mousemove', showSlideshowControls);
+  fs.addEventListener('touchstart', showSlideshowControls);
+  showSlideshowControls();
+}
+
+function showSlideshowControls() {
+  const controls = document.getElementById('slideshowControls');
+  const prev = document.getElementById('ssNavPrev');
+  const next = document.getElementById('ssNavNext');
+  controls.classList.remove('hidden');
+  prev.classList.remove('hidden');
+  next.classList.remove('hidden');
+  clearTimeout(controlsTimeout);
+  controlsTimeout = setTimeout(() => {
+    controls.classList.add('hidden');
+    prev.classList.add('hidden');
+    next.classList.add('hidden');
+  }, 3000);
+}
+
+function slideshowNext() {
+  slideshowIndex = (slideshowIndex + 1) % slideshowPhotos.length;
+  showSlideshowPhoto(slideshowIndex);
+}
+
+function slideshowPrev() {
+  slideshowIndex = (slideshowIndex - 1 + slideshowPhotos.length) % slideshowPhotos.length;
+  showSlideshowPhoto(slideshowIndex);
+}
+
+function showSlideshowPhoto(idx) {
+  const p = slideshowPhotos[idx];
+  const container = document.getElementById('slideshowImageContainer');
+
+  // Fade out old images
+  container.querySelectorAll('img.active').forEach(img => {
+    img.classList.remove('active');
+    setTimeout(() => img.remove(), 1600);
+  });
+
+  const img = document.createElement('img');
+  img.src = p.url;
+  img.alt = `Photo by ${p.uploader_name}`;
+  img.onclick = () => slideshowTogglePause();
+  container.appendChild(img);
+
+  // Force reflow then add active class
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => img.classList.add('active'));
+  });
+
+  const caption = document.getElementById('slideshowCaption');
+  const yearText = p.year ? ` \u00B7 ${p.year}` : '';
+  caption.textContent = `${p.uploader_name}${yearText}`;
+}
+
+function slideshowTogglePause() {
+  slideshowPaused = !slideshowPaused;
+  document.getElementById('ssPauseBtn').innerHTML = slideshowPaused ? '&#x25B6;' : '&#x23F8;';
+}
+
+function slideshowSetSpeed(val) {
+  slideshowSpeed = parseInt(val);
+  if (slideshowInterval) {
+    clearInterval(slideshowInterval);
+    slideshowInterval = setInterval(() => {
+      if (!slideshowPaused) slideshowNext();
+    }, slideshowSpeed);
+  }
+}
+
+function exitSlideshow() {
+  clearInterval(slideshowInterval);
+  slideshowInterval = null;
+  document.getElementById('slideshowFullscreen').classList.remove('active');
+  document.getElementById('slideshowTitle').classList.remove('active');
+  try { document.exitFullscreen?.(); } catch {}
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('slideshowFullscreen').classList.contains('active')) return;
+  if (e.key === 'Escape') exitSlideshow();
+  if (e.key === 'ArrowLeft') slideshowPrev();
+  if (e.key === 'ArrowRight') slideshowNext();
+  if (e.key === ' ') { e.preventDefault(); slideshowTogglePause(); }
+});
+
+// ============================================
+// PRINT
+// ============================================
+function printSection(section) {
+  document.body.classList.add(`print-${section}`);
+  window.print();
+  document.body.classList.remove(`print-${section}`);
+}
+
+// ============================================
+// UTIL
+// ============================================
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadPhotos();
+  loadGuestbook();
+  loadFunFacts();
+  loadTree();
+  initSignaturePad();
+});
+</script>
+</body>
+</html>
