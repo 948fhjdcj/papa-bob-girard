@@ -4,17 +4,8 @@ export default {
     const path = url.pathname;
 
     // CORS headers
-    const ALLOWED_ORIGINS = [
-      'https://papabob.org',
-      'https://www.papabob.org',
-      'https://papa-bob-site.pages.dev',
-      'http://localhost:8788',
-      'http://localhost:3000',
-    ];
-    const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
     const corsHeaders = {
-      'Access-Control-Allow-Origin': allowedOrigin,
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Magic-Word',
     };
