@@ -335,17 +335,23 @@ async function handleAPI(request, env, url, path) {
     if (authErr) return authErr;
 
     const formData = await request.formData();
-    const name = formData.get('name');
-    const relationship = formData.get('relationship');
-    const relationshipCategory = formData.get('relationship_category');
-    const note = formData.get('note') || null;
+    const name = formData.get('name')?.trim();
+    const relationship = formData.get('relationship')?.trim();
+    const relationshipCategory = formData.get('relationship_category')?.trim();
+    const note = formData.get('note')?.trim() || null;
     const photo = formData.get('photo');
 
     if (!name || !relationship || !relationshipCategory) {
       return jsonResponse({ error: 'name, relationship, and relationship_category are required' }, 400);
     }
 
-    let photoKey = null;
+    // Check for existing entry by name (case-insensitive)
+    const existing = await env.DB.prepare(
+      'SELECT id, photo_key FROM family_tree WHERE LOWER(name) = LOWER(?)'
+    ).bind(name).first();
+
+    // Handle photo — preserve existing if no new photo provided
+    let photoKey = existing?.photo_key || null;
     if (photo && photo instanceof File && photo.size > 0) {
       photoKey = `tree/${Date.now()}-${rand4()}.jpg`;
       const arrayBuffer = await photo.arrayBuffer();
@@ -355,14 +361,19 @@ async function handleAPI(request, env, url, path) {
       });
     }
 
-    const result = await env.DB.prepare(
-      'INSERT INTO family_tree (name, relationship, relationship_category, note, photo_key) VALUES (?, ?, ?, ?, ?)'
-    ).bind(name, relationship, relationshipCategory, note, photoKey).run();
+    if (existing) {
+      await env.DB.prepare(
+        'UPDATE family_tree SET relationship = ?, relationship_category = ?, note = ?, photo_key = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
+      ).bind(relationship, relationshipCategory, note, photoKey, existing.id).run();
 
-    return jsonResponse({
-      success: true,
-      node: { id: result.meta.last_row_id, name, relationship, relationship_category: relationshipCategory },
-    });
+      return jsonResponse({ success: true, action: 'updated', id: existing.id });
+    } else {
+      const result = await env.DB.prepare(
+        'INSERT INTO family_tree (name, relationship, relationship_category, note, photo_key) VALUES (?, ?, ?, ?, ?)'
+      ).bind(name, relationship, relationshipCategory, note, photoKey).run();
+
+      return jsonResponse({ success: true, action: 'inserted', id: result.meta.last_row_id });
+    }
   }
 
   if (method === 'GET' && path === '/api/tree') {

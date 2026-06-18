@@ -232,8 +232,6 @@ nav {
   background: var(--bg);
 }
 
-.hero-slideshow { position: absolute; inset: 0; }
-
 .hero-fallback-bg {
   position: absolute;
   inset: 0;
@@ -249,18 +247,6 @@ nav {
 
 
 
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(1.5px) sepia(0.35) brightness(0.85);
-  transform: scale(1.05);
-  opacity: 0;
-  transition: opacity 1.5s ease;
-}
-
-.hero-slide.active { opacity: 1; }
 
 .hero-overlay {
   position: absolute;
@@ -438,71 +424,34 @@ nav {
 @media (min-width: 1024px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
 
 .photo-card {
-  position: relative;
-  border-radius: var(--radius);
+  cursor: zoom-in;
+  border-radius: 4px;
   overflow: hidden;
   background: var(--surface);
-  aspect-ratio: 1;
-  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.photo-card img {
+.photo-card:hover { transform: scale(1.02); }
+
+@media (hover: none) { .photo-card:hover { transform: none; } }
+
+.photo-card-img {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s;
 }
 
-.photo-card:hover img { transform: scale(1.05); }
-
-.photo-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  opacity: 0;
-  transition: opacity 0.25s;
-  padding: 0.75rem;
-}
-
-.photo-card:hover .photo-card-overlay,
-.photo-card.touched .photo-card-overlay { opacity: 1; }
-
-.photo-card-meta {
-  color: var(--text);
-  font-size: 0.82rem;
-  text-align: center;
-  margin-bottom: 0.25rem;
-}
-
-.photo-card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  justify-content: center;
-}
-
-.photo-card-actions button,
-.photo-card-actions a {
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
+.photo-card-caption {
+  padding: 6px 8px;
   font-size: 0.75rem;
-  background: rgba(255,255,255,0.1);
-  color: var(--text);
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: background 0.2s;
+  color: var(--text-sec);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.photo-card-actions button:hover,
-.photo-card-actions a:hover { background: rgba(255,255,255,0.2); }
+.photo-card-name { color: var(--gold); }
 
 .skeleton {
   background: var(--surface);
@@ -679,6 +628,13 @@ nav {
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.5rem;
+}
+
+.tree-form-hint {
+  font-size: 0.78rem;
+  color: var(--text-sec);
+  margin-top: 4px;
+  margin-bottom: 12px;
 }
 
 .tree-node circle { cursor: pointer; }
@@ -1034,6 +990,183 @@ footer .footer-love {
 }
 
 /* ============================================
+   LIGHTBOX
+   ============================================ */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox.is-open { display: flex; }
+
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  cursor: pointer;
+}
+
+.lightbox-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 85vh;
+}
+
+.lightbox-photo {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.9);
+  display: block;
+}
+
+.lightbox-meta {
+  margin-top: 10px;
+  text-align: center;
+  color: var(--text-sec);
+  font-size: 0.85rem;
+  min-height: 20px;
+}
+
+.lightbox-uploader { color: var(--gold); margin-right: 8px; }
+
+.lightbox-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  pointer-events: all;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  font-size: 2.5rem;
+  line-height: 1;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover { background: rgba(0,0,0,0.8); }
+
+.lightbox.no-browse .lightbox-controls { display: none; }
+
+.lightbox-toolbar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 3;
+}
+
+.lightbox-download,
+.lightbox-share-toggle {
+  background: rgba(10,10,10,0.85);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.lightbox-download:hover,
+.lightbox-share-toggle:hover {
+  background: rgba(30,30,30,0.95);
+  border-color: var(--gold);
+}
+
+.lightbox-share-menu { position: relative; }
+
+.lightbox-share-options {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 160px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.8);
+}
+
+.lightbox-share-options button {
+  display: block;
+  width: 100%;
+  padding: 10px 18px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  min-height: 44px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.lightbox-share-options button:hover {
+  background: var(--surface);
+  color: var(--gold);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 1.2rem;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  transition: background 0.2s;
+}
+
+.lightbox-close:hover {
+  background: rgba(50,50,50,0.9);
+  color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .lightbox-photo { max-height: 70vh; }
+  .lightbox-prev, .lightbox-next { width: 40px; height: 40px; font-size: 2rem; }
+  .lightbox-toolbar { bottom: 16px; gap: 8px; }
+  .lightbox-download, .lightbox-share-toggle { padding: 10px 14px; font-size: 0.85rem; }
+}
+
+/* ============================================
    SPINNER
    ============================================ */
 .spinner {
@@ -1150,6 +1283,7 @@ footer .footer-love {
     <div class="form-group">
       <label for="trName">Your name</label>
       <input type="text" id="trName" placeholder="e.g. Sarah Girard" required>
+      <p class="tree-form-hint">Already added yourself? Enter your name again to update your entry. &#x1F49B;</p>
     </div>
     <div class="form-group">
       <label for="trRelationship">What's your relationship to Bob?</label>
@@ -1231,6 +1365,36 @@ footer .footer-love {
 <input type="file" id="filePickerSingle" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" multiple style="display:none;" onchange="handleFileSelection(this.files)">
 <input type="file" id="filePickerFolder" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" webkitdirectory style="display:none;" onchange="handleFileSelection(this.files)">
 
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" aria-modal="true" role="dialog" aria-hidden="true">
+  <div class="lightbox-backdrop"></div>
+  <div class="lightbox-content">
+    <img id="lightbox-img" src="" alt="" class="lightbox-photo" />
+    <div class="lightbox-meta">
+      <span id="lightbox-name" class="lightbox-uploader"></span>
+      <span id="lightbox-year" class="lightbox-year"></span>
+    </div>
+  </div>
+  <div class="lightbox-controls">
+    <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous photo">&#8249;</button>
+    <button class="lightbox-next" id="lightbox-next" aria-label="Next photo">&#8250;</button>
+  </div>
+  <div class="lightbox-toolbar">
+    <button class="lightbox-download" id="lightbox-download">&#x2B07; Download</button>
+    <div class="lightbox-share-menu">
+      <button class="lightbox-share-toggle" id="lightbox-share-toggle">&#x2022;&#x2022;&#x2022; Share</button>
+      <div class="lightbox-share-options" id="lightbox-share-options" hidden>
+        <button data-share="facebook">Facebook</button>
+        <button data-share="twitter">X / Twitter</button>
+        <button data-share="whatsapp">WhatsApp</button>
+        <button data-share="sms">SMS</button>
+        <button data-share="copy">Copy Link</button>
+      </div>
+    </div>
+  </div>
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&#x2715;</button>
+</div>
+
 <!-- ROUTER CONTENT AREA -->
 <div id="app"></div>
 
@@ -1265,7 +1429,6 @@ let galleryView = 'all';
 let gallerySort = 'newest';
 let activeUploaderFilter = null;
 let selectedFiles = [];
-let heroSlideInterval = null;
 let galleryRefreshInterval = null;
 let slideshowInterval = null;
 let slideshowPaused = false;
@@ -1308,7 +1471,6 @@ function routeTo(path) {
 }
 
 function cleanup() {
-  if (heroSlideInterval) { clearInterval(heroSlideInterval); heroSlideInterval = null; }
   if (galleryRefreshInterval) { clearInterval(galleryRefreshInterval); galleryRefreshInterval = null; }
 }
 
@@ -1333,8 +1495,7 @@ function renderHomePage() {
   app.innerHTML = `
     <section id="hero">
       <div class="hero-grain"></div>
-      <div class="hero-slideshow" id="heroSlideshow"></div>
-      <div class="hero-fallback-bg" id="heroFallbackBg"></div>
+      <div class="hero-fallback-bg"></div>
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <h1>PaPa Bob Girard</h1>
@@ -1350,17 +1511,16 @@ function renderHomePage() {
       </div>
     </div>`;
 
-  loadPhotosAndRender();
+  loadPhotosForHome();
 }
 
-async function loadPhotosAndRender() {
+async function loadPhotosForHome() {
   try {
     const res = await fetch(`${API_BASE}/photos`);
     allPhotos = await res.json();
   } catch { allPhotos = []; }
 
   if (currentRoute === '/') {
-    updateHeroSlideshow();
     renderCollage();
   }
 }
@@ -1423,43 +1583,18 @@ function renderCollage() {
   const maxBottom = Math.max(...placed.map(p => p.y + p.h)) + padding;
   container.style.height = Math.max(isMobile ? 800 : 600, maxBottom) + 'px';
 
-  container.innerHTML = placed.map(p => `
-    <div class="collage-photo" onclick="navigate('/photos')"
-      style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rotation}deg);">
-      <img src="${photoUrl(p.photo.url)}" alt="Photo of PaPa Bob" loading="lazy">
-    </div>`).join('');
-}
-
-function updateHeroSlideshow() {
-  const container = document.getElementById('heroSlideshow');
-  const fallback = document.getElementById('heroFallbackBg');
-  if (!container) return;
-
-  if (allPhotos.length === 0) {
-    container.innerHTML = '';
-    if (fallback) fallback.style.opacity = '';
-    return;
-  }
-
-  if (fallback) fallback.style.opacity = '0';
-
-  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5).slice(0, 10);
-  container.innerHTML = shuffled.map((p, i) =>
-    `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${photoUrl(p.url)}')"></div>`
-  ).join('');
-
-  if (heroSlideInterval) clearInterval(heroSlideInterval);
-
-  if (shuffled.length > 1) {
-    let current = 0;
-    heroSlideInterval = setInterval(() => {
-      const slides = container.querySelectorAll('.hero-slide');
-      if (slides.length === 0) return;
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }, 4000);
-  }
+  container.innerHTML = '';
+  placed.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'collage-photo';
+    div.style.cssText = `left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rotation}deg);cursor:zoom-in;`;
+    div.innerHTML = `<img src="${photoUrl(p.photo.url)}" alt="Photo of PaPa Bob" loading="lazy">`;
+    div.addEventListener('click', (e) => {
+      e.stopPropagation();
+      Lightbox.open([{ key: p.photo.key, url: photoUrl(p.photo.url), uploader_name: p.photo.uploader_name, year: p.photo.year }], 0, false);
+    });
+    container.appendChild(div);
+  });
 }
 
 // --- PHOTOS PAGE ---
@@ -1705,6 +1840,8 @@ async function loadPhotos() {
   }
 }
 
+let currentFilteredPhotos = [];
+
 function renderGallery() {
   const grid = document.getElementById('photoGrid');
   const chipsContainer = document.getElementById('nameChips');
@@ -1712,6 +1849,8 @@ function renderGallery() {
 
   let photos = [...allPhotos];
   if (activeUploaderFilter) photos = photos.filter(p => p.uploader_name === activeUploaderFilter);
+
+  currentFilteredPhotos = photos;
 
   if (photos.length === 0 && allPhotos.length === 0) {
     grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Be the first to share a photo of PaPa Bob — he\'d love it &#x1F49B;</div>';
@@ -1739,30 +1878,22 @@ function renderGallery() {
     activeUploaderFilter = null;
   }
 
-  grid.innerHTML = photos.map(p => {
-    const siteUrl = photoUrl(p.url);
-    const yearLabel = p.year ? ` &middot; ${p.year}` : '';
-    return `
-      <div class="photo-card" onclick="togglePhotoCard(this)" ontouchstart="">
-        <img src="${photoUrl(p.url)}" alt="Photo by ${p.uploader_name}" loading="lazy">
-        <div class="photo-card-overlay">
-          <div class="photo-card-meta">${p.uploader_name}${yearLabel}</div>
-          <div class="photo-card-actions">
-            <a href="${API_BASE}/photos/download/${p.key}" title="Download">Download</a>
-            <button onclick="event.stopPropagation();copyLink('${siteUrl}')">Copy Link</button>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">FB</a>
-            <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(siteUrl)}&text=PaPa%20Bob%20Girard" target="_blank" rel="noopener" onclick="event.stopPropagation()">X</a>
-            <a href="https://wa.me/?text=${encodeURIComponent('Check out this photo of PaPa Bob! ' + siteUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">WhatsApp</a>
-            <a href="sms:?body=${encodeURIComponent('Check out this photo of PaPa Bob! ' + siteUrl)}" onclick="event.stopPropagation()">SMS</a>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-}
+  // Build photo grid with lightbox-ready data
+  const lightboxPhotos = photos.map(p => ({ key: p.key, url: photoUrl(p.url), uploader_name: p.uploader_name, year: p.year }));
 
-function togglePhotoCard(card) {
-  document.querySelectorAll('.photo-card.touched').forEach(c => { if (c !== card) c.classList.remove('touched'); });
-  card.classList.toggle('touched');
+  grid.innerHTML = '';
+  photos.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'photo-card';
+    card.innerHTML = `
+      <img src="${photoUrl(p.url)}" alt="Photo by ${escapeHtml(p.uploader_name)}" loading="lazy" class="photo-card-img">
+      <div class="photo-card-caption">
+        <span class="photo-card-name">${escapeHtml(p.uploader_name)}</span>
+        <span class="photo-card-year">${p.year || ''}</span>
+      </div>`;
+    card.addEventListener('click', () => Lightbox.open(lightboxPhotos, idx, true));
+    grid.appendChild(card);
+  });
 }
 
 function filterByUploader(name) {
@@ -1783,10 +1914,6 @@ function setGallerySort(sort, btn) {
   btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadPhotos();
-}
-
-function copyLink(url) {
-  navigator.clipboard.writeText(url).then(() => showToast('Copied! \u{1F49B}'));
 }
 
 // ============================================
@@ -2374,10 +2501,15 @@ async function submitTreeNode() {
     if (photoFile) { const processed = await processImage(photoFile); formData.append('photo', processed, photoFile.name); }
 
     const res = await fetch(`${API_BASE}/tree`, { method: 'POST', headers: getMagicHeader(), body: formData });
-    if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to add'); }
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add');
 
     closeModal('treeModal');
-    showToast("You're part of PaPa Bob's world now! \u{1F49B}");
+    if (result.action === 'updated') {
+      showToast('Your entry has been updated \u{1F49B}');
+    } else {
+      showToast("You've been added to PaPa Bob's World \u{1F49B}");
+    }
     document.getElementById('trName').value = '';
     document.getElementById('trRelationship').value = '';
     document.getElementById('trOtherDetail').value = '';
@@ -2514,6 +2646,112 @@ function printSection(section) {
 }
 
 // ============================================
+// LIGHTBOX
+// ============================================
+const Lightbox = (() => {
+  let currentPhotos = [];
+  let currentIndex = 0;
+  let browseMode = false;
+
+  function open(photos, index, browse = false) {
+    currentPhotos = photos;
+    currentIndex = index;
+    browseMode = browse;
+    const lb = document.getElementById('lightbox');
+    lb.classList.add('is-open');
+    lb.setAttribute('aria-hidden', 'false');
+    browseMode ? lb.classList.remove('no-browse') : lb.classList.add('no-browse');
+    render();
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeydown);
+  }
+
+  function close() {
+    const lb = document.getElementById('lightbox');
+    lb.classList.remove('is-open');
+    lb.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleKeydown);
+    closeShareMenu();
+  }
+
+  function render() {
+    const photo = currentPhotos[currentIndex];
+    if (!photo) return;
+    document.getElementById('lightbox-img').src = photo.url;
+    document.getElementById('lightbox-img').alt = photo.uploader_name || 'Photo of PaPa Bob';
+    document.getElementById('lightbox-name').textContent = photo.uploader_name || '';
+    document.getElementById('lightbox-year').textContent = photo.year || '';
+    document.getElementById('lightbox-download').onclick = () => {
+      window.location.href = `${API_BASE}/photos/download/${encodeURIComponent(photo.key)}`;
+    };
+    const shareUrl = `${API_HOST}/api/photos/view/${encodeURIComponent(photo.key)}`;
+    document.querySelectorAll('.lightbox-share-options [data-share]').forEach(btn => {
+      btn.onclick = () => handleShare(btn.dataset.share, shareUrl);
+    });
+  }
+
+  function prev() {
+    if (!browseMode || currentPhotos.length <= 1) return;
+    currentIndex = (currentIndex - 1 + currentPhotos.length) % currentPhotos.length;
+    render();
+  }
+
+  function next() {
+    if (!browseMode || currentPhotos.length <= 1) return;
+    currentIndex = (currentIndex + 1) % currentPhotos.length;
+    render();
+  }
+
+  function handleKeydown(e) {
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+  }
+
+  function toggleShareMenu() {
+    const menu = document.getElementById('lightbox-share-options');
+    menu.hidden = !menu.hidden;
+  }
+
+  function closeShareMenu() {
+    const el = document.getElementById('lightbox-share-options');
+    if (el) el.hidden = true;
+  }
+
+  function handleShare(platform, url) {
+    closeShareMenu();
+    const encoded = encodeURIComponent(url);
+    const text = encodeURIComponent('Check out this photo of PaPa Bob! ');
+    switch (platform) {
+      case 'facebook': window.open(`https://www.facebook.com/sharer/sharer.php?u=${encoded}`, '_blank'); break;
+      case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encoded}&text=${text}`, '_blank'); break;
+      case 'whatsapp': window.open(`https://wa.me/?text=${text}${encoded}`, '_blank'); break;
+      case 'sms': window.location.href = `sms:?body=${text}${encoded}`; break;
+      case 'copy':
+        navigator.clipboard.writeText(url).then(() => showToast('Link copied! \u{1F49B}'));
+        break;
+    }
+  }
+
+  function init() {
+    document.getElementById('lightbox-close').addEventListener('click', close);
+    document.querySelector('.lightbox-backdrop').addEventListener('click', close);
+    document.getElementById('lightbox-prev').addEventListener('click', prev);
+    document.getElementById('lightbox-next').addEventListener('click', next);
+    document.getElementById('lightbox-share-toggle').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleShareMenu();
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.lightbox-share-menu')) closeShareMenu();
+    });
+  }
+
+  return { open, close, init };
+})();
+
+// ============================================
 // UTIL
 // ============================================
 function escapeHtml(str) {
@@ -2526,6 +2764,7 @@ function escapeHtml(str) {
 // INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+  Lightbox.init();
   routeTo(window.location.pathname);
 });
 </script>
