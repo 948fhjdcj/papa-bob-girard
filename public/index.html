@@ -2294,19 +2294,33 @@ function renderTreeFallback(nodes) {
   fallback.style.display = 'block';
   treeContainer.style.display = 'none';
 
-  // Always show Bob at the top, matching the same card style as everyone else
-  let html = '<div class="tree-fallback-grid" style="justify-content:center;margin-bottom:1.5rem;">'
-    + '<div class="tree-fallback-card"><h4>PaPa Bob Girard</h4><p>The man himself</p></div>'
+  // Bob banner at top
+  let html = '<div style="text-align:center;padding:1.5rem;margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-el);">'
+    + '<h3 style="font-family:var(--font-display);color:var(--gold);font-size:1.5rem;margin-bottom:0.25rem;">PaPa Bob Girard</h3>'
+    + '<p style="color:var(--text-sec);font-size:0.95rem;">The man at the center of it all</p>'
     + '</div>';
 
-  const categories = { family: [], friend: [], other: [] };
-  nodes.forEach(n => categories[n.category]?.push(n));
-  const labels = { family: 'Family', friend: 'Friends', other: 'Other' };
+  // Order: Immediate Family, Extended Family, Friends & Others
+  const immediate = ['Son','Daughter','Wife / Partner','Brother','Sister','Grandson','Granddaughter','Great-Grandson','Great-Granddaughter'];
+  const extended = ['Son-in-Law','Daughter-in-Law','Brother-in-Law','Sister-in-Law','Nephew','Niece','Cousin','Uncle','Aunt'];
 
-  for (const [cat, list] of Object.entries(categories)) {
-    if (list.length === 0) continue;
-    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${labels[cat]}</h3><div class="tree-fallback-grid">`;
-    html += list.map(n => {
+  const groups = [
+    { label: 'Immediate Family', items: [] },
+    { label: 'Extended Family', items: [] },
+    { label: 'Friends & Others', items: [] },
+  ];
+
+  for (const n of nodes) {
+    const rel = n.relationship?.split(' \u2014 ')[0] || '';
+    if (immediate.includes(rel)) groups[0].items.push(n);
+    else if (extended.includes(rel)) groups[1].items.push(n);
+    else groups[2].items.push(n);
+  }
+
+  for (const group of groups) {
+    if (group.items.length === 0) continue;
+    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${group.label}</h3><div class="tree-fallback-grid">`;
+    html += group.items.map(n => {
       let card = '<div class="tree-fallback-card">';
       if (n.photo_url) card += `<img src="${n.photo_url}" alt="${escapeHtml(n.name)}">`;
       card += `<h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>`;
