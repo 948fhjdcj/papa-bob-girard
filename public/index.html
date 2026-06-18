@@ -15,18 +15,20 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0d0d0d;
-  --surface: #161616;
-  --surface-el: #1f1f1f;
-  --gold: #c9a84c;
-  --gold-muted: #8a6f2e;
-  --text: #f0ece0;
-  --text-sec: #9a9080;
-  --border: #2a2620;
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-el: #1c1a17;
+  --gold: #c4a882;
+  --gold-muted: #6b4e2a;
+  --highlight: #8b1a1a;
+  --text: #ede8df;
+  --text-sec: #7a7060;
+  --border: #2a2520;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', -apple-system, sans-serif;
   --radius: 12px;
   --radius-sm: 8px;
+  --surface-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 html { scroll-behavior: smooth; }
@@ -109,8 +111,8 @@ option { color: var(--text); font-weight: 400; }
   font-size: 0.95rem;
 }
 
-.btn-gold { background: var(--gold); color: #0d0d0d; }
-.btn-gold:hover { background: #d4b35a; }
+.btn-gold { background: var(--gold); color: #0a0a0a; }
+.btn-gold:hover { background: #b89a74; }
 .btn-outline { border: 1px solid var(--gold); color: var(--gold); }
 .btn-outline:hover { background: rgba(201, 168, 76, 0.1); }
 .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
@@ -139,7 +141,7 @@ nav {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(13, 13, 13, 0.85);
+  background: rgba(10, 10, 10, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -191,7 +193,7 @@ nav {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(13, 13, 13, 0.97);
+  background: rgba(10, 10, 10, 0.97);
   z-index: 999;
   flex-direction: column;
   align-items: center;
@@ -259,8 +261,8 @@ nav {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center, rgba(13,13,13,0.1) 0%, rgba(13,13,13,0.88) 100%),
-    linear-gradient(to bottom, rgba(13,13,13,0.7) 0%, transparent 30%, transparent 60%, rgba(13,13,13,0.95) 100%);
+    radial-gradient(ellipse at center, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.88) 100%),
+    linear-gradient(to bottom, rgba(10,10,10,0.7) 0%, transparent 30%, transparent 60%, rgba(10,10,10,0.95) 100%);
   z-index: 1;
 }
 
@@ -284,7 +286,7 @@ nav {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 8vw, 5rem);
   color: var(--gold);
-  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 40px rgba(196,168,130,0.3);
   margin-bottom: 1rem;
   font-weight: 700;
 }
@@ -305,7 +307,7 @@ nav {
   transform: translateX(-50%);
   z-index: 2;
   animation: bobScroll 2s ease-in-out infinite;
-  color: var(--gold-muted);
+  color: var(--gold);
   font-size: 1.5rem;
   cursor: pointer;
 }
@@ -345,7 +347,7 @@ nav {
 .collage-photo {
   position: absolute;
   border: 6px solid #fff;
-  box-shadow: 3px 6px 18px rgba(0,0,0,0.6);
+  box-shadow: 3px 6px 18px rgba(0,0,0,0.7);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, z-index 0s;
   z-index: 1;
@@ -394,7 +396,7 @@ nav {
 
 .gallery-toggle button.active {
   background: var(--gold);
-  color: #0d0d0d;
+  color: #0a0a0a;
 }
 
 .name-chips {
@@ -569,6 +571,8 @@ nav {
 
 .guestbook-card {
   background: var(--surface-el);
+  background-image: var(--surface-texture);
+  background-blend-mode: overlay;
   padding: 1.5rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -619,7 +623,9 @@ nav {
 .fact-card {
   break-inside: avoid;
   background: var(--surface-el);
-  border: 1px solid var(--gold-muted);
+  background-image: var(--surface-texture);
+  background-blend-mode: overlay;
+  border: 1px solid rgba(107,78,42,0.4);
   border-radius: var(--radius);
   padding: 1.25rem;
   margin-bottom: 1rem;
@@ -819,6 +825,8 @@ nav {
 
 .modal {
   background: var(--surface-el);
+  background-image: var(--surface-texture);
+  background-blend-mode: overlay;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2rem;
@@ -852,7 +860,7 @@ nav {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(13, 13, 13, 0.95);
+  background: rgba(10, 10, 10, 0.95);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 9000;
@@ -865,6 +873,8 @@ nav {
 .magic-gate-card {
   text-align: center;
   background: var(--surface-el);
+  background-image: var(--surface-texture);
+  background-blend-mode: overlay;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2.5rem 2rem;
@@ -886,7 +896,7 @@ nav {
 }
 
 .magic-gate-error {
-  color: #e8785a;
+  color: #8b1a1a;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
   display: none;
@@ -918,14 +928,15 @@ nav {
 .toast {
   padding: 0.75rem 1.5rem;
   background: var(--surface-el);
-  border: 1px solid var(--gold);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   animation: toastIn 0.3s ease;
   white-space: nowrap;
 }
 
-.toast.error { border-color: #e8785a; }
+.toast.error { border-left-color: #8b1a1a; }
 
 @keyframes toastIn {
   from { opacity: 0; transform: translateY(10px); }
@@ -1234,7 +1245,9 @@ footer .footer-love {
 // ============================================
 // CONFIG
 // ============================================
-const API_BASE = 'https://papa-bob-api.dan-fcc.workers.dev/api';
+const API_BASE = (window.location.hostname === 'papabob.org' || window.location.hostname === 'www.papabob.org')
+  ? '/api'
+  : 'https://papa-bob-api.dan-fcc.workers.dev/api';
 let isUnlocked = sessionStorage.getItem('unlocked') === 'true';
 let pendingAction = null;
 let allPhotos = [];
@@ -1640,7 +1653,7 @@ function showConfetti() {
   const container = document.createElement('div');
   container.className = 'confetti-container';
   document.body.appendChild(container);
-  const colors = ['#c9a84c', '#f0ece0', '#e8785a', '#5ab8e8', '#5ae87a', '#e85ab8'];
+  const colors = ['#c4a882', '#ede8df', '#8b1a1a', '#6b4e2a', '#a8c4a0', '#d4a882'];
   for (let i = 0; i < 50; i++) {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
@@ -2192,8 +2205,8 @@ function renderTreeD3(nodes) {
   const graphLinks = nodes.map(n => ({ source: 'bob', target: `node-${n.id}` }));
 
   if (nodes.length === 0) {
-    svg.append('circle').attr('cx', width / 2).attr('cy', height / 2).attr('r', 40).attr('fill', '#c9a84c').attr('opacity', 0.9);
-    svg.append('text').attr('x', width / 2).attr('y', height / 2 + 5).attr('text-anchor', 'middle').attr('fill', '#0d0d0d').attr('font-size', '14px').attr('font-weight', '600').text('PaPa Bob');
+    svg.append('circle').attr('cx', width / 2).attr('cy', height / 2).attr('r', 40).attr('fill', '#c4a882').attr('opacity', 0.9);
+    svg.append('text').attr('x', width / 2).attr('y', height / 2 + 5).attr('text-anchor', 'middle').attr('fill', '#0a0a0a').attr('font-size', '14px').attr('font-weight', '600').text('PaPa Bob');
     return;
   }
 
@@ -2203,7 +2216,7 @@ function renderTreeD3(nodes) {
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(40));
 
-  const link = svg.append('g').selectAll('line').data(graphLinks).join('line').attr('stroke', '#2a2620').attr('stroke-width', 1.5);
+  const link = svg.append('g').selectAll('line').data(graphLinks).join('line').attr('stroke', 'rgba(42,37,32,0.6)').attr('stroke-width', 1.5);
 
   const nodeGroup = svg.append('g').selectAll('g').data(graphNodes).join('g').attr('class', 'tree-node')
     .call(d3.drag()
@@ -2215,25 +2228,29 @@ function renderTreeD3(nodes) {
   nodeGroup.append('circle')
     .attr('r', d => d.id === 'bob' ? 40 : 28)
     .attr('fill', d => {
-      if (d.id === 'bob') return '#c9a84c';
-      if (d.category === 'family') return '#8a6f2e';
-      if (d.category === 'friend') return '#4a6a5a';
-      return '#4a4a5a';
+      if (d.id === 'bob') return '#c4a882';
+      if (d.category === 'family') return '#3a2e1e';
+      if (d.category === 'friend') return '#1a2a1a';
+      return '#1c1a17';
     })
-    .attr('stroke', d => d.id === 'bob' ? '#f0ece0' : 'none')
+    .attr('stroke', d => d.id === 'bob' ? '#ede8df' : 'none')
     .attr('stroke-width', 2).attr('opacity', 0.9)
     .on('click', (event, d) => { if (d.id !== 'bob') showTreeTooltip(d, event); });
 
   nodeGroup.append('text')
     .attr('dy', d => d.id === 'bob' ? 5 : 4)
     .attr('text-anchor', 'middle')
-    .attr('fill', d => d.id === 'bob' ? '#0d0d0d' : '#f0ece0')
+    .attr('fill', d => {
+      if (d.id === 'bob') return '#0a0a0a';
+      if (d.category === 'friend') return '#a8c4a0';
+      return '#c4a882';
+    })
     .attr('font-size', d => d.id === 'bob' ? '14px' : '10px')
     .attr('font-weight', d => d.id === 'bob' ? '600' : '500')
     .text(d => d.name.length > 12 ? d.name.substring(0, 11) + '...' : d.name);
 
   nodeGroup.filter(d => d.id !== 'bob').append('text')
-    .attr('dy', 42).attr('text-anchor', 'middle').attr('fill', '#9a9080').attr('font-size', '8px')
+    .attr('dy', 42).attr('text-anchor', 'middle').attr('fill', '#7a7060').attr('font-size', '8px')
     .text(d => { const r = d.relationship || ''; return r.length > 20 ? r.substring(0, 19) + '...' : r; });
 
   simulation.on('tick', () => {

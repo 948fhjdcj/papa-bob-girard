@@ -14,7 +14,6 @@ database_id = "797d1768-5996-45ce-aa77-07f67d28c220"
 [vars]
 MAGIC_WORD = "LoveYou"
 
-# Uncomment once papabob.org is added to Cloudflare and proxied:
-# [[routes]]
-# pattern = "papabob.org/api/*"
-# zone_name = "papabob.org"
+[[routes]]
+pattern = "papabob.org/api/*"
+zone_name = "papabob.org"
