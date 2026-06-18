@@ -2550,6 +2550,12 @@ function buildPolaroidCard(node) {
     : `<div class="polaroid-monogram">${initials}</div>`;
   const noteHTML = node.note ? `<div class="polaroid-note-tooltip">${escapeHtml(node.note)}</div>` : '';
   card.innerHTML = `<div class="polaroid-photo-area">${photoHTML}</div><div class="polaroid-caption"><span class="polaroid-name">${escapeHtml(node.name)}</span><span class="polaroid-relationship">${escapeHtml(node.relationship)}</span></div>${noteHTML}`;
+  if (imgUrl) {
+    card.style.cursor = 'zoom-in';
+    card.addEventListener('click', () => {
+      Lightbox.open([{ key: node.photo_key || '', url: imgUrl, uploader_name: node.name, year: '' }], 0, false);
+    });
+  }
   return card;
 }
 
