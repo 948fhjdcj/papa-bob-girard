@@ -239,20 +239,15 @@ nav {
   inset: 0;
   background-image: url('hero-bob.jpg');
   background-repeat: no-repeat;
-  background-position: center 10%;
-  background-size: cover;
+  background-position: center center;
+  background-size: contain;
   filter: blur(1.5px) sepia(0.35) brightness(0.85);
   transform: scale(1.05);
   z-index: 0;
   transition: opacity 1.5s ease;
 }
 
-@media (max-width: 768px) {
-  .hero-fallback-bg {
-    background-size: contain;
-    background-position: center center;
-  }
-}
+
 
 .hero-slide {
   position: absolute;
