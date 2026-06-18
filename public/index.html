@@ -599,30 +599,36 @@ nav {
 .fact-card-meta { font-size: 0.8rem; color: var(--text-sec); }
 
 /* ============================================
-   FAMILY TREE
+   CONSTELLATION TREE
    ============================================ */
-.tree-container {
+.constellation-wrap {
   width: 100%;
-  min-height: 500px;
-  background: var(--surface);
   border-radius: var(--radius);
   overflow: hidden;
-  position: relative;
+  background: #050505;
 }
 
-.tree-svg { width: 100%; height: 600px; }
-@media (max-width: 768px) { .tree-svg { height: 450px; } }
+.constellation-legend {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+}
 
-.tree-fallback { display: none; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-item.family { color: #d4d0c8; }
+.legend-item.friends { color: #a8c4a0; }
+.legend-item.other { color: #a0a0b4; }
 
-.tree-fallback-grid {
+.constellation-fallback-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.tree-fallback-card {
+.constellation-fallback-card {
   background: var(--surface-el);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -630,15 +636,8 @@ nav {
   text-align: center;
 }
 
-.tree-fallback-card h4 { color: var(--gold); margin-bottom: 0.25rem; }
-.tree-fallback-card p { font-size: 0.85rem; color: var(--text-sec); }
-
-.tree-fallback-card img {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 0.5rem;
-}
+.constellation-fallback-card h4 { color: var(--gold); margin-bottom: 0.25rem; }
+.constellation-fallback-card p { font-size: 0.85rem; color: var(--text-sec); }
 
 .tree-form-hint {
   font-size: 0.78rem;
@@ -647,25 +646,58 @@ nav {
   margin-bottom: 12px;
 }
 
-.tree-node circle { cursor: pointer; }
-.tree-node text { font-family: var(--font-body); pointer-events: none; }
-
-.tree-tooltip {
-  position: absolute;
+.constellation-popup {
+  position: fixed;
+  z-index: 1000;
   background: var(--surface-el);
-  border: 1px solid var(--gold-muted);
-  border-radius: var(--radius-sm);
-  padding: 1rem;
-  max-width: 250px;
-  z-index: 10;
-  display: none;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px 12px;
+  max-width: 220px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.8);
+  pointer-events: all;
 }
 
-.tree-tooltip.visible { display: block; }
-.tree-tooltip h4 { color: var(--gold); margin-bottom: 0.25rem; }
-.tree-tooltip p { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 0.25rem; }
-.tree-tooltip img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-top: 0.5rem; }
+.popup-name { font-family: var(--font-display); color: var(--gold); font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+.popup-relationship { color: var(--text-sec); font-size: 0.78rem; margin-bottom: 6px; }
+.popup-note { color: var(--text); font-size: 0.82rem; line-height: 1.4; margin-bottom: 6px; }
+.popup-photo { width: 100%; border-radius: 6px; object-fit: cover; max-height: 120px; display: block; margin-top: 6px; }
+.popup-close { position: absolute; top: 8px; right: 10px; background: none; border: none; color: var(--text-sec); cursor: pointer; font-size: 0.8rem; padding: 0; line-height: 1; }
+
+/* ============================================
+   CELEBRATION ANIMATIONS
+   ============================================ */
+@keyframes cardGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(212,208,200,0); }
+  30%  { box-shadow: 0 0 24px 4px rgba(212,208,200,0.35); }
+  100% { box-shadow: 0 0 0 0 rgba(212,208,200,0); }
+}
+
+.guestbook-card.new-entry { animation: cardGlow 1.8s ease-out forwards; }
+
+@keyframes cardFlipIn {
+  0%   { transform: rotateY(90deg) scale(0.8); opacity: 0; }
+  60%  { transform: rotateY(-8deg) scale(1.02); opacity: 1; }
+  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+}
+
+.fact-card.new-entry { animation: cardFlipIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-style: preserve-3d; }
+
+.magic-shimmer {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 100%; aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(212,208,200,0.4) 0%, rgba(212,208,200,0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  animation: shimmerRipple 0.6s ease-out forwards;
+}
+
+@keyframes shimmerRipple {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
 
 /* ============================================
    SLIDESHOW
@@ -1418,8 +1450,8 @@ footer .footer-love {
 <!-- Toast container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- D3.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<!-- EXIF reader for photo rotation -->
+<script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/lite.umd.js"></script>
 
 <script>
 // ============================================
@@ -1447,7 +1479,6 @@ let slideshowSpeed = 5000;
 let slideshowPhotos = [];
 let slideshowIndex = -1;
 let controlsTimeout = null;
-function d3Available() { return typeof d3 !== 'undefined'; }
 let currentRoute = null;
 let treeData = null;
 let sigCanvas, sigCtx, sigDrawing = false;
@@ -1483,6 +1514,9 @@ function routeTo(path) {
 
 function cleanup() {
   if (galleryRefreshInterval) { clearInterval(galleryRefreshInterval); galleryRefreshInterval = null; }
+  stopConstellationLoop();
+  const popup = document.getElementById('constellation-popup');
+  if (popup) popup.remove();
 }
 
 function updateActiveNav() {
@@ -1728,11 +1762,15 @@ function renderWorldPage() {
         <p>Show him where you fit. Every person here is someone whose life he touched.</p>
         <button class="btn btn-gold" style="margin-top:1rem;" onclick="requireMagicWord(() => openModal('treeModal'))">Add Yourself</button>
       </div>
-      <div class="tree-container" id="treeContainer">
-        <svg class="tree-svg" id="treeSvg"></svg>
-        <div class="tree-tooltip" id="treeTooltip"></div>
+      <div class="constellation-legend">
+        <span class="legend-item family">&#x2605; Family</span>
+        <span class="legend-item friends">&#x2605; Friends</span>
+        <span class="legend-item other">&#x2605; Others</span>
       </div>
-      <div class="tree-fallback" id="treeFallback"></div>
+      <div class="constellation-wrap">
+        <canvas id="constellation-canvas" style="width:100%;display:block;touch-action:none;"></canvas>
+      </div>
+      <div id="constellationFallback" style="display:none;"></div>
     </div>`;
 
   loadTree();
@@ -1760,10 +1798,13 @@ function checkMagicWord() {
   if (val.toLowerCase() === 'loveyou') {
     isUnlocked = true;
     sessionStorage.setItem('unlocked', 'true');
-    document.getElementById('magicGate').classList.remove('open');
     input.value = '';
     document.getElementById('magicError').style.display = 'none';
-    if (pendingAction) { pendingAction(); pendingAction = null; }
+    const card = document.querySelector('.magic-gate-card');
+    playUnlockShimmer(card, () => {
+      document.getElementById('magicGate').classList.remove('open');
+      if (pendingAction) { pendingAction(); pendingAction = null; }
+    });
   } else {
     document.getElementById('magicError').style.display = 'block';
     input.classList.add('shake');
@@ -2022,29 +2063,51 @@ function handleFileSelection(fileList) {
 }
 
 async function processImage(file) {
-  return new Promise((resolve) => {
-    const ext = file.name.split('.').pop().toLowerCase();
-    if (ext === 'heic') { resolve(file); return; }
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'heic') return file;
+
+  // Read EXIF orientation
+  let orientation = 1;
+  try {
+    if (typeof exifr !== 'undefined') {
+      const exif = await exifr.parse(file, ['Orientation']);
+      orientation = exif?.Orientation || 1;
+    }
+  } catch { orientation = 1; }
+
+  return new Promise((resolve, reject) => {
     const img = new Image();
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      img.onload = () => {
-        const maxDim = 1600;
-        let { width, height } = img;
-        if (width > maxDim || height > maxDim) {
-          if (width > height) { height = Math.round((height / width) * maxDim); width = maxDim; }
-          else { width = Math.round((width / height) * maxDim); height = maxDim; }
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width; canvas.height = height;
-        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        canvas.toBlob((blob) => resolve(blob || file), 'image/jpeg', 0.85);
-      };
-      img.onerror = () => resolve(file);
-      img.src = e.target.result;
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const swapDims = [5,6,7,8].includes(orientation);
+      const srcW = swapDims ? img.naturalHeight : img.naturalWidth;
+      const srcH = swapDims ? img.naturalWidth : img.naturalHeight;
+      const maxDim = 1600;
+      let drawW = srcW, drawH = srcH;
+      if (Math.max(drawW, drawH) > maxDim) {
+        const s = maxDim / Math.max(drawW, drawH);
+        drawW = Math.round(drawW * s); drawH = Math.round(drawH * s);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = drawW; canvas.height = drawH;
+      const ctx = canvas.getContext('2d');
+      ctx.save();
+      switch (orientation) {
+        case 2: ctx.transform(-1,0,0,1,drawW,0); break;
+        case 3: ctx.transform(-1,0,0,-1,drawW,drawH); break;
+        case 4: ctx.transform(1,0,0,-1,0,drawH); break;
+        case 5: ctx.transform(0,1,1,0,0,0); break;
+        case 6: ctx.transform(0,1,-1,0,drawH,0); break;
+        case 7: ctx.transform(0,-1,-1,0,drawH,drawW); break;
+        case 8: ctx.transform(0,-1,1,0,0,drawW); break;
+      }
+      ctx.drawImage(img, 0, 0, drawW, drawH);
+      ctx.restore();
+      URL.revokeObjectURL(url);
+      canvas.toBlob(blob => resolve(blob || file), 'image/jpeg', 0.85);
     };
-    reader.onerror = () => resolve(file);
-    reader.readAsDataURL(file);
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
   });
 }
 
@@ -2216,6 +2279,7 @@ async function submitGuestbook() {
 
     closeModal('guestbookModal');
     showToast("Bob's going to love this \u{1F49B}");
+    launchHearts(btn);
     document.getElementById('gbName').value = '';
     document.getElementById('gbMessage').value = '';
     document.getElementById('gbPhoto').value = '';
@@ -2277,6 +2341,7 @@ async function submitFunFact() {
 
     closeModal('funfactModal');
     showToast('Fun fact added! \u{1F49B}');
+    launchSparkles(btn);
     document.getElementById('ffName').value = '';
     document.getElementById('ffFact').value = '';
     loadFunFacts();
@@ -2289,11 +2354,10 @@ async function submitFunFact() {
 }
 
 // ============================================
-// FAMILY TREE
+// FAMILY TREE — CONSTELLATION
 // ============================================
 const IMMEDIATE_FAMILY = ['Son','Daughter','Wife / Partner','Brother','Sister','Grandson','Granddaughter','Great-Grandson','Great-Granddaughter'];
 const EXTENDED_FAMILY = ['Son-in-Law','Daughter-in-Law','Brother-in-Law','Sister-in-Law','Nephew','Niece','Cousin','Uncle','Aunt'];
-const FRIENDS_OTHERS = ['Best Friend','Old Friend','Neighbor','Coworker','Fellow Veteran','Served Together','Childhood Friend','Friend of the Family','Other'];
 
 function handleRelationshipChange() {
   const val = document.getElementById('trRelationship').value;
@@ -2306,183 +2370,283 @@ function getRelationshipCategory(val) {
   return 'Friend';
 }
 
+// --- Constellation state ---
+let constellationNodes = [];
+let constellationBob = null;
+let constellationAnimId = null;
+let constellationPulse = 0;
+let constellationCtx = null;
+let constellationCanvas = null;
+
 async function loadTree() {
   try {
     const res = await fetch(`${API_BASE}/tree`);
     treeData = await res.json();
   } catch {
-    const c = document.getElementById('treeContainer');
-    if (c) c.innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
+    const wrap = document.querySelector('.constellation-wrap');
+    if (wrap) wrap.innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
     return;
   }
-  try {
-    renderTree();
-  } catch (err) {
-    console.error('Tree render error:', err);
-    // Fall back to card grid on D3 error
-    const allNodes = [
-      ...treeData.family.map(n => ({ ...n, category: 'family' })),
-      ...treeData.friends.map(n => ({ ...n, category: 'friend' })),
-      ...treeData.other.map(n => ({ ...n, category: 'other' })),
-    ];
-    renderTreeFallback(allNodes);
-  }
+  renderConstellation();
 }
 
-function renderTree() {
-  if (!treeData) return;
+function renderConstellation(animateNodeId) {
+  constellationCanvas = document.getElementById('constellation-canvas');
+  if (!constellationCanvas) return;
+  constellationCtx = constellationCanvas.getContext('2d');
+  if (!constellationCtx) { renderConstellationFallback(); return; }
+
+  const dpr = window.devicePixelRatio || 1;
+  const rect = constellationCanvas.getBoundingClientRect();
+  const W = rect.width;
+  const H = Math.max(W * 0.65, 400);
+  constellationCanvas.width = W * dpr;
+  constellationCanvas.height = H * dpr;
+  constellationCanvas.style.height = H + 'px';
+  constellationCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
   const allNodes = [
-    ...treeData.family.map(n => ({ ...n, category: 'family' })),
-    ...treeData.friends.map(n => ({ ...n, category: 'friend' })),
-    ...treeData.other.map(n => ({ ...n, category: 'other' })),
+    ...(treeData.family || []).map(n => ({ ...n, cat: 'family' })),
+    ...(treeData.friends || []).map(n => ({ ...n, cat: 'friends' })),
+    ...(treeData.other || []).map(n => ({ ...n, cat: 'other' })),
   ];
 
-  if (allNodes.length === 0 && !d3Available()) {
-    const c = document.getElementById('treeContainer');
-    if (c) c.innerHTML = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
-    return;
+  const cx = W / 2, cy = H / 2;
+  constellationBob = { x: cx, y: cy };
+  const baseR = Math.min(W, H) * 0.35;
+
+  const cats = { family: [], friends: [], other: [] };
+  allNodes.forEach(n => cats[n.cat]?.push(n));
+
+  constellationNodes = [];
+  const arcs = { family: [-150, -30], friends: [-20, 100], other: [110, 220] };
+  for (const [cat, list] of Object.entries(cats)) {
+    const [s, e] = arcs[cat].map(d => d * Math.PI / 180);
+    list.forEach((n, i) => {
+      const angle = list.length === 1 ? (s + e) / 2 : s + (i / (list.length - 1)) * (e - s);
+      const r = baseR + (i % 2 === 0 ? 0 : 25);
+      constellationNodes.push({ ...n, x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r, cat });
+    });
   }
 
-  if (!d3Available()) { renderTreeFallback(allNodes); return; }
-  renderTreeD3(allNodes);
+  // Setup interaction
+  constellationCanvas.onmousemove = (e) => {
+    const r = constellationCanvas.getBoundingClientRect();
+    constellationCanvas.style.cursor = getNodeAt(e.clientX - r.left, e.clientY - r.top) ? 'pointer' : 'default';
+  };
+  constellationCanvas.onclick = (e) => {
+    const r = constellationCanvas.getBoundingClientRect();
+    const node = getNodeAt(e.clientX - r.left, e.clientY - r.top);
+    const existing = document.getElementById('constellation-popup');
+    if (existing) existing.remove();
+    if (node) showNodePopup(node, e.clientX, e.clientY);
+  };
+  constellationCanvas.ontouchend = (e) => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    const r = constellationCanvas.getBoundingClientRect();
+    const node = getNodeAt(t.clientX - r.left, t.clientY - r.top);
+    const existing = document.getElementById('constellation-popup');
+    if (existing) existing.remove();
+    if (node) showNodePopup(node, t.clientX, t.clientY);
+  };
+
+  if (animateNodeId) {
+    const newNode = constellationNodes.find(n => n.id === animateNodeId);
+    if (newNode) { animateShootingStar(newNode); return; }
+  }
+
+  startConstellationLoop();
 }
 
-function renderTreeD3(nodes) {
-  const svg = d3.select('#treeSvg');
-  svg.selectAll('*').remove();
-
-  const container = document.getElementById('treeContainer');
-  if (!container) return;
-  const width = container.clientWidth;
-  const height = parseInt(getComputedStyle(document.getElementById('treeSvg')).height);
-  svg.attr('viewBox', `0 0 ${width} ${height}`);
-
-  const graphNodes = [
-    { id: 'bob', name: 'PaPa Bob', category: 'bob', fx: width / 2, fy: height / 2 },
-    ...nodes.map(n => ({ id: `node-${n.id}`, ...n })),
-  ];
-
-  const graphLinks = nodes.map(n => ({ source: 'bob', target: `node-${n.id}` }));
-
-  if (nodes.length === 0) {
-    svg.append('circle').attr('cx', width / 2).attr('cy', height / 2).attr('r', 40).attr('fill', '#d4d0c8').attr('opacity', 0.9);
-    svg.append('text').attr('x', width / 2).attr('y', height / 2 + 5).attr('text-anchor', 'middle').attr('fill', '#0a0a0a').attr('font-size', '14px').attr('font-weight', '600').text('PaPa Bob');
-    return;
+function startConstellationLoop() {
+  stopConstellationLoop();
+  function frame() {
+    drawConstellationFrame();
+    constellationAnimId = requestAnimationFrame(frame);
   }
+  frame();
+}
 
-  const simulation = d3.forceSimulation(graphNodes)
-    .force('link', d3.forceLink(graphLinks).id(d => d.id).distance(120))
-    .force('charge', d3.forceManyBody().strength(-200))
-    .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius(40));
+function stopConstellationLoop() {
+  if (constellationAnimId) { cancelAnimationFrame(constellationAnimId); constellationAnimId = null; }
+}
 
-  const link = svg.append('g').selectAll('line').data(graphLinks).join('line').attr('stroke', 'rgba(37,37,40,0.8)').attr('stroke-width', 1.5);
+function drawConstellationFrame() {
+  if (!constellationCtx || !constellationCanvas) return;
+  const ctx = constellationCtx;
+  const dpr = window.devicePixelRatio || 1;
+  const W = constellationCanvas.width / dpr;
+  const H = constellationCanvas.height / dpr;
+  constellationPulse += 0.02;
 
-  const nodeGroup = svg.append('g').selectAll('g').data(graphNodes).join('g').attr('class', 'tree-node')
-    .call(d3.drag()
-      .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-      .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
-      .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); if (d.id !== 'bob') { d.fx = null; d.fy = null; } })
-    );
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#050505';
+  ctx.fillRect(0, 0, W, H);
 
-  nodeGroup.append('circle')
-    .attr('r', d => d.id === 'bob' ? 40 : 28)
-    .attr('fill', d => {
-      if (d.id === 'bob') return '#d4d0c8';
-      if (d.category === 'family') return '#1a1a2e';
-      if (d.category === 'friend') return '#1a2a1a';
-      return '#181818';
-    })
-    .attr('stroke', d => d.id === 'bob' ? '#e8e6e0' : 'none')
-    .attr('stroke-width', 2).attr('opacity', 0.9)
-    .on('click', (event, d) => { if (d.id !== 'bob') showTreeTooltip(d, event); });
-
-  nodeGroup.append('text')
-    .attr('dy', d => d.id === 'bob' ? 5 : 4)
-    .attr('text-anchor', 'middle')
-    .attr('fill', d => {
-      if (d.id === 'bob') return '#0a0a0a';
-      if (d.category === 'friend') return '#a8c4a0';
-      return '#d4d0c8';
-    })
-    .attr('font-size', d => d.id === 'bob' ? '14px' : '10px')
-    .attr('font-weight', d => d.id === 'bob' ? '600' : '500')
-    .text(d => d.name.length > 12 ? d.name.substring(0, 11) + '...' : d.name);
-
-  nodeGroup.filter(d => d.id !== 'bob').append('text')
-    .attr('dy', 42).attr('text-anchor', 'middle').attr('fill', '#6a6870').attr('font-size', '8px')
-    .text(d => { const r = d.relationship || ''; return r.length > 20 ? r.substring(0, 19) + '...' : r; });
-
-  simulation.on('tick', () => {
-    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-    nodeGroup.attr('transform', d => `translate(${d.x},${d.y})`);
+  // Background stars
+  const bgStars = getBgStars(W, H);
+  bgStars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${s.opacity * (0.6 + 0.4 * Math.sin(constellationPulse + s.x))})`;
+    ctx.fill();
   });
+
+  // Connection lines
+  const bob = constellationBob;
+  constellationNodes.forEach(n => {
+    const colors = { family: 'rgba(212,208,200,0.25)', friends: 'rgba(168,196,160,0.2)', other: 'rgba(160,160,180,0.15)' };
+    ctx.beginPath(); ctx.moveTo(bob.x, bob.y); ctx.lineTo(n.x, n.y);
+    ctx.strokeStyle = colors[n.cat] || colors.other;
+    ctx.lineWidth = 0.8; ctx.setLineDash([4, 6]); ctx.stroke(); ctx.setLineDash([]);
+  });
+
+  // Person nodes
+  const nodeColors = {
+    family: { glow: 'rgba(212,208,200,0.6)', star: '#d4d0c8', text: '#d4d0c8' },
+    friends: { glow: 'rgba(168,196,160,0.5)', star: '#a8c4a0', text: '#a8c4a0' },
+    other: { glow: 'rgba(160,160,180,0.4)', star: '#a0a0b4', text: '#a0a0b4' },
+  };
+
+  constellationNodes.forEach(n => {
+    const c = nodeColors[n.cat] || nodeColors.other;
+    const pulse = 0.15 * Math.sin(constellationPulse + n.x * 0.05);
+    const r = 5 + pulse;
+
+    const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 4);
+    glow.addColorStop(0, c.glow); glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(n.x, n.y, r * 4, 0, Math.PI * 2); ctx.fillStyle = glow; ctx.fill();
+
+    drawStar(ctx, n.x, n.y, r, 4, c.star);
+
+    const fs = W < 600 ? 9 : 11;
+    ctx.font = `${fs}px Inter, sans-serif`; ctx.fillStyle = c.text; ctx.textAlign = 'center';
+    ctx.fillText(n.name, n.x, n.y + r + 14);
+    ctx.font = `${fs - 2}px Inter, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillText(n.relationship || '', n.x, n.y + r + 24);
+  });
+
+  // Bob node
+  const bp = 0.3 * Math.sin(constellationPulse * 0.8);
+  const br = 18 + bp;
+  const outerG = ctx.createRadialGradient(bob.x, bob.y, 0, bob.x, bob.y, br * 5);
+  outerG.addColorStop(0, 'rgba(212,208,200,0.4)'); outerG.addColorStop(0.5, 'rgba(212,208,200,0.1)'); outerG.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.arc(bob.x, bob.y, br * 5, 0, Math.PI * 2); ctx.fillStyle = outerG; ctx.fill();
+  const innerG = ctx.createRadialGradient(bob.x, bob.y, 0, bob.x, bob.y, br * 1.5);
+  innerG.addColorStop(0, 'rgba(255,255,240,0.95)'); innerG.addColorStop(0.5, 'rgba(212,208,200,0.8)'); innerG.addColorStop(1, 'rgba(212,208,200,0.2)');
+  ctx.beginPath(); ctx.arc(bob.x, bob.y, br * 1.5, 0, Math.PI * 2); ctx.fillStyle = innerG; ctx.fill();
+  drawStar(ctx, bob.x, bob.y, br, 6, '#fffffe');
+  const bfs = W < 600 ? 11 : 13;
+  ctx.font = `bold ${bfs}px "Playfair Display", serif`; ctx.fillStyle = '#d4d0c8'; ctx.textAlign = 'center';
+  ctx.fillText('PaPa Bob', bob.x, bob.y + br + 18);
 }
 
-function showTreeTooltip(d, event) {
-  const tooltip = document.getElementById('treeTooltip');
-  if (!tooltip) return;
-  let html = `<h4>${escapeHtml(d.name)}</h4><p>${escapeHtml(d.relationship)}</p>`;
-  if (d.note) html += `<p style="color:var(--text);margin-top:0.5rem;">${escapeHtml(d.note)}</p>`;
-  if (d.photo_url) html += `<img src="${photoUrl(d.photo_url)}" alt="${escapeHtml(d.name)}">`;
-  tooltip.innerHTML = html;
-
-  const container = document.getElementById('treeContainer');
-  const rect = container.getBoundingClientRect();
-  tooltip.style.left = Math.min(event.clientX - rect.left, rect.width - 260) + 'px';
-  tooltip.style.top = (event.clientY - rect.top + 10) + 'px';
-  tooltip.classList.add('visible');
-
-  const close = () => { tooltip.classList.remove('visible'); document.removeEventListener('click', close); };
-  setTimeout(() => document.addEventListener('click', close), 10);
+function drawStar(ctx, cx, cy, outerR, points, color) {
+  const innerR = outerR * 0.45;
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const angle = (i * Math.PI) / points - Math.PI / 2;
+    const r = i % 2 === 0 ? outerR : innerR;
+    const x = cx + Math.cos(angle) * r, y = cy + Math.sin(angle) * r;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.closePath(); ctx.fillStyle = color; ctx.fill();
 }
 
-function renderTreeFallback(nodes) {
-  const fallback = document.getElementById('treeFallback');
-  const treeContainer = document.getElementById('treeContainer');
-  if (!fallback || !treeContainer) return;
-  fallback.style.display = 'block';
-  treeContainer.style.display = 'none';
+function getBgStars(W, H) {
+  if (window._bgStars && window._bgW === W) return window._bgStars;
+  const stars = [];
+  for (let i = 0; i < 80; i++) {
+    stars.push({ x: (Math.sin(i * 127.1) * 0.5 + 0.5) * W, y: (Math.sin(i * 311.7) * 0.5 + 0.5) * H, size: 0.3 + (Math.sin(i * 71.3) * 0.5 + 0.5) * 1.2, opacity: 0.1 + (Math.sin(i * 43.7) * 0.5 + 0.5) * 0.25 });
+  }
+  window._bgStars = stars; window._bgW = W; return stars;
+}
 
-  // Bob banner at top
-  let html = '<div style="text-align:center;padding:1.5rem;margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-el);">'
-    + '<h3 style="font-family:var(--font-display);color:var(--gold);font-size:1.5rem;margin-bottom:0.25rem;">PaPa Bob Girard</h3>'
-    + '<p style="color:var(--text-sec);font-size:0.95rem;">The Man Himself</p>'
-    + '</div>';
+function getNodeAt(x, y) {
+  return constellationNodes.find(n => Math.hypot(n.x - x, n.y - y) < 24);
+}
 
-  // Order: Immediate Family, Extended Family, Friends & Others
-  const immediate = ['Son','Daughter','Wife / Partner','Brother','Sister','Grandson','Granddaughter','Great-Grandson','Great-Granddaughter'];
-  const extended = ['Son-in-Law','Daughter-in-Law','Brother-in-Law','Sister-in-Law','Nephew','Niece','Cousin','Uncle','Aunt'];
+function showNodePopup(node, screenX, screenY) {
+  let popup = document.getElementById('constellation-popup');
+  if (!popup) { popup = document.createElement('div'); popup.id = 'constellation-popup'; popup.className = 'constellation-popup'; document.body.appendChild(popup); }
+  popup.innerHTML = `<div class="popup-name">${escapeHtml(node.name)}</div><div class="popup-relationship">${escapeHtml(node.relationship)}</div>${node.note ? `<div class="popup-note">${escapeHtml(node.note)}</div>` : ''}${node.photo_url ? `<img class="popup-photo" src="${photoUrl(node.photo_url)}" alt="${escapeHtml(node.name)}">` : ''}<button class="popup-close" onclick="this.parentElement.remove()">&#x2715;</button>`;
+  let left = screenX + 12, top = screenY - 60;
+  if (left + 220 > window.innerWidth - 16) left = screenX - 232;
+  if (top < 8) top = 8;
+  popup.style.left = left + 'px'; popup.style.top = top + 'px'; popup.hidden = false;
+}
 
-  const groups = [
-    { label: 'Immediate Family', items: [] },
-    { label: 'Extended Family', items: [] },
-    { label: 'Friends & Others', items: [] },
-  ];
+function animateShootingStar(newNode) {
+  stopConstellationLoop();
+  const bob = constellationBob;
+  const start = performance.now();
+  const dur = 1200;
 
-  for (const n of nodes) {
+  function frame(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const cx = bob.x + (newNode.x - bob.x) * ease;
+    const cy = bob.y + (newNode.y - bob.y) * ease;
+
+    drawConstellationFrame();
+
+    const ctx = constellationCtx;
+    // Trail
+    const tl = 20 * (1 - ease);
+    if (tl > 1) {
+      const tx = cx - (newNode.x - bob.x) * 0.08 * (1 - ease);
+      const ty = cy - (newNode.y - bob.y) * 0.08 * (1 - ease);
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(tx, ty);
+      const tg = ctx.createLinearGradient(cx, cy, tx, ty);
+      tg.addColorStop(0, 'rgba(255,255,240,0.9)'); tg.addColorStop(1, 'rgba(255,255,240,0)');
+      ctx.strokeStyle = tg; ctx.lineWidth = 2; ctx.stroke();
+    }
+    drawStar(ctx, cx, cy, 6 + 4 * (1 - ease), 4, '#fffffe');
+
+    if (p < 1) requestAnimationFrame(frame);
+    else {
+      // Arrival pulse
+      const ps = performance.now();
+      function pulse(now2) {
+        const pp = Math.min((now2 - ps) / 600, 1);
+        drawConstellationFrame();
+        ctx.beginPath(); ctx.arc(newNode.x, newNode.y, 6 + pp * 40, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(212,208,200,${(1 - pp) * 0.8})`; ctx.lineWidth = 2; ctx.stroke();
+        // Bob ripple
+        ctx.beginPath(); ctx.arc(bob.x, bob.y, 20 + pp * 60, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255,255,240,${(1 - pp) * 0.5})`; ctx.lineWidth = 1.5; ctx.stroke();
+        if (pp < 1) requestAnimationFrame(pulse);
+        else startConstellationLoop();
+      }
+      requestAnimationFrame(pulse);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function renderConstellationFallback() {
+  const fallback = document.getElementById('constellationFallback');
+  const wrap = document.querySelector('.constellation-wrap');
+  if (!fallback || !wrap) return;
+  wrap.style.display = 'none'; fallback.style.display = 'block';
+
+  const allNodes = [...(treeData.family||[]).map(n=>({...n,cat:'family'})),...(treeData.friends||[]).map(n=>({...n,cat:'friends'})),...(treeData.other||[]).map(n=>({...n,cat:'other'}))];
+  let html = '<div style="text-align:center;padding:1.5rem;margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-el);"><h3 style="font-family:var(--font-display);color:var(--gold);font-size:1.5rem;margin-bottom:0.25rem;">PaPa Bob Girard</h3><p style="color:var(--text-sec);font-size:0.95rem;">The Man Himself</p></div>';
+
+  const groups = [{ label: 'Immediate Family', items: [] }, { label: 'Extended Family', items: [] }, { label: 'Friends & Others', items: [] }];
+  for (const n of allNodes) {
     const rel = n.relationship?.split(' \u2014 ')[0] || '';
-    if (immediate.includes(rel)) groups[0].items.push(n);
-    else if (extended.includes(rel)) groups[1].items.push(n);
+    if (IMMEDIATE_FAMILY.includes(rel)) groups[0].items.push(n);
+    else if (EXTENDED_FAMILY.includes(rel)) groups[1].items.push(n);
     else groups[2].items.push(n);
   }
-
-  for (const group of groups) {
-    if (group.items.length === 0) continue;
-    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${group.label}</h3><div class="tree-fallback-grid">`;
-    html += group.items.map(n => {
-      let card = '<div class="tree-fallback-card">';
-      if (n.photo_url) card += `<img src="${photoUrl(n.photo_url)}" alt="${escapeHtml(n.name)}">`;
-      card += `<h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>`;
-      if (n.note) card += `<p style="margin-top:0.5rem;color:var(--text);">${escapeHtml(n.note)}</p>`;
-      return card + '</div>';
-    }).join('') + '</div>';
+  for (const g of groups) {
+    if (!g.items.length) continue;
+    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${g.label}</h3><div class="constellation-fallback-grid">`;
+    html += g.items.map(n => `<div class="constellation-fallback-card"><h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>${n.note ? `<p style="margin-top:0.5rem;color:var(--text);">${escapeHtml(n.note)}</p>` : ''}</div>`).join('') + '</div>';
   }
-
-  if (nodes.length === 0) {
-    html += '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
-  }
-
+  if (!allNodes.length) html += '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
   fallback.innerHTML = html;
 }
 
@@ -2527,7 +2691,11 @@ async function submitTreeNode() {
     document.getElementById('trOtherGroup').style.display = 'none';
     document.getElementById('trNote').value = '';
     document.getElementById('trPhoto').value = '';
-    loadTree();
+
+    // Re-fetch tree and animate new node
+    const treeRes = await fetch(`${API_BASE}/tree`);
+    treeData = await treeRes.json();
+    renderConstellation(result.id);
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
   } finally {
@@ -2762,6 +2930,59 @@ const Lightbox = (() => {
 
   return { open, close, init };
 })();
+
+// ============================================
+// CELEBRATION ANIMATIONS
+// ============================================
+function launchHearts(triggerEl) {
+  const rect = triggerEl.getBoundingClientRect();
+  const ox = rect.left + rect.width / 2, oy = rect.top;
+  const hearts = [];
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement('div');
+    el.textContent = '\u{1F49B}';
+    el.style.cssText = `position:fixed;left:${ox + (Math.random()-0.5)*60}px;top:${oy}px;font-size:${12+Math.random()*14}px;pointer-events:none;z-index:99999;opacity:1;user-select:none;`;
+    document.body.appendChild(el);
+    hearts.push({ el, x: ox + (Math.random()-0.5)*60, y: oy, vx: (Math.random()-0.5)*1.5, vy: -(2+Math.random()*3) });
+  }
+  const start = performance.now();
+  function anim(now) {
+    const p = (now - start) / 2000;
+    hearts.forEach(h => { h.x += h.vx; h.y += h.vy; h.vy += 0.04; h.el.style.left = h.x+'px'; h.el.style.top = h.y+'px'; h.el.style.opacity = Math.max(0, 1-p*1.2); });
+    if (p < 1) requestAnimationFrame(anim); else hearts.forEach(h => h.el.remove());
+  }
+  requestAnimationFrame(anim);
+}
+
+function launchSparkles(triggerEl) {
+  const rect = triggerEl.getBoundingClientRect();
+  const ox = rect.left + rect.width / 2, oy = rect.top + rect.height / 2;
+  const sparkles = [];
+  for (let i = 0; i < 12; i++) {
+    const el = document.createElement('div');
+    const angle = (i / 12) * Math.PI * 2;
+    const speed = 2 + Math.random() * 4;
+    el.style.cssText = `position:fixed;left:${ox}px;top:${oy}px;width:${3+Math.random()*4}px;height:${3+Math.random()*4}px;background:${Math.random()>0.5?'#d4d0c8':'#fff'};border-radius:50%;pointer-events:none;z-index:99999;opacity:1;`;
+    document.body.appendChild(el);
+    sparkles.push({ el, x: ox, y: oy, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed });
+  }
+  const start = performance.now();
+  function anim(now) {
+    const p = (now - start) / 700;
+    sparkles.forEach(s => { s.x += s.vx; s.y += s.vy; s.vy += 0.1; s.el.style.left = s.x+'px'; s.el.style.top = s.y+'px'; s.el.style.opacity = Math.max(0, 1-p*1.3); });
+    if (p < 1) requestAnimationFrame(anim); else sparkles.forEach(s => s.el.remove());
+  }
+  requestAnimationFrame(anim);
+}
+
+function playUnlockShimmer(modalEl, onComplete) {
+  const shimmer = document.createElement('div');
+  shimmer.className = 'magic-shimmer';
+  modalEl.style.position = 'relative';
+  modalEl.style.overflow = 'hidden';
+  modalEl.appendChild(shimmer);
+  setTimeout(() => { shimmer.remove(); onComplete(); }, 600);
+}
 
 // ============================================
 // UTIL
