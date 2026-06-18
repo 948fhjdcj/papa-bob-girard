@@ -237,7 +237,10 @@ nav {
 .hero-fallback-bg {
   position: absolute;
   inset: 0;
-  background: url('hero-bob.jpg') center 10% / cover no-repeat;
+  background-image: url('hero-bob.jpg');
+  background-repeat: no-repeat;
+  background-position: center 10%;
+  background-size: cover;
   filter: blur(1.5px) sepia(0.35) brightness(0.85);
   transform: scale(1.05);
   z-index: 0;
