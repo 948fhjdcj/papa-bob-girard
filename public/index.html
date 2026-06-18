@@ -1113,6 +1113,19 @@ footer .footer-love {
   </div>
 </div>
 
+<!-- Download Confirm Modal -->
+<div class="modal-overlay" id="downloadConfirmModal">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('downloadConfirmModal')">&times;</button>
+    <h3>Download all photos of PaPa Bob?</h3>
+    <p style="color:var(--text-sec);margin-bottom:1.5rem;">This will package everything into a single ZIP file. It may take a moment depending on how many photos have been shared.</p>
+    <div style="display:flex;gap:0.75rem;justify-content:center;">
+      <button class="btn btn-outline" onclick="closeModal('downloadConfirmModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="executeDownloadAll()">Download Everything &#x1F49B;</button>
+    </div>
+  </div>
+</div>
+
 <!-- Tree Modal -->
 <div class="modal-overlay" id="treeModal">
   <div class="modal">
@@ -1436,6 +1449,10 @@ function renderPhotosPage() {
         <p>Every photo tells a story. Here are some of the best ones.</p>
       </div>
 
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <button class="btn btn-outline" id="downloadAllBtn" onclick="confirmDownloadAll()" style="width:100%;max-width:400px;justify-content:center;">&#x2B07; Download All Photos</button>
+      </div>
+
       <div class="gallery-controls">
         <div class="gallery-toggle">
           <button class="active" onclick="setGalleryView('all', this)">All Photos</button>
@@ -1688,9 +1705,11 @@ function renderGallery() {
     const uploaders = {};
     allPhotos.forEach(p => { if (!uploaders[p.uploader_name]) uploaders[p.uploader_name] = 0; uploaders[p.uploader_name]++; });
     chipsContainer.innerHTML = Object.entries(uploaders)
-      .map(([name, count]) =>
-        `<button class="name-chip ${activeUploaderFilter === name ? 'active' : ''}" onclick="filterByUploader('${name.replace(/'/g, "\\'")}')">${name} (${count})</button>`
-      ).join('');
+      .map(([name, count]) => {
+        const slug = name.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+        return `<button class="name-chip ${activeUploaderFilter === name ? 'active' : ''}" onclick="filterByUploader('${name.replace(/'/g, "\\'")}')">${name} (${count})</button>`
+          + `<button class="name-chip" onclick="downloadPersonPhotos('${slug}', '${name.replace(/'/g, "\\'")}')" style="font-size:0.75rem;padding:0.25rem 0.6rem;" title="Download ${name}'s photos">&#x2B07;</button>`;
+      }).join('');
     chipsContainer.style.display = 'flex';
   } else {
     chipsContainer.style.display = 'none';
@@ -1745,6 +1764,75 @@ function setGallerySort(sort, btn) {
 
 function copyLink(url) {
   navigator.clipboard.writeText(url).then(() => showToast('Copied! \u{1F49B}'));
+}
+
+// ============================================
+// BULK DOWNLOAD
+// ============================================
+function confirmDownloadAll() {
+  if (allPhotos.length === 0) { showToast('No photos to download yet.', true); return; }
+  openModal('downloadConfirmModal');
+}
+
+async function executeDownloadAll() {
+  closeModal('downloadConfirmModal');
+  const btn = document.getElementById('downloadAllBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Preparing your download...'; }
+
+  try {
+    const res = await fetch(`${API_BASE}/photos/download-all`);
+    if (!res.ok) {
+      const data = await res.json();
+      if (res.status === 413) {
+        showToast('There are too many photos to download at once \u2014 please download by person using the buttons below.', true);
+      } else {
+        showToast(data.error || 'Download failed.', true);
+      }
+      return;
+    }
+    const blob = await res.blob();
+    triggerBlobDownload(blob, 'papa-bob-all-photos.zip');
+    showMobileDownloadHint();
+  } catch (err) {
+    showToast('Download failed. Please try again.', true);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '&#x2B07; Download All Photos'; }
+  }
+}
+
+async function downloadPersonPhotos(slug, name) {
+  showToast(`Preparing ${name}'s photos...`);
+
+  try {
+    const res = await fetch(`${API_BASE}/photos/download-person/${slug}`);
+    if (!res.ok) {
+      const data = await res.json();
+      showToast(data.error || 'Download failed.', true);
+      return;
+    }
+    const blob = await res.blob();
+    triggerBlobDownload(blob, `papa-bob-photos-${slug}.zip`);
+    showMobileDownloadHint();
+  } catch (err) {
+    showToast('Download failed. Please try again.', true);
+  }
+}
+
+function triggerBlobDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+function showMobileDownloadHint() {
+  if (window.innerWidth < 768) {
+    showToast('Your ZIP file is downloading. Check your Files app to find it. \u{1F49B}');
+  }
 }
 
 // ============================================
