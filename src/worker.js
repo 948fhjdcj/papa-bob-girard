@@ -116,7 +116,7 @@ async function handleAPI(request, env, url, path) {
 
   // List photos
   if (method === 'GET' && path === '/api/photos') {
-    const list = await env.PHOTOS.list({ limit: 1000 });
+    const list = await env.PHOTOS.list({ limit: 1000, include: ['customMetadata'] });
     const photos = [];
 
     for (const obj of list.objects) {
@@ -153,7 +153,7 @@ async function handleAPI(request, env, url, path) {
 
   // Download all photos as ZIP
   if (method === 'GET' && path === '/api/photos/download-all') {
-    const list = await env.PHOTOS.list({ limit: 1000 });
+    const list = await env.PHOTOS.list({ limit: 1000, include: ['customMetadata'] });
     const photoObjects = list.objects.filter(o => !o.key.startsWith('guestbook/') && !o.key.startsWith('tree/'));
 
     if (photoObjects.length === 0) {
@@ -239,7 +239,7 @@ async function handleAPI(request, env, url, path) {
 
   // List uploaders
   if (method === 'GET' && path === '/api/photos/uploaders') {
-    const list = await env.PHOTOS.list({ limit: 1000 });
+    const list = await env.PHOTOS.list({ limit: 1000, include: ['customMetadata'] });
     const uploaders = {};
 
     for (const obj of list.objects) {

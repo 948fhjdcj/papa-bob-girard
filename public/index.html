@@ -1245,7 +1245,14 @@ footer .footer-love {
 // ============================================
 // CONFIG
 // ============================================
-const API_BASE = 'https://papa-bob-api.dan-fcc.workers.dev/api';
+const API_HOST = 'https://papa-bob-api.dan-fcc.workers.dev';
+const API_BASE = API_HOST + '/api';
+
+function photoUrl(relativeUrl) {
+  if (!relativeUrl) return null;
+  if (relativeUrl.startsWith('http')) return relativeUrl;
+  return API_HOST + relativeUrl;
+}
 let isUnlocked = sessionStorage.getItem('unlocked') === 'true';
 let pendingAction = null;
 let allPhotos = [];
@@ -1414,7 +1421,7 @@ function renderCollage() {
   container.innerHTML = placed.map(p => `
     <div class="collage-photo" onclick="navigate('/photos')"
       style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rotation}deg);">
-      <img src="${p.photo.url}" alt="Photo of PaPa Bob" loading="lazy">
+      <img src="${photoUrl(p.photo.url)}" alt="Photo of PaPa Bob" loading="lazy">
     </div>`).join('');
 }
 
@@ -1433,7 +1440,7 @@ function updateHeroSlideshow() {
 
   const shuffled = [...allPhotos].sort(() => Math.random() - 0.5).slice(0, 10);
   container.innerHTML = shuffled.map((p, i) =>
-    `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${p.url}')"></div>`
+    `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${photoUrl(p.url)}')"></div>`
   ).join('');
 
   if (heroSlideInterval) clearInterval(heroSlideInterval);
@@ -1728,11 +1735,11 @@ function renderGallery() {
   }
 
   grid.innerHTML = photos.map(p => {
-    const siteUrl = window.location.origin + p.url;
+    const siteUrl = photoUrl(p.url);
     const yearLabel = p.year ? ` &middot; ${p.year}` : '';
     return `
       <div class="photo-card" onclick="togglePhotoCard(this)" ontouchstart="">
-        <img src="${p.url}" alt="Photo by ${p.uploader_name}" loading="lazy">
+        <img src="${photoUrl(p.url)}" alt="Photo by ${p.uploader_name}" loading="lazy">
         <div class="photo-card-overlay">
           <div class="photo-card-meta">${p.uploader_name}${yearLabel}</div>
           <div class="photo-card-actions">
@@ -1969,7 +1976,7 @@ async function loadGuestbook() {
           </div>
           <div class="guestbook-card-message">${escapeHtml(e.message)}</div>`;
       if (e.signature_data) html += `<img class="guestbook-card-signature" src="${e.signature_data}" alt="Signature">`;
-      if (e.photo_url) html += `<img class="guestbook-card-photo" src="${e.photo_url}" alt="Photo with Bob" loading="lazy">`;
+      if (e.photo_url) html += `<img class="guestbook-card-photo" src="${photoUrl(e.photo_url)}" alt="Photo with Bob" loading="lazy">`;
       html += '</div>';
       return html;
     }).join('');
@@ -2274,7 +2281,7 @@ function showTreeTooltip(d, event) {
   if (!tooltip) return;
   let html = `<h4>${escapeHtml(d.name)}</h4><p>${escapeHtml(d.relationship)}</p>`;
   if (d.note) html += `<p style="color:var(--text);margin-top:0.5rem;">${escapeHtml(d.note)}</p>`;
-  if (d.photo_url) html += `<img src="${d.photo_url}" alt="${escapeHtml(d.name)}">`;
+  if (d.photo_url) html += `<img src="${photoUrl(d.photo_url)}" alt="${escapeHtml(d.name)}">`;
   tooltip.innerHTML = html;
 
   const container = document.getElementById('treeContainer');
@@ -2322,7 +2329,7 @@ function renderTreeFallback(nodes) {
     html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${group.label}</h3><div class="tree-fallback-grid">`;
     html += group.items.map(n => {
       let card = '<div class="tree-fallback-card">';
-      if (n.photo_url) card += `<img src="${n.photo_url}" alt="${escapeHtml(n.name)}">`;
+      if (n.photo_url) card += `<img src="${photoUrl(n.photo_url)}" alt="${escapeHtml(n.name)}">`;
       card += `<h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>`;
       if (n.note) card += `<p style="margin-top:0.5rem;color:var(--text);">${escapeHtml(n.note)}</p>`;
       return card + '</div>';
@@ -2389,9 +2396,9 @@ function startSlideshow() {
     // Try loading photos first
     fetch(`${API_BASE}/photos`).then(r => r.json()).then(data => {
       allPhotos = data;
-      if (allPhotos.length === 0) { showToast('No photos uploaded yet \u2014 add some first!', true); return; }
+      if (allPhotos.length === 0) { showToast('No photos uploaded yet \u2014 add some first!', true); if (currentRoute === '/slideshow') navigate('/'); return; }
       launchSlideshow();
-    }).catch(() => showToast('Could not load photos.', true));
+    }).catch(() => { showToast('Could not load photos.', true); if (currentRoute === '/slideshow') navigate('/'); });
     return;
   }
   launchSlideshow();
@@ -2452,7 +2459,7 @@ function showSlideshowPhoto(idx) {
   const container = document.getElementById('slideshowImageContainer');
   container.querySelectorAll('img.active').forEach(img => { img.classList.remove('active'); setTimeout(() => img.remove(), 1600); });
   const img = document.createElement('img');
-  img.src = p.url;
+  img.src = photoUrl(p.url);
   img.alt = `Photo by ${p.uploader_name}`;
   img.onclick = () => slideshowTogglePause();
   container.appendChild(img);
