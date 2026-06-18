@@ -2638,12 +2638,13 @@ async function submitTreeNode() {
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to add');
 
-    closeModal('treeModal');
     if (result.action === 'updated') {
       showToast("Your spot in PaPa Bob's World has been updated \u{1F49B}");
     } else {
       showToast("You've been added to PaPa Bob's World \u{1F49B}");
     }
+    closeModal('treeModal');
+
     const submittedName = name;
     document.getElementById('trName').value = '';
     document.getElementById('trRelationship').value = '';
@@ -2652,22 +2653,30 @@ async function submitTreeNode() {
     document.getElementById('trNote').value = '';
     document.getElementById('trPhoto').value = '';
 
-    // Re-fetch and animate
-    const treeRes = await fetch(`${API_BASE}/tree`);
-    treeData = await treeRes.json();
-    renderPolaroidWeb();
-    // Animate the new/updated card
-    requestAnimationFrame(() => {
+    // Wait 2.5s for user to see toast and look at the tree, then animate
+    setTimeout(async () => {
+      const treeRes = await fetch(`${API_BASE}/tree`);
+      treeData = await treeRes.json();
+      renderPolaroidWeb();
+
+      // Find the card by name
+      await new Promise(r => setTimeout(r, 100));
       const cards = document.querySelectorAll('.polaroid-card:not(.polaroid-bob)');
+      let newCard = null;
       cards.forEach(c => {
         const nameEl = c.querySelector('.polaroid-name');
-        if (nameEl && nameEl.textContent.trim().toLowerCase() === submittedName.toLowerCase()) {
-          c.classList.add('animating-in');
-          c.addEventListener('animationend', () => c.classList.remove('animating-in'), { once: true });
-          c.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        if (nameEl && nameEl.textContent.trim().toLowerCase() === submittedName.toLowerCase()) newCard = c;
       });
-    });
+      if (!newCard) return;
+
+      // Scroll into view first
+      newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Let scroll settle, then animate
+      await new Promise(r => setTimeout(r, 400));
+      newCard.classList.add('animating-in');
+      newCard.addEventListener('animationend', () => newCard.classList.remove('animating-in'), { once: true });
+    }, 2500);
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
   } finally {
