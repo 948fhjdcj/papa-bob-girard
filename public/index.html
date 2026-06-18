@@ -64,11 +64,11 @@ input, textarea, select {
   transition: border-color 0.2s;
 }
 
-input:focus, textarea:focus, select:focus {
-  border-color: var(--gold);
-}
-
+input:focus, textarea:focus, select:focus { border-color: var(--gold); }
 textarea { resize: vertical; min-height: 100px; }
+
+optgroup { color: var(--text-sec); font-style: normal; font-weight: 600; }
+option { color: var(--text); font-weight: 400; }
 
 /* ============================================
    UTILITY
@@ -109,26 +109,11 @@ textarea { resize: vertical; min-height: 100px; }
   font-size: 0.95rem;
 }
 
-.btn-gold {
-  background: var(--gold);
-  color: #0d0d0d;
-}
-
+.btn-gold { background: var(--gold); color: #0d0d0d; }
 .btn-gold:hover { background: #d4b35a; }
-
-.btn-outline {
-  border: 1px solid var(--gold);
-  color: var(--gold);
-}
-
-.btn-outline:hover {
-  background: rgba(201, 168, 76, 0.1);
-}
-
-.btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-}
+.btn-outline { border: 1px solid var(--gold); color: var(--gold); }
+.btn-outline:hover { background: rgba(201, 168, 76, 0.1); }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
 
 .empty-state {
   text-align: center;
@@ -137,21 +122,12 @@ textarea { resize: vertical; min-height: 100px; }
   font-size: 1.1rem;
 }
 
-.form-group {
-  margin-bottom: 1rem;
-}
-
+.form-group { margin-bottom: 1rem; }
 .form-group label {
   display: block;
   margin-bottom: 0.4rem;
   font-size: 0.9rem;
   color: var(--text-sec);
-}
-
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0;
 }
 
 /* ============================================
@@ -183,6 +159,7 @@ nav {
   font-size: 1.25rem;
   color: var(--gold);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .nav-links {
@@ -195,9 +172,11 @@ nav {
   color: var(--text-sec);
   font-size: 0.9rem;
   transition: color 0.2s;
+  text-decoration: none;
 }
 
 .nav-links a:hover { color: var(--text); text-decoration: none; }
+.nav-links a.active { color: var(--gold); }
 
 .nav-hamburger {
   display: none;
@@ -211,10 +190,7 @@ nav {
 .nav-mobile {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(13, 13, 13, 0.97);
   z-index: 999;
   flex-direction: column;
@@ -224,21 +200,15 @@ nav {
 }
 
 .nav-mobile.open { display: flex; }
-
-.nav-mobile a {
-  font-size: 1.5rem;
-  color: var(--text);
-}
+.nav-mobile a { font-size: 1.5rem; color: var(--text); text-decoration: none; }
+.nav-mobile a.active { color: var(--gold); }
 
 .nav-mobile-close {
   position: absolute;
-  top: 1rem;
-  right: 1.5rem;
+  top: 1rem; right: 1.5rem;
   font-size: 2rem;
   color: var(--text);
-  background: none;
-  border: none;
-  cursor: pointer;
+  background: none; border: none; cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -260,28 +230,24 @@ nav {
   background: var(--bg);
 }
 
-.hero-slideshow {
-  position: absolute;
-  inset: 0;
-}
+.hero-slideshow { position: absolute; inset: 0; }
 
 .hero-fallback-bg {
   position: absolute;
   inset: 0;
   background: url('hero-bob.jpg') center 10% / cover no-repeat;
-  filter: blur(1.5px) saturate(0.65) sepia(0.35);
-  transform: scale(1.05); /* hide blur edge artifacts */
+  filter: blur(1.5px) sepia(0.35) brightness(0.85);
+  transform: scale(1.05);
   z-index: 0;
+  transition: opacity 1.5s ease;
 }
-
-.hero-slideshow.has-photos ~ .hero-fallback-bg { opacity: 0; transition: opacity 1.5s ease; }
 
 .hero-slide {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: blur(1.5px) saturate(0.65) sepia(0.35);
+  filter: blur(1.5px) sepia(0.35) brightness(0.85);
   transform: scale(1.05);
   opacity: 0;
   transition: opacity 1.5s ease;
@@ -293,12 +259,11 @@ nav {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center, rgba(13,13,13,0.15) 0%, rgba(13,13,13,0.7) 60%, rgba(13,13,13,0.92) 100%),
-    linear-gradient(to bottom, rgba(13,13,13,0.8) 0%, rgba(13,13,13,0.1) 20%, rgba(13,13,13,0.1) 60%, rgba(13,13,13,1) 100%);
+    radial-gradient(ellipse at center, rgba(13,13,13,0.1) 0%, rgba(13,13,13,0.88) 100%),
+    linear-gradient(to bottom, rgba(13,13,13,0.7) 0%, transparent 30%, transparent 60%, rgba(13,13,13,0.95) 100%);
   z-index: 1;
 }
 
-/* CSS grain texture */
 .hero-grain {
   position: absolute;
   inset: 0;
@@ -331,7 +296,7 @@ nav {
   margin: 0 auto;
 }
 
-<!-- BOB BIO: insert here — Phase 2: Short paragraph about who PaPa Bob is -->
+/* BOB BIO: insert here — Phase 2 */
 
 .hero-scroll {
   position: absolute;
@@ -348,6 +313,55 @@ nav {
 @keyframes bobScroll {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================
+   PHOTO COLLAGE (Home page)
+   ============================================ */
+.collage-section {
+  padding: 3rem 1.5rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.collage-heading {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.collage-container {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+}
+
+@media (max-width: 768px) {
+  .collage-container { min-height: 800px; }
+}
+
+.collage-photo {
+  position: absolute;
+  border: 6px solid #fff;
+  box-shadow: 3px 6px 18px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, z-index 0s;
+  z-index: 1;
+}
+
+.collage-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.collage-photo:hover {
+  transform: rotate(0deg) scale(1.08) !important;
+  box-shadow: 5px 10px 30px rgba(0,0,0,0.8);
+  z-index: 100;
 }
 
 /* ============================================
@@ -450,9 +464,7 @@ nav {
 }
 
 .photo-card:hover .photo-card-overlay,
-.photo-card.touched .photo-card-overlay {
-  opacity: 1;
-}
+.photo-card.touched .photo-card-overlay { opacity: 1; }
 
 .photo-card-meta {
   color: var(--text);
@@ -483,11 +495,8 @@ nav {
 }
 
 .photo-card-actions button:hover,
-.photo-card-actions a:hover {
-  background: rgba(255,255,255,0.2);
-}
+.photo-card-actions a:hover { background: rgba(255,255,255,0.2); }
 
-/* Skeleton loading */
 .skeleton {
   background: var(--surface);
   border-radius: var(--radius);
@@ -503,10 +512,6 @@ nav {
 /* ============================================
    UPLOAD SECTION
    ============================================ */
-#upload {
-  background: var(--surface);
-}
-
 .upload-buttons {
   display: flex;
   gap: 1rem;
@@ -576,20 +581,9 @@ nav {
   margin-bottom: 0.75rem;
 }
 
-.guestbook-card-name {
-  font-weight: 600;
-  color: var(--gold);
-}
-
-.guestbook-card-date {
-  font-size: 0.8rem;
-  color: var(--text-sec);
-}
-
-.guestbook-card-message {
-  margin-bottom: 0.75rem;
-  white-space: pre-wrap;
-}
+.guestbook-card-name { font-weight: 600; color: var(--gold); }
+.guestbook-card-date { font-size: 0.8rem; color: var(--text-sec); }
+.guestbook-card-message { margin-bottom: 0.75rem; white-space: pre-wrap; }
 
 .guestbook-card-signature {
   max-height: 80px;
@@ -603,10 +597,7 @@ nav {
   margin-top: 0.75rem;
 }
 
-/* Signature pad */
-.signature-area {
-  margin-bottom: 1rem;
-}
+.signature-area { margin-bottom: 1rem; }
 
 .signature-canvas {
   width: 100%;
@@ -621,13 +612,7 @@ nav {
 /* ============================================
    FUN FACTS
    ============================================ */
-#funfacts { background: var(--surface); }
-
-.facts-grid {
-  columns: 1;
-  gap: 1rem;
-}
-
+.facts-grid { columns: 1; gap: 1rem; }
 @media (min-width: 600px) { .facts-grid { columns: 2; } }
 @media (min-width: 1024px) { .facts-grid { columns: 3; } }
 
@@ -640,15 +625,8 @@ nav {
   margin-bottom: 1rem;
 }
 
-.fact-card-text {
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-}
-
-.fact-card-meta {
-  font-size: 0.8rem;
-  color: var(--text-sec);
-}
+.fact-card-text { margin-bottom: 0.75rem; font-size: 1rem; }
+.fact-card-meta { font-size: 0.8rem; color: var(--text-sec); }
 
 /* ============================================
    FAMILY TREE
@@ -662,18 +640,10 @@ nav {
   position: relative;
 }
 
-.tree-svg {
-  width: 100%;
-  height: 600px;
-}
+.tree-svg { width: 100%; height: 600px; }
+@media (max-width: 768px) { .tree-svg { height: 450px; } }
 
-@media (max-width: 768px) {
-  .tree-svg { height: 450px; }
-}
-
-.tree-fallback {
-  display: none;
-}
+.tree-fallback { display: none; }
 
 .tree-fallback-grid {
   display: grid;
@@ -690,25 +660,16 @@ nav {
   text-align: center;
 }
 
-.tree-fallback-card h4 {
-  color: var(--gold);
-  margin-bottom: 0.25rem;
-}
-
-.tree-fallback-card p {
-  font-size: 0.85rem;
-  color: var(--text-sec);
-}
+.tree-fallback-card h4 { color: var(--gold); margin-bottom: 0.25rem; }
+.tree-fallback-card p { font-size: 0.85rem; color: var(--text-sec); }
 
 .tree-fallback-card img {
-  width: 60px;
-  height: 60px;
+  width: 60px; height: 60px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.5rem;
 }
 
-/* D3 node styles */
 .tree-node circle { cursor: pointer; }
 .tree-node text { font-family: var(--font-body); pointer-events: none; }
 
@@ -725,7 +686,6 @@ nav {
 }
 
 .tree-tooltip.visible { display: block; }
-
 .tree-tooltip h4 { color: var(--gold); margin-bottom: 0.25rem; }
 .tree-tooltip p { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 0.25rem; }
 .tree-tooltip img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-top: 0.5rem; }
@@ -780,16 +740,11 @@ nav {
   margin-bottom: 1rem;
 }
 
-.slideshow-title-slide p {
-  color: var(--text-sec);
-  font-size: 1.25rem;
-}
+.slideshow-title-slide p { color: var(--text-sec); font-size: 1.25rem; }
 
 .slideshow-caption {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   padding: 1rem;
   background: rgba(0,0,0,0.6);
   text-align: center;
@@ -800,8 +755,7 @@ nav {
 
 .slideshow-controls {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1rem; right: 1rem;
   display: flex;
   gap: 0.5rem;
   z-index: 3;
@@ -832,8 +786,7 @@ nav {
   background: rgba(255,255,255,0.1);
   border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 50px; height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -885,13 +838,11 @@ nav {
 
 .modal-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1rem; right: 1rem;
   font-size: 1.5rem;
   color: var(--text-sec);
   cursor: pointer;
-  background: none;
-  border: none;
+  background: none; border: none;
 }
 
 /* ============================================
@@ -994,17 +945,13 @@ nav {
 
 .confetti-piece {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 10px; height: 10px;
   top: -10px;
   animation: confettiFall 3s ease-in forwards;
 }
 
 @keyframes confettiFall {
-  to {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
-  }
+  to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
 
 /* ============================================
@@ -1016,29 +963,16 @@ footer {
   border-top: 1px solid var(--border);
 }
 
-footer .tribute-line {
-  color: var(--text-sec);
-  font-size: 0.95rem;
-  margin-bottom: 2rem;
-}
-
-footer .footer-divider {
-  width: 200px;
-  height: 1px;
-  background: var(--border);
-  margin: 0 auto 2rem;
-}
-
-footer h3 {
+footer .footer-title {
   font-family: var(--font-display);
   color: var(--gold);
-  font-size: 1.1rem;
-  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
-footer .service-info {
+footer .footer-love {
   color: var(--text-sec);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 /* ============================================
@@ -1046,12 +980,12 @@ footer .service-info {
    ============================================ */
 @media print {
   body { background: #fff !important; color: #000 !important; }
-  nav, #hero, #gallery, #upload, #tree, .slideshow-fullscreen, footer,
+  nav, #hero, .slideshow-fullscreen, footer,
   .btn, .modal-overlay, .magic-gate, .toast-container, .section-header .btn,
-  .gallery-controls, .upload-buttons, .name-chips { display: none !important; }
+  .gallery-controls, .upload-buttons, .name-chips, .collage-section,
+  .upload-form, .upload-buttons { display: none !important; }
 
   .section-container { padding: 1rem 0; }
-
   .section-header h2 { color: #000 !important; font-size: 24pt; }
   .section-header p { color: #333 !important; }
 
@@ -1071,20 +1005,16 @@ footer .service-info {
 
   @page { margin: 1in; }
 
-  /* Print header */
-  #guestbook::before, #funfacts::before {
+  #app::before {
     display: block;
     text-align: center;
     font-size: 18pt;
     font-weight: bold;
     margin-bottom: 1rem;
   }
-  #guestbook::before { content: "PaPa Bob Girard - Messages"; }
-  #funfacts::before { content: "PaPa Bob Girard - Fun Facts"; }
 
-  /* Show the right section based on print target */
-  body.print-guestbook #funfacts { display: none !important; }
-  body.print-funfacts #guestbook { display: none !important; }
+  body.print-guestbook .facts-grid { display: none !important; }
+  body.print-funfacts .guestbook-feed { display: none !important; }
 }
 
 /* ============================================
@@ -1092,8 +1022,7 @@ footer .service-info {
    ============================================ */
 .spinner {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 20px; height: 20px;
   border: 2px solid var(--border);
   border-top-color: var(--gold);
   border-radius: 50%;
@@ -1101,24 +1030,19 @@ footer .service-info {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* Section backgrounds alternating */
-section:nth-of-type(even) { background: var(--surface); }
 </style>
 </head>
 <body>
 
-<!-- ==========================================
-     NAVIGATION
-     ========================================== -->
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <span class="nav-logo" onclick="scrollToSection('hero')">PaPa Bob Girard</span>
-    <div class="nav-links">
-      <a href="#gallery" onclick="scrollToSection('gallery')">Photos</a>
-      <a href="#guestbook" onclick="scrollToSection('guestbook')">Messages</a>
-      <a href="#funfacts" onclick="scrollToSection('funfacts')">Fun Facts</a>
-      <a href="#tree" onclick="scrollToSection('tree')">His World</a>
+    <a class="nav-logo" href="/" onclick="navigate('/', event)">PaPa Bob Girard</a>
+    <div class="nav-links" id="navLinks">
+      <a href="/photos" onclick="navigate('/photos', event)">Photos</a>
+      <a href="/messages" onclick="navigate('/messages', event)">Messages</a>
+      <a href="/funfacts" onclick="navigate('/funfacts', event)">Fun Facts</a>
+      <a href="/world" onclick="navigate('/world', event)">His World</a>
       <button class="btn btn-outline btn-sm" onclick="startSlideshow()">&#9654; Slideshow</button>
     </div>
     <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">&#9776;</button>
@@ -1127,16 +1051,14 @@ section:nth-of-type(even) { background: var(--surface); }
 
 <div class="nav-mobile" id="mobileNav">
   <button class="nav-mobile-close" onclick="toggleMobileNav()">&times;</button>
-  <a href="#gallery" onclick="toggleMobileNav(); scrollToSection('gallery')">Photos</a>
-  <a href="#guestbook" onclick="toggleMobileNav(); scrollToSection('guestbook')">Messages</a>
-  <a href="#funfacts" onclick="toggleMobileNav(); scrollToSection('funfacts')">Fun Facts</a>
-  <a href="#tree" onclick="toggleMobileNav(); scrollToSection('tree')">His World</a>
+  <a href="/photos" onclick="navigate('/photos', event); toggleMobileNav()">Photos</a>
+  <a href="/messages" onclick="navigate('/messages', event); toggleMobileNav()">Messages</a>
+  <a href="/funfacts" onclick="navigate('/funfacts', event); toggleMobileNav()">Fun Facts</a>
+  <a href="/world" onclick="navigate('/world', event); toggleMobileNav()">His World</a>
   <button class="btn btn-outline" onclick="toggleMobileNav(); startSlideshow()">&#9654; Slideshow</button>
 </div>
 
-<!-- ==========================================
-     MAGIC WORD GATE
-     ========================================== -->
+<!-- MAGIC WORD GATE -->
 <div class="magic-gate" id="magicGate">
   <div class="magic-gate-card">
     <h3>What's the magic word?</h3>
@@ -1146,108 +1068,7 @@ section:nth-of-type(even) { background: var(--surface); }
   </div>
 </div>
 
-<!-- ==========================================
-     HERO
-     ========================================== -->
-<section id="hero">
-  <div class="hero-grain"></div>
-  <div class="hero-slideshow" id="heroSlideshow"></div>
-  <div class="hero-fallback-bg" id="heroFallbackBg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1>PaPa Bob Girard</h1>
-    <!-- BOB BIO: insert here — Phase 2: Short bio paragraph about PaPa Bob -->
-    <p>Share your love. Share your memories. He'd love to see them.</p>
-  </div>
-  <div class="hero-scroll" onclick="scrollToSection('gallery')">&#x25BC;</div>
-</section>
-
-<!-- ==========================================
-     PHOTO GALLERY
-     ========================================== -->
-<section id="gallery">
-  <div class="section-container">
-    <div class="section-header">
-      <h2>Photos of PaPa Bob</h2>
-      <p>Every photo tells a story. Here are some of the best ones.</p>
-    </div>
-
-    <div class="gallery-controls">
-      <div class="gallery-toggle">
-        <button class="active" onclick="setGalleryView('all', this)">All Photos</button>
-        <button onclick="setGalleryView('person', this)">By Person</button>
-      </div>
-      <div class="gallery-toggle">
-        <button class="active" onclick="setGallerySort('newest', this)">Newest First</button>
-        <button onclick="setGallerySort('year', this)">By Year</button>
-      </div>
-    </div>
-
-    <div class="name-chips" id="nameChips" style="display:none;"></div>
-
-    <div class="photo-grid" id="photoGrid">
-      <div class="skeleton"></div>
-      <div class="skeleton"></div>
-      <div class="skeleton"></div>
-      <div class="skeleton"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ==========================================
-     UPLOAD PHOTOS
-     ========================================== -->
-<section id="upload">
-  <div class="section-container">
-    <div class="section-header">
-      <h2>Share a Photo of PaPa Bob</h2>
-      <p>Got a photo of Bob on your phone? From an old album? Upload it here.</p>
-    </div>
-
-    <div class="upload-buttons">
-      <button class="btn btn-gold" onclick="triggerUpload(false)">Upload a Photo</button>
-      <button class="btn btn-outline" onclick="triggerUpload(true)">Upload a Folder</button>
-    </div>
-
-    <input type="file" id="filePickerSingle" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" multiple style="display:none;" onchange="handleFileSelection(this.files)">
-    <input type="file" id="filePickerFolder" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" webkitdirectory style="display:none;" onchange="handleFileSelection(this.files)">
-
-    <div class="upload-form" id="uploadForm">
-      <div class="file-info" id="fileInfo"></div>
-      <div class="form-group">
-        <label for="uploaderName">Your name</label>
-        <input type="text" id="uploaderName" placeholder="e.g. Sarah Girard" required>
-      </div>
-      <div class="form-group">
-        <label for="photoYear">When was this taken? (optional)</label>
-        <input type="text" id="photoYear" placeholder="e.g. 1987, Summer '92, Not sure">
-      </div>
-      <div class="progress-bar-container" id="uploadProgress">
-        <div class="progress-bar" id="uploadProgressBar"></div>
-      </div>
-      <button class="btn btn-gold" style="width:100%;justify-content:center;" id="uploadSubmitBtn" onclick="submitUpload()">Share these photos</button>
-    </div>
-  </div>
-</section>
-
-<!-- ==========================================
-     GUESTBOOK
-     ========================================== -->
-<section id="guestbook">
-  <div class="section-container">
-    <div class="section-header">
-      <h2>Leave Bob a Message</h2>
-      <p>Tell him what he means to you. He'll read every single one.</p>
-      <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('guestbookModal'))">Leave a Message</button>
-        <button class="btn btn-outline btn-sm" onclick="printSection('guestbook')">&#x1F5A8; Print Guestbook</button>
-      </div>
-    </div>
-    <div class="guestbook-feed" id="guestbookFeed">
-      <div class="empty-state">Loading messages...</div>
-    </div>
-  </div>
-</section>
+<!-- MODALS (persist across pages) -->
 
 <!-- Guestbook Modal -->
 <div class="modal-overlay" id="guestbookModal">
@@ -1275,25 +1096,6 @@ section:nth-of-type(even) { background: var(--surface); }
   </div>
 </div>
 
-<!-- ==========================================
-     FUN FACTS
-     ========================================== -->
-<section id="funfacts">
-  <div class="section-container">
-    <div class="section-header">
-      <h2>Things You Might Not Know About PaPa Bob</h2>
-      <p>Drop a fun fact. A story. Something only you know about him.</p>
-      <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('funfactModal'))">Share a Fun Fact</button>
-        <button class="btn btn-outline btn-sm" onclick="printSection('funfacts')">&#x1F5A8; Print Fun Facts</button>
-      </div>
-    </div>
-    <div class="facts-grid" id="factsGrid">
-      <div class="empty-state">Loading fun facts...</div>
-    </div>
-  </div>
-</section>
-
 <!-- Fun Fact Modal -->
 <div class="modal-overlay" id="funfactModal">
   <div class="modal">
@@ -1311,24 +1113,6 @@ section:nth-of-type(even) { background: var(--surface); }
   </div>
 </div>
 
-<!-- ==========================================
-     FAMILY TREE
-     ========================================== -->
-<section id="tree">
-  <div class="section-container">
-    <div class="section-header">
-      <h2>PaPa Bob's World</h2>
-      <p>Show him where you fit. Every person here is someone whose life he touched.</p>
-      <button class="btn btn-gold" style="margin-top:1rem;" onclick="requireMagicWord(() => openModal('treeModal'))">Add Yourself</button>
-    </div>
-    <div class="tree-container" id="treeContainer">
-      <svg class="tree-svg" id="treeSvg"></svg>
-      <div class="tree-tooltip" id="treeTooltip"></div>
-    </div>
-    <div class="tree-fallback" id="treeFallback"></div>
-  </div>
-</section>
-
 <!-- Tree Modal -->
 <div class="modal-overlay" id="treeModal">
   <div class="modal">
@@ -1340,15 +1124,46 @@ section:nth-of-type(even) { background: var(--surface); }
     </div>
     <div class="form-group">
       <label for="trRelationship">What's your relationship to Bob?</label>
-      <input type="text" id="trRelationship" placeholder="e.g. Granddaughter, Best friend since 1978">
-    </div>
-    <div class="form-group">
-      <label for="trCategory">Relationship category</label>
-      <select id="trCategory">
-        <option value="Family">Family</option>
-        <option value="Friend">Friend</option>
-        <option value="Other">Other</option>
+      <select id="trRelationship" onchange="handleRelationshipChange()">
+        <option value="" disabled selected>Choose one...</option>
+        <optgroup label="Immediate Family">
+          <option value="Son">Son</option>
+          <option value="Daughter">Daughter</option>
+          <option value="Wife / Partner">Wife / Partner</option>
+          <option value="Brother">Brother</option>
+          <option value="Sister">Sister</option>
+          <option value="Grandson">Grandson</option>
+          <option value="Granddaughter">Granddaughter</option>
+          <option value="Great-Grandson">Great-Grandson</option>
+          <option value="Great-Granddaughter">Great-Granddaughter</option>
+        </optgroup>
+        <optgroup label="Extended Family">
+          <option value="Son-in-Law">Son-in-Law</option>
+          <option value="Daughter-in-Law">Daughter-in-Law</option>
+          <option value="Brother-in-Law">Brother-in-Law</option>
+          <option value="Sister-in-Law">Sister-in-Law</option>
+          <option value="Nephew">Nephew</option>
+          <option value="Niece">Niece</option>
+          <option value="Cousin">Cousin</option>
+          <option value="Uncle">Uncle</option>
+          <option value="Aunt">Aunt</option>
+        </optgroup>
+        <optgroup label="Friends &amp; Others">
+          <option value="Best Friend">Best Friend</option>
+          <option value="Old Friend">Old Friend</option>
+          <option value="Neighbor">Neighbor</option>
+          <option value="Coworker">Coworker</option>
+          <option value="Fellow Veteran">Fellow Veteran</option>
+          <option value="Served Together">Served Together</option>
+          <option value="Childhood Friend">Childhood Friend</option>
+          <option value="Friend of the Family">Friend of the Family</option>
+          <option value="Other">Other</option>
+        </optgroup>
       </select>
+    </div>
+    <div class="form-group" id="trOtherGroup" style="display:none;">
+      <label for="trOtherDetail">Tell us your relationship to Bob</label>
+      <input type="text" id="trOtherDetail" placeholder="e.g. Golf buddy, Old bandmate, Former boss...">
     </div>
     <div class="form-group">
       <label for="trNote">Anything you want to add? (optional)</label>
@@ -1362,33 +1177,7 @@ section:nth-of-type(even) { background: var(--surface); }
   </div>
 </div>
 
-<!-- ==========================================
-     SLIDESHOW SECTION
-     ========================================== -->
-<section id="slideshowSection">
-  <div class="section-container" style="text-align:center;">
-    <div class="section-header">
-      <h2>Watch the Slideshow</h2>
-      <p>Play a fullscreen photo slideshow — perfect for a gathering or just to enjoy.</p>
-    </div>
-    <button class="btn btn-gold" onclick="startSlideshow()">&#9654; Start Slideshow</button>
-  </div>
-</section>
-
-<!-- ==========================================
-     FOOTER
-     ========================================== -->
-<footer>
-  <p class="tribute-line">Made with love for PaPa Bob Girard</p>
-  <div class="footer-divider"></div>
-  <!-- PHASE 2: SERVICE/CEREMONY DETAILS — Replace this block with full service info section including date, time, location, RSVP -->
-  <h3>Service Information</h3>
-  <p class="service-info">Details will be posted here soon.<br>Check back for updates on gathering and celebration arrangements.</p>
-</footer>
-
-<!-- ==========================================
-     SLIDESHOW FULLSCREEN
-     ========================================== -->
+<!-- SLIDESHOW FULLSCREEN -->
 <div class="slideshow-fullscreen" id="slideshowFullscreen">
   <div class="slideshow-title-slide" id="slideshowTitle">
     <h1>PaPa Bob Girard</h1>
@@ -1409,10 +1198,23 @@ section:nth-of-type(even) { background: var(--surface); }
   </div>
 </div>
 
+<!-- Hidden file pickers (persist across pages) -->
+<input type="file" id="filePickerSingle" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" multiple style="display:none;" onchange="handleFileSelection(this.files)">
+<input type="file" id="filePickerFolder" accept="image/jpeg,image/png,image/gif,image/heic,image/webp,.heic" webkitdirectory style="display:none;" onchange="handleFileSelection(this.files)">
+
+<!-- ROUTER CONTENT AREA -->
+<div id="app"></div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-title">PaPa Bob Girard</p>
+  <p class="footer-love">Made with love by his family &#x1F49B;</p>
+</footer>
+
 <!-- Toast container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- D3.js for tree visualization -->
+<!-- D3.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 
 <script>
@@ -1428,6 +1230,7 @@ let gallerySort = 'newest';
 let activeUploaderFilter = null;
 let selectedFiles = [];
 let heroSlideInterval = null;
+let galleryRefreshInterval = null;
 let slideshowInterval = null;
 let slideshowPaused = false;
 let slideshowSpeed = 5000;
@@ -1435,15 +1238,331 @@ let slideshowPhotos = [];
 let slideshowIndex = -1;
 let controlsTimeout = null;
 let d3Available = typeof d3 !== 'undefined';
+let currentRoute = null;
+let treeData = null;
+let sigCanvas, sigCtx, sigDrawing = false;
+let sigInitialized = false;
+
+// ============================================
+// ROUTER
+// ============================================
+const routes = {
+  '/': renderHomePage,
+  '/photos': renderPhotosPage,
+  '/messages': renderMessagesPage,
+  '/funfacts': renderFunFactsPage,
+  '/world': renderWorldPage,
+  '/slideshow': renderSlideshowPage,
+};
+
+function navigate(path, event) {
+  if (event) event.preventDefault();
+  if (path === currentRoute) return;
+  history.pushState(null, '', path);
+  routeTo(path);
+}
+
+function routeTo(path) {
+  cleanup();
+  currentRoute = path;
+  const render = routes[path] || routes['/'];
+  render();
+  updateActiveNav();
+  window.scrollTo(0, 0);
+}
+
+function cleanup() {
+  if (heroSlideInterval) { clearInterval(heroSlideInterval); heroSlideInterval = null; }
+  if (galleryRefreshInterval) { clearInterval(galleryRefreshInterval); galleryRefreshInterval = null; }
+}
+
+function updateActiveNav() {
+  document.querySelectorAll('.nav-links a, .nav-mobile a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href === currentRoute || (currentRoute === '/' && href === '/')) {
+      a.classList.add('active');
+    } else {
+      a.classList.remove('active');
+    }
+  });
+}
+
+window.addEventListener('popstate', () => routeTo(window.location.pathname));
+
+// ============================================
+// PAGE RENDERERS
+// ============================================
+function renderHomePage() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <section id="hero">
+      <div class="hero-grain"></div>
+      <div class="hero-slideshow" id="heroSlideshow"></div>
+      <div class="hero-fallback-bg" id="heroFallbackBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>PaPa Bob Girard</h1>
+        <!-- BOB BIO: Phase 2 -->
+        <p>Share your love. Share your memories. He'd love to see them.</p>
+      </div>
+      <div class="hero-scroll" onclick="document.querySelector('.collage-section').scrollIntoView({behavior:'smooth'})">&#x25BC;</div>
+    </section>
+    <div class="collage-section">
+      <h2 class="collage-heading">A Few Memories</h2>
+      <div class="collage-container" id="collageContainer">
+        <div class="empty-state">Loading photos...</div>
+      </div>
+    </div>`;
+
+  loadPhotosAndRender();
+}
+
+async function loadPhotosAndRender() {
+  try {
+    const res = await fetch(`${API_BASE}/photos`);
+    allPhotos = await res.json();
+  } catch { allPhotos = []; }
+
+  if (currentRoute === '/') {
+    updateHeroSlideshow();
+    renderCollage();
+  }
+}
+
+function renderCollage() {
+  const container = document.getElementById('collageContainer');
+  if (!container) return;
+
+  if (allPhotos.length === 0) {
+    container.innerHTML = '<div class="empty-state">Photos will appear here as family and friends share them &#x1F49B;</div>';
+    return;
+  }
+
+  // Pick up to 16 random photos
+  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
+  const photos = shuffled.slice(0, 16);
+
+  const isMobile = window.innerWidth < 768;
+  const containerW = container.clientWidth;
+  const padding = 20;
+  const minSize = isMobile ? 130 : 160;
+  const maxSize = isMobile ? 200 : 260;
+
+  // Place photos with scatter algorithm
+  const placed = [];
+  const positions = [];
+
+  for (let i = 0; i < photos.length; i++) {
+    const w = minSize + Math.random() * (maxSize - minSize);
+    const h = w * (0.75 + Math.random() * 0.5); // vary aspect
+    const rotation = (Math.random() - 0.5) * 16; // -8 to +8 deg
+    let x, y, attempts = 0, ok = false;
+
+    while (attempts < 80) {
+      x = padding + Math.random() * (containerW - w - padding * 2);
+      y = padding + i * (isMobile ? 70 : 55) + Math.random() * 40;
+      ok = true;
+
+      for (const p of positions) {
+        const dx = (x + w/2) - (p.x + p.w/2);
+        const dy = (y + h/2) - (p.y + p.h/2);
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 80) { ok = false; break; }
+      }
+
+      if (ok) break;
+      attempts++;
+    }
+
+    if (!ok) {
+      x = padding + Math.random() * (containerW - w - padding * 2);
+      y = padding + i * (isMobile ? 80 : 60);
+    }
+
+    positions.push({ x, y, w, h });
+    placed.push({ photo: photos[i], x, y, w, h, rotation });
+  }
+
+  // Calculate container height
+  const maxBottom = Math.max(...placed.map(p => p.y + p.h)) + padding;
+  container.style.height = Math.max(isMobile ? 800 : 600, maxBottom) + 'px';
+
+  container.innerHTML = placed.map(p => `
+    <div class="collage-photo" onclick="navigate('/photos')"
+      style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rotation}deg);">
+      <img src="${p.photo.url}" alt="Photo of PaPa Bob" loading="lazy">
+    </div>`).join('');
+}
+
+function updateHeroSlideshow() {
+  const container = document.getElementById('heroSlideshow');
+  const fallback = document.getElementById('heroFallbackBg');
+  if (!container) return;
+
+  if (allPhotos.length === 0) {
+    container.innerHTML = '';
+    if (fallback) fallback.style.opacity = '';
+    return;
+  }
+
+  if (fallback) fallback.style.opacity = '0';
+
+  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5).slice(0, 10);
+  container.innerHTML = shuffled.map((p, i) =>
+    `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${p.url}')"></div>`
+  ).join('');
+
+  if (heroSlideInterval) clearInterval(heroSlideInterval);
+
+  if (shuffled.length > 1) {
+    let current = 0;
+    heroSlideInterval = setInterval(() => {
+      const slides = container.querySelectorAll('.hero-slide');
+      if (slides.length === 0) return;
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 4000);
+  }
+}
+
+// --- PHOTOS PAGE ---
+function renderPhotosPage() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Photos of PaPa Bob</h2>
+        <p>Every photo tells a story. Here are some of the best ones.</p>
+      </div>
+
+      <div class="gallery-controls">
+        <div class="gallery-toggle">
+          <button class="active" onclick="setGalleryView('all', this)">All Photos</button>
+          <button onclick="setGalleryView('person', this)">By Person</button>
+        </div>
+        <div class="gallery-toggle">
+          <button class="active" onclick="setGallerySort('newest', this)">Newest First</button>
+          <button onclick="setGallerySort('year', this)">By Year</button>
+        </div>
+      </div>
+
+      <div class="name-chips" id="nameChips" style="display:none;"></div>
+      <div class="photo-grid" id="photoGrid">
+        <div class="skeleton"></div><div class="skeleton"></div>
+        <div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);">
+      <div class="section-container">
+        <div class="section-header">
+          <h2>Share a Photo of PaPa Bob</h2>
+          <p>Got a photo of Bob on your phone? From an old album? Upload it here.</p>
+        </div>
+        <div class="upload-buttons">
+          <button class="btn btn-gold" onclick="triggerUpload(false)">Upload a Photo</button>
+          <button class="btn btn-outline" onclick="triggerUpload(true)">Upload a Folder</button>
+        </div>
+        <div class="upload-form" id="uploadForm">
+          <div class="file-info" id="fileInfo"></div>
+          <div class="form-group">
+            <label for="uploaderName">Your name</label>
+            <input type="text" id="uploaderName" placeholder="e.g. Sarah Girard" required>
+          </div>
+          <div class="form-group">
+            <label for="photoYear">When was this taken? (optional)</label>
+            <input type="text" id="photoYear" placeholder="e.g. 1987, Summer '92, Not sure">
+          </div>
+          <div class="progress-bar-container" id="uploadProgress">
+            <div class="progress-bar" id="uploadProgressBar"></div>
+          </div>
+          <button class="btn btn-gold" style="width:100%;justify-content:center;" id="uploadSubmitBtn" onclick="submitUpload()">Share these photos</button>
+        </div>
+      </div>
+    </div>`;
+
+  galleryView = 'all';
+  gallerySort = 'newest';
+  activeUploaderFilter = null;
+  loadPhotos();
+  galleryRefreshInterval = setInterval(loadPhotos, 60000);
+}
+
+// --- MESSAGES PAGE ---
+function renderMessagesPage() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Leave Bob a Message</h2>
+        <p>Tell him what he means to you. He'll read every single one.</p>
+        <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('guestbookModal'))">Leave a Message</button>
+          <button class="btn btn-outline btn-sm" onclick="printSection('guestbook')">&#x1F5A8; Print Guestbook</button>
+        </div>
+      </div>
+      <div class="guestbook-feed" id="guestbookFeed">
+        <div class="empty-state">Loading messages...</div>
+      </div>
+    </div>`;
+
+  loadGuestbook();
+  initSignaturePad();
+}
+
+// --- FUN FACTS PAGE ---
+function renderFunFactsPage() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Things You Might Not Know About PaPa Bob</h2>
+        <p>Drop a fun fact. A story. Something only you know about him.</p>
+        <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('funfactModal'))">Share a Fun Fact</button>
+          <button class="btn btn-outline btn-sm" onclick="printSection('funfacts')">&#x1F5A8; Print Fun Facts</button>
+        </div>
+      </div>
+      <div class="facts-grid" id="factsGrid">
+        <div class="empty-state">Loading fun facts...</div>
+      </div>
+    </div>`;
+
+  loadFunFacts();
+}
+
+// --- WORLD PAGE ---
+function renderWorldPage() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="section-container">
+      <div class="section-header">
+        <h2>PaPa Bob's World</h2>
+        <p>Show him where you fit. Every person here is someone whose life he touched.</p>
+        <button class="btn btn-gold" style="margin-top:1rem;" onclick="requireMagicWord(() => openModal('treeModal'))">Add Yourself</button>
+      </div>
+      <div class="tree-container" id="treeContainer">
+        <svg class="tree-svg" id="treeSvg"></svg>
+        <div class="tree-tooltip" id="treeTooltip"></div>
+      </div>
+      <div class="tree-fallback" id="treeFallback"></div>
+    </div>`;
+
+  loadTree();
+}
+
+// --- SLIDESHOW PAGE ---
+function renderSlideshowPage() {
+  document.getElementById('app').innerHTML = '';
+  startSlideshow();
+}
 
 // ============================================
 // MAGIC WORD
 // ============================================
 function requireMagicWord(callback) {
-  if (isUnlocked) {
-    callback();
-    return;
-  }
+  if (isUnlocked) { callback(); return; }
   pendingAction = callback;
   document.getElementById('magicGate').classList.add('open');
   setTimeout(() => document.getElementById('magicInput').focus(), 100);
@@ -1458,10 +1577,7 @@ function checkMagicWord() {
     document.getElementById('magicGate').classList.remove('open');
     input.value = '';
     document.getElementById('magicError').style.display = 'none';
-    if (pendingAction) {
-      pendingAction();
-      pendingAction = null;
-    }
+    if (pendingAction) { pendingAction(); pendingAction = null; }
   } else {
     document.getElementById('magicError').style.display = 'block';
     input.classList.add('shake');
@@ -1484,15 +1600,6 @@ function getMagicHeader() {
 // ============================================
 // NAVIGATION
 // ============================================
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) {
-    const navH = document.querySelector('nav').offsetHeight;
-    const top = el.offsetTop - navH;
-    window.scrollTo({ top, behavior: 'smooth' });
-  }
-}
-
 function toggleMobileNav() {
   document.getElementById('mobileNav').classList.toggle('open');
 }
@@ -1535,19 +1642,11 @@ function showConfetti() {
 // ============================================
 // MODALS
 // ============================================
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
-
-// Close modal on overlay click
 document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal-overlay')) {
-    e.target.classList.remove('open');
-  }
+  if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
 });
 
 // ============================================
@@ -1557,26 +1656,22 @@ async function loadPhotos() {
   try {
     const params = new URLSearchParams();
     if (gallerySort === 'person') params.set('sort', 'person');
-
     const res = await fetch(`${API_BASE}/photos?${params}`);
-    const data = await res.json();
-    allPhotos = data;
-    renderGallery();
-    updateHeroSlideshow();
-  } catch (err) {
-    document.getElementById('photoGrid').innerHTML = '<div class="empty-state">Could not load photos right now. Try refreshing.</div>';
+    allPhotos = await res.json();
+    if (currentRoute === '/photos') renderGallery();
+  } catch {
+    const grid = document.getElementById('photoGrid');
+    if (grid) grid.innerHTML = '<div class="empty-state">Could not load photos right now. Try refreshing.</div>';
   }
 }
 
 function renderGallery() {
   const grid = document.getElementById('photoGrid');
   const chipsContainer = document.getElementById('nameChips');
+  if (!grid || !chipsContainer) return;
 
   let photos = [...allPhotos];
-
-  if (activeUploaderFilter) {
-    photos = photos.filter(p => p.uploader_name === activeUploaderFilter);
-  }
+  if (activeUploaderFilter) photos = photos.filter(p => p.uploader_name === activeUploaderFilter);
 
   if (photos.length === 0 && allPhotos.length === 0) {
     grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Be the first to share a photo of PaPa Bob — he\'d love it &#x1F49B;</div>';
@@ -1589,13 +1684,9 @@ function renderGallery() {
     return;
   }
 
-  // Show name chips if in person view
   if (galleryView === 'person') {
     const uploaders = {};
-    allPhotos.forEach(p => {
-      if (!uploaders[p.uploader_name]) uploaders[p.uploader_name] = 0;
-      uploaders[p.uploader_name]++;
-    });
+    allPhotos.forEach(p => { if (!uploaders[p.uploader_name]) uploaders[p.uploader_name] = 0; uploaders[p.uploader_name]++; });
     chipsContainer.innerHTML = Object.entries(uploaders)
       .map(([name, count]) =>
         `<button class="name-chip ${activeUploaderFilter === name ? 'active' : ''}" onclick="filterByUploader('${name.replace(/'/g, "\\'")}')">${name} (${count})</button>`
@@ -1628,10 +1719,7 @@ function renderGallery() {
 }
 
 function togglePhotoCard(card) {
-  // For mobile tap support
-  document.querySelectorAll('.photo-card.touched').forEach(c => {
-    if (c !== card) c.classList.remove('touched');
-  });
+  document.querySelectorAll('.photo-card.touched').forEach(c => { if (c !== card) c.classList.remove('touched'); });
   card.classList.toggle('touched');
 }
 
@@ -1659,57 +1747,13 @@ function copyLink(url) {
   navigator.clipboard.writeText(url).then(() => showToast('Copied! \u{1F49B}'));
 }
 
-// Auto-refresh every 60s
-setInterval(loadPhotos, 60000);
-
-// ============================================
-// HERO SLIDESHOW
-// ============================================
-function updateHeroSlideshow() {
-  const container = document.getElementById('heroSlideshow');
-  const fallback = document.getElementById('heroFallbackBg');
-  if (allPhotos.length === 0) {
-    container.innerHTML = '';
-    container.classList.remove('has-photos');
-    if (fallback) fallback.style.opacity = '';
-    return;
-  }
-
-  // Hide fallback, show slideshow
-  container.classList.add('has-photos');
-  if (fallback) fallback.style.opacity = '0';
-
-  // Pick up to 10 random photos
-  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5).slice(0, 10);
-  container.innerHTML = shuffled.map((p, i) =>
-    `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url('${p.url}')"></div>`
-  ).join('');
-
-  // Clear old interval
-  if (heroSlideInterval) clearInterval(heroSlideInterval);
-
-  if (shuffled.length > 1) {
-    let current = 0;
-    heroSlideInterval = setInterval(() => {
-      const slides = container.querySelectorAll('.hero-slide');
-      if (slides.length === 0) return;
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }, 4000);
-  }
-}
-
 // ============================================
 // UPLOAD PHOTOS
 // ============================================
 function triggerUpload(isFolder) {
   requireMagicWord(() => {
-    if (isFolder) {
-      document.getElementById('filePickerFolder').click();
-    } else {
-      document.getElementById('filePickerSingle').click();
-    }
+    if (isFolder) document.getElementById('filePickerFolder').click();
+    else document.getElementById('filePickerSingle').click();
   });
 }
 
@@ -1718,64 +1762,38 @@ function handleFileSelection(fileList) {
     const ext = f.name.split('.').pop().toLowerCase();
     return ['jpg', 'jpeg', 'png', 'gif', 'heic', 'webp'].includes(ext);
   });
-
-  if (files.length === 0) {
-    showToast('No supported image files found.', true);
-    return;
-  }
-
+  if (files.length === 0) { showToast('No supported image files found.', true); return; }
   selectedFiles = files;
   const totalSize = files.reduce((s, f) => s + f.size, 0);
   const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
-
-  document.getElementById('fileInfo').textContent = `${files.length} photo${files.length > 1 ? 's' : ''} selected (${sizeMB} MB)`;
-  document.getElementById('uploadForm').classList.add('visible');
+  const fileInfo = document.getElementById('fileInfo');
+  const uploadForm = document.getElementById('uploadForm');
+  if (fileInfo) fileInfo.textContent = `${files.length} photo${files.length > 1 ? 's' : ''} selected (${sizeMB} MB)`;
+  if (uploadForm) uploadForm.classList.add('visible');
 }
 
 async function processImage(file) {
   return new Promise((resolve) => {
     const ext = file.name.split('.').pop().toLowerCase();
-
-    // For HEIC, try to load heic2any, but if unavailable just pass through
-    if (ext === 'heic') {
-      // Try basic passthrough for HEIC — browser may not support it natively
-      resolve(file);
-      return;
-    }
-
+    if (ext === 'heic') { resolve(file); return; }
     const img = new Image();
     const reader = new FileReader();
-
     reader.onload = (e) => {
       img.onload = () => {
         const maxDim = 1600;
         let { width, height } = img;
-
         if (width > maxDim || height > maxDim) {
-          if (width > height) {
-            height = Math.round((height / width) * maxDim);
-            width = maxDim;
-          } else {
-            width = Math.round((width / height) * maxDim);
-            height = maxDim;
-          }
+          if (width > height) { height = Math.round((height / width) * maxDim); width = maxDim; }
+          else { width = Math.round((width / height) * maxDim); height = maxDim; }
         }
-
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-
-        canvas.toBlob((blob) => {
-          resolve(blob || file);
-        }, 'image/jpeg', 0.85);
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        canvas.toBlob((blob) => resolve(blob || file), 'image/jpeg', 0.85);
       };
-
       img.onerror = () => resolve(file);
       img.src = e.target.result;
     };
-
     reader.onerror = () => resolve(file);
     reader.readAsDataURL(file);
   });
@@ -1784,21 +1802,12 @@ async function processImage(file) {
 async function submitUpload() {
   const name = document.getElementById('uploaderName').value.trim();
   const year = document.getElementById('photoYear').value.trim();
-
-  if (!name) {
-    showToast('Please enter your name.', true);
-    return;
-  }
-
-  if (selectedFiles.length === 0) {
-    showToast('No files selected.', true);
-    return;
-  }
+  if (!name) { showToast('Please enter your name.', true); return; }
+  if (selectedFiles.length === 0) { showToast('No files selected.', true); return; }
 
   const submitBtn = document.getElementById('uploadSubmitBtn');
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
-
   const progressContainer = document.getElementById('uploadProgress');
   const progressBar = document.getElementById('uploadProgressBar');
   progressContainer.classList.add('visible');
@@ -1807,34 +1816,18 @@ async function submitUpload() {
     const formData = new FormData();
     formData.append('uploader_name', name);
     if (year) formData.append('year', year);
-
     for (let i = 0; i < selectedFiles.length; i++) {
       const processed = await processImage(selectedFiles[i]);
       formData.append('photo', processed, selectedFiles[i].name);
-      const pct = Math.round(((i + 1) / selectedFiles.length) * 80);
-      progressBar.style.width = pct + '%';
+      progressBar.style.width = Math.round(((i + 1) / selectedFiles.length) * 80) + '%';
     }
-
     progressBar.style.width = '90%';
-
-    const res = await fetch(`${API_BASE}/photos/upload`, {
-      method: 'POST',
-      headers: getMagicHeader(),
-      body: formData,
-    });
-
+    const res = await fetch(`${API_BASE}/photos/upload`, { method: 'POST', headers: getMagicHeader(), body: formData });
     const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.error || 'Upload failed');
-    }
-
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
     progressBar.style.width = '100%';
-
     showConfetti();
     showToast('Thank you! Your photos are up \u{1F49B}');
-
-    // Reset
     document.getElementById('uploadForm').classList.remove('visible');
     progressContainer.classList.remove('visible');
     progressBar.style.width = '0%';
@@ -1843,7 +1836,6 @@ async function submitUpload() {
     selectedFiles = [];
     document.getElementById('filePickerSingle').value = '';
     document.getElementById('filePickerFolder').value = '';
-
     loadPhotos();
   } catch (err) {
     showToast(err.message || 'Upload failed. Please try again.', true);
@@ -1861,6 +1853,7 @@ async function loadGuestbook() {
     const res = await fetch(`${API_BASE}/guestbook`);
     const entries = await res.json();
     const feed = document.getElementById('guestbookFeed');
+    if (!feed) return;
 
     if (entries.length === 0) {
       feed.innerHTML = '<div class="empty-state">Be the first to leave Bob a message &#x1F49B;</div>';
@@ -1876,30 +1869,25 @@ async function loadGuestbook() {
             <span class="guestbook-card-date">${date}</span>
           </div>
           <div class="guestbook-card-message">${escapeHtml(e.message)}</div>`;
-
-      if (e.signature_data) {
-        html += `<img class="guestbook-card-signature" src="${e.signature_data}" alt="Signature">`;
-      }
-      if (e.photo_url) {
-        html += `<img class="guestbook-card-photo" src="${e.photo_url}" alt="Photo with Bob" loading="lazy">`;
-      }
-
+      if (e.signature_data) html += `<img class="guestbook-card-signature" src="${e.signature_data}" alt="Signature">`;
+      if (e.photo_url) html += `<img class="guestbook-card-photo" src="${e.photo_url}" alt="Photo with Bob" loading="lazy">`;
       html += '</div>';
       return html;
     }).join('');
   } catch {
-    document.getElementById('guestbookFeed').innerHTML = '<div class="empty-state">Could not load messages right now.</div>';
+    const feed = document.getElementById('guestbookFeed');
+    if (feed) feed.innerHTML = '<div class="empty-state">Could not load messages right now.</div>';
   }
 }
 
 // Signature Pad
-let sigCanvas, sigCtx, sigDrawing = false;
-
 function initSignaturePad() {
   sigCanvas = document.getElementById('signatureCanvas');
+  if (!sigCanvas) return;
   sigCtx = sigCanvas.getContext('2d');
 
   function resizeCanvas() {
+    if (!sigCanvas) return;
     const rect = sigCanvas.getBoundingClientRect();
     sigCanvas.width = rect.width;
     sigCanvas.height = rect.height;
@@ -1908,7 +1896,6 @@ function initSignaturePad() {
     sigCtx.lineCap = 'round';
   }
 
-  // Observe modal opening to resize
   const observer = new MutationObserver(() => {
     if (document.getElementById('guestbookModal').classList.contains('open')) {
       setTimeout(resizeCanvas, 50);
@@ -1924,23 +1911,16 @@ function initSignaturePad() {
     return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
   }
 
-  function startDraw(e) {
-    e.preventDefault();
-    sigDrawing = true;
-    const pos = getPos(e);
-    sigCtx.beginPath();
-    sigCtx.moveTo(pos.x, pos.y);
-  }
-
-  function draw(e) {
-    if (!sigDrawing) return;
-    e.preventDefault();
-    const pos = getPos(e);
-    sigCtx.lineTo(pos.x, pos.y);
-    sigCtx.stroke();
-  }
-
+  function startDraw(e) { e.preventDefault(); sigDrawing = true; const pos = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(pos.x, pos.y); }
+  function draw(e) { if (!sigDrawing) return; e.preventDefault(); const pos = getPos(e); sigCtx.lineTo(pos.x, pos.y); sigCtx.stroke(); }
   function endDraw() { sigDrawing = false; }
+
+  // Remove old listeners by replacing node
+  const newCanvas = sigCanvas.cloneNode(true);
+  sigCanvas.parentNode.replaceChild(newCanvas, sigCanvas);
+  sigCanvas = newCanvas;
+  sigCtx = sigCanvas.getContext('2d');
+  resizeCanvas();
 
   sigCanvas.addEventListener('mousedown', startDraw);
   sigCanvas.addEventListener('mousemove', draw);
@@ -1952,9 +1932,7 @@ function initSignaturePad() {
 }
 
 function clearSignature() {
-  if (sigCtx && sigCanvas) {
-    sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-  }
+  if (sigCtx && sigCanvas) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
 }
 
 function getSignatureData() {
@@ -1969,11 +1947,7 @@ function getSignatureData() {
 async function submitGuestbook() {
   const name = document.getElementById('gbName').value.trim();
   const message = document.getElementById('gbMessage').value.trim();
-
-  if (!name || !message) {
-    showToast('Please enter your name and message.', true);
-    return;
-  }
+  if (!name || !message) { showToast('Please enter your name and message.', true); return; }
 
   const btn = document.getElementById('gbSubmitBtn');
   btn.disabled = true;
@@ -1983,36 +1957,20 @@ async function submitGuestbook() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('message', message);
-
     const sig = getSignatureData();
     if (sig) formData.append('signature_data', sig);
-
     const photoFile = document.getElementById('gbPhoto').files[0];
-    if (photoFile) {
-      const processed = await processImage(photoFile);
-      formData.append('photo', processed, photoFile.name);
-    }
+    if (photoFile) { const processed = await processImage(photoFile); formData.append('photo', processed, photoFile.name); }
 
-    const res = await fetch(`${API_BASE}/guestbook`, {
-      method: 'POST',
-      headers: getMagicHeader(),
-      body: formData,
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || 'Failed to submit');
-    }
+    const res = await fetch(`${API_BASE}/guestbook`, { method: 'POST', headers: getMagicHeader(), body: formData });
+    if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to submit'); }
 
     closeModal('guestbookModal');
     showToast("Bob's going to love this \u{1F49B}");
-
-    // Reset form
     document.getElementById('gbName').value = '';
     document.getElementById('gbMessage').value = '';
     document.getElementById('gbPhoto').value = '';
     clearSignature();
-
     loadGuestbook();
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
@@ -2030,6 +1988,7 @@ async function loadFunFacts() {
     const res = await fetch(`${API_BASE}/funfacts`);
     const facts = await res.json();
     const grid = document.getElementById('factsGrid');
+    if (!grid) return;
 
     if (facts.length === 0) {
       grid.innerHTML = '<div class="empty-state">Be the first to share something about PaPa Bob that the rest of us don\'t know &#x1F49B;</div>';
@@ -2045,18 +2004,15 @@ async function loadFunFacts() {
         </div>`;
     }).join('');
   } catch {
-    document.getElementById('factsGrid').innerHTML = '<div class="empty-state">Could not load fun facts right now.</div>';
+    const grid = document.getElementById('factsGrid');
+    if (grid) grid.innerHTML = '<div class="empty-state">Could not load fun facts right now.</div>';
   }
 }
 
 async function submitFunFact() {
   const name = document.getElementById('ffName').value.trim();
   const fact = document.getElementById('ffFact').value.trim();
-
-  if (!name || !fact) {
-    showToast('Please enter your name and the fun fact.', true);
-    return;
-  }
+  if (!name || !fact) { showToast('Please enter your name and the fun fact.', true); return; }
 
   const btn = document.getElementById('ffSubmitBtn');
   btn.disabled = true;
@@ -2068,18 +2024,12 @@ async function submitFunFact() {
       headers: { ...getMagicHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, fact }),
     });
-
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || 'Failed to submit');
-    }
+    if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to submit'); }
 
     closeModal('funfactModal');
-    showToast('Fun fact added! &#x1F49B;');
-
+    showToast('Fun fact added! \u{1F49B}');
     document.getElementById('ffName').value = '';
     document.getElementById('ffFact').value = '';
-
     loadFunFacts();
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
@@ -2092,7 +2042,20 @@ async function submitFunFact() {
 // ============================================
 // FAMILY TREE
 // ============================================
-let treeData = null;
+const IMMEDIATE_FAMILY = ['Son','Daughter','Wife / Partner','Brother','Sister','Grandson','Granddaughter','Great-Grandson','Great-Granddaughter'];
+const EXTENDED_FAMILY = ['Son-in-Law','Daughter-in-Law','Brother-in-Law','Sister-in-Law','Nephew','Niece','Cousin','Uncle','Aunt'];
+const FRIENDS_OTHERS = ['Best Friend','Old Friend','Neighbor','Coworker','Fellow Veteran','Served Together','Childhood Friend','Friend of the Family','Other'];
+
+function handleRelationshipChange() {
+  const val = document.getElementById('trRelationship').value;
+  document.getElementById('trOtherGroup').style.display = val === 'Other' ? 'block' : 'none';
+}
+
+function getRelationshipCategory(val) {
+  if (IMMEDIATE_FAMILY.includes(val) || EXTENDED_FAMILY.includes(val)) return 'Family';
+  if (val === 'Other') return 'Other';
+  return 'Friend';
+}
 
 async function loadTree() {
   try {
@@ -2100,13 +2063,13 @@ async function loadTree() {
     treeData = await res.json();
     renderTree();
   } catch {
-    document.getElementById('treeContainer').innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
+    const c = document.getElementById('treeContainer');
+    if (c) c.innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
   }
 }
 
 function renderTree() {
   if (!treeData) return;
-
   const allNodes = [
     ...treeData.family.map(n => ({ ...n, category: 'family' })),
     ...treeData.friends.map(n => ({ ...n, category: 'friend' })),
@@ -2114,15 +2077,12 @@ function renderTree() {
   ];
 
   if (allNodes.length === 0 && !d3Available) {
-    document.getElementById('treeContainer').innerHTML = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
+    const c = document.getElementById('treeContainer');
+    if (c) c.innerHTML = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
     return;
   }
 
-  if (!d3Available) {
-    renderTreeFallback(allNodes);
-    return;
-  }
-
+  if (!d3Available) { renderTreeFallback(allNodes); return; }
   renderTreeD3(allNodes);
 }
 
@@ -2131,32 +2091,21 @@ function renderTreeD3(nodes) {
   svg.selectAll('*').remove();
 
   const container = document.getElementById('treeContainer');
+  if (!container) return;
   const width = container.clientWidth;
   const height = parseInt(getComputedStyle(document.getElementById('treeSvg')).height);
-
   svg.attr('viewBox', `0 0 ${width} ${height}`);
 
-  // Build nodes array with Bob at center
   const graphNodes = [
     { id: 'bob', name: 'PaPa Bob', category: 'bob', fx: width / 2, fy: height / 2 },
     ...nodes.map(n => ({ id: `node-${n.id}`, ...n })),
   ];
 
-  const graphLinks = nodes.map(n => ({
-    source: 'bob',
-    target: `node-${n.id}`,
-  }));
+  const graphLinks = nodes.map(n => ({ source: 'bob', target: `node-${n.id}` }));
 
   if (nodes.length === 0) {
-    // Just draw Bob
-    svg.append('circle')
-      .attr('cx', width / 2).attr('cy', height / 2).attr('r', 40)
-      .attr('fill', '#c9a84c').attr('opacity', 0.9);
-    svg.append('text')
-      .attr('x', width / 2).attr('y', height / 2 + 5)
-      .attr('text-anchor', 'middle').attr('fill', '#0d0d0d')
-      .attr('font-size', '14px').attr('font-weight', '600')
-      .text('PaPa Bob');
+    svg.append('circle').attr('cx', width / 2).attr('cy', height / 2).attr('r', 40).attr('fill', '#c9a84c').attr('opacity', 0.9);
+    svg.append('text').attr('x', width / 2).attr('y', height / 2 + 5).attr('text-anchor', 'middle').attr('fill', '#0d0d0d').attr('font-size', '14px').attr('font-weight', '600').text('PaPa Bob');
     return;
   }
 
@@ -2166,28 +2115,13 @@ function renderTreeD3(nodes) {
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(40));
 
-  const link = svg.append('g')
-    .selectAll('line')
-    .data(graphLinks)
-    .join('line')
-    .attr('stroke', '#2a2620')
-    .attr('stroke-width', 1.5);
+  const link = svg.append('g').selectAll('line').data(graphLinks).join('line').attr('stroke', '#2a2620').attr('stroke-width', 1.5);
 
-  const nodeGroup = svg.append('g')
-    .selectAll('g')
-    .data(graphNodes)
-    .join('g')
-    .attr('class', 'tree-node')
+  const nodeGroup = svg.append('g').selectAll('g').data(graphNodes).join('g').attr('class', 'tree-node')
     .call(d3.drag()
-      .on('start', (event, d) => {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x; d.fy = d.y;
-      })
+      .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
       .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
-      .on('end', (event, d) => {
-        if (!event.active) simulation.alphaTarget(0);
-        if (d.id !== 'bob') { d.fx = null; d.fy = null; }
-      })
+      .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); if (d.id !== 'bob') { d.fx = null; d.fy = null; } })
     );
 
   nodeGroup.append('circle')
@@ -2199,12 +2133,8 @@ function renderTreeD3(nodes) {
       return '#4a4a5a';
     })
     .attr('stroke', d => d.id === 'bob' ? '#f0ece0' : 'none')
-    .attr('stroke-width', 2)
-    .attr('opacity', 0.9)
-    .on('click', (event, d) => {
-      if (d.id === 'bob') return;
-      showTreeTooltip(d, event);
-    });
+    .attr('stroke-width', 2).attr('opacity', 0.9)
+    .on('click', (event, d) => { if (d.id !== 'bob') showTreeTooltip(d, event); });
 
   nodeGroup.append('text')
     .attr('dy', d => d.id === 'bob' ? 5 : 4)
@@ -2212,32 +2142,21 @@ function renderTreeD3(nodes) {
     .attr('fill', d => d.id === 'bob' ? '#0d0d0d' : '#f0ece0')
     .attr('font-size', d => d.id === 'bob' ? '14px' : '10px')
     .attr('font-weight', d => d.id === 'bob' ? '600' : '500')
-    .text(d => {
-      const name = d.name;
-      return name.length > 12 ? name.substring(0, 11) + '...' : name;
-    });
+    .text(d => d.name.length > 12 ? d.name.substring(0, 11) + '...' : d.name);
 
-  // Relationship label below node
   nodeGroup.filter(d => d.id !== 'bob').append('text')
-    .attr('dy', 42)
-    .attr('text-anchor', 'middle')
-    .attr('fill', '#9a9080')
-    .attr('font-size', '8px')
-    .text(d => {
-      const r = d.relationship || '';
-      return r.length > 20 ? r.substring(0, 19) + '...' : r;
-    });
+    .attr('dy', 42).attr('text-anchor', 'middle').attr('fill', '#9a9080').attr('font-size', '8px')
+    .text(d => { const r = d.relationship || ''; return r.length > 20 ? r.substring(0, 19) + '...' : r; });
 
   simulation.on('tick', () => {
-    link
-      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
-      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
     nodeGroup.attr('transform', d => `translate(${d.x},${d.y})`);
   });
 }
 
 function showTreeTooltip(d, event) {
   const tooltip = document.getElementById('treeTooltip');
+  if (!tooltip) return;
   let html = `<h4>${escapeHtml(d.name)}</h4><p>${escapeHtml(d.relationship)}</p>`;
   if (d.note) html += `<p style="color:var(--text);margin-top:0.5rem;">${escapeHtml(d.note)}</p>`;
   if (d.photo_url) html += `<img src="${d.photo_url}" alt="${escapeHtml(d.name)}">`;
@@ -2249,56 +2168,48 @@ function showTreeTooltip(d, event) {
   tooltip.style.top = (event.clientY - rect.top + 10) + 'px';
   tooltip.classList.add('visible');
 
-  const close = () => {
-    tooltip.classList.remove('visible');
-    document.removeEventListener('click', close);
-  };
+  const close = () => { tooltip.classList.remove('visible'); document.removeEventListener('click', close); };
   setTimeout(() => document.addEventListener('click', close), 10);
 }
 
 function renderTreeFallback(nodes) {
   const fallback = document.getElementById('treeFallback');
+  const treeContainer = document.getElementById('treeContainer');
+  if (!fallback || !treeContainer) return;
   fallback.style.display = 'block';
-  document.getElementById('treeContainer').style.display = 'none';
+  treeContainer.style.display = 'none';
 
   const categories = { family: [], friend: [], other: [] };
   nodes.forEach(n => categories[n.category]?.push(n));
-
   const labels = { family: 'Family', friend: 'Friends', other: 'Other' };
   let html = '';
 
   for (const [cat, list] of Object.entries(categories)) {
     if (list.length === 0) continue;
-    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${labels[cat]}</h3>`;
-    html += '<div class="tree-fallback-grid">';
+    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${labels[cat]}</h3><div class="tree-fallback-grid">`;
     html += list.map(n => {
       let card = '<div class="tree-fallback-card">';
       if (n.photo_url) card += `<img src="${n.photo_url}" alt="${escapeHtml(n.name)}">`;
       card += `<h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>`;
       if (n.note) card += `<p style="margin-top:0.5rem;color:var(--text);">${escapeHtml(n.note)}</p>`;
-      card += '</div>';
-      return card;
-    }).join('');
-    html += '</div>';
+      return card + '</div>';
+    }).join('') + '</div>';
   }
 
-  if (html === '') {
-    html = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
-  }
-
-  fallback.innerHTML = html;
+  fallback.innerHTML = html || '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
 }
 
 async function submitTreeNode() {
   const name = document.getElementById('trName').value.trim();
-  const relationship = document.getElementById('trRelationship').value.trim();
-  const category = document.getElementById('trCategory').value;
+  const relationshipVal = document.getElementById('trRelationship').value;
+  const otherDetail = document.getElementById('trOtherDetail').value.trim();
   const note = document.getElementById('trNote').value.trim();
 
-  if (!name || !relationship) {
-    showToast('Please enter your name and relationship.', true);
-    return;
-  }
+  if (!name || !relationshipVal) { showToast('Please enter your name and relationship.', true); return; }
+  if (relationshipVal === 'Other' && !otherDetail) { showToast('Please tell us your relationship to Bob.', true); return; }
+
+  const relationship = relationshipVal === 'Other' ? `Other \u2014 ${otherDetail}` : relationshipVal;
+  const category = getRelationshipCategory(relationshipVal);
 
   const btn = document.getElementById('trSubmitBtn');
   btn.disabled = true;
@@ -2310,32 +2221,20 @@ async function submitTreeNode() {
     formData.append('relationship', relationship);
     formData.append('relationship_category', category);
     if (note) formData.append('note', note);
-
     const photoFile = document.getElementById('trPhoto').files[0];
-    if (photoFile) {
-      const processed = await processImage(photoFile);
-      formData.append('photo', processed, photoFile.name);
-    }
+    if (photoFile) { const processed = await processImage(photoFile); formData.append('photo', processed, photoFile.name); }
 
-    const res = await fetch(`${API_BASE}/tree`, {
-      method: 'POST',
-      headers: getMagicHeader(),
-      body: formData,
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || 'Failed to add');
-    }
+    const res = await fetch(`${API_BASE}/tree`, { method: 'POST', headers: getMagicHeader(), body: formData });
+    if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to add'); }
 
     closeModal('treeModal');
     showToast("You're part of PaPa Bob's world now! \u{1F49B}");
-
     document.getElementById('trName').value = '';
     document.getElementById('trRelationship').value = '';
+    document.getElementById('trOtherDetail').value = '';
+    document.getElementById('trOtherGroup').style.display = 'none';
     document.getElementById('trNote').value = '';
     document.getElementById('trPhoto').value = '';
-
     loadTree();
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
@@ -2350,41 +2249,37 @@ async function submitTreeNode() {
 // ============================================
 function startSlideshow() {
   if (allPhotos.length === 0) {
-    showToast('No photos uploaded yet — add some first!', true);
+    // Try loading photos first
+    fetch(`${API_BASE}/photos`).then(r => r.json()).then(data => {
+      allPhotos = data;
+      if (allPhotos.length === 0) { showToast('No photos uploaded yet \u2014 add some first!', true); return; }
+      launchSlideshow();
+    }).catch(() => showToast('Could not load photos.', true));
     return;
   }
+  launchSlideshow();
+}
 
+function launchSlideshow() {
   slideshowPhotos = [...allPhotos].sort(() => Math.random() - 0.5);
   slideshowIndex = -1;
   slideshowPaused = false;
 
   const fs = document.getElementById('slideshowFullscreen');
   fs.classList.add('active');
+  try { document.documentElement.requestFullscreen?.(); } catch {}
 
-  // Try native fullscreen
-  try {
-    document.documentElement.requestFullscreen?.();
-  } catch {}
-
-  // Show title slide first
   const titleSlide = document.getElementById('slideshowTitle');
   titleSlide.classList.add('active');
   document.getElementById('slideshowCaption').textContent = '';
+  document.getElementById('slideshowImageContainer').innerHTML = '';
 
-  // Prepare image container
-  const imgContainer = document.getElementById('slideshowImageContainer');
-  imgContainer.innerHTML = '';
-
-  // After 4 seconds, start photos
   setTimeout(() => {
     titleSlide.classList.remove('active');
     slideshowNext();
-    slideshowInterval = setInterval(() => {
-      if (!slideshowPaused) slideshowNext();
-    }, slideshowSpeed);
+    slideshowInterval = setInterval(() => { if (!slideshowPaused) slideshowNext(); }, slideshowSpeed);
   }, 4000);
 
-  // Controls visibility
   fs.addEventListener('mousemove', showSlideshowControls);
   fs.addEventListener('touchstart', showSlideshowControls);
   showSlideshowControls();
@@ -2418,27 +2313,15 @@ function slideshowPrev() {
 function showSlideshowPhoto(idx) {
   const p = slideshowPhotos[idx];
   const container = document.getElementById('slideshowImageContainer');
-
-  // Fade out old images
-  container.querySelectorAll('img.active').forEach(img => {
-    img.classList.remove('active');
-    setTimeout(() => img.remove(), 1600);
-  });
-
+  container.querySelectorAll('img.active').forEach(img => { img.classList.remove('active'); setTimeout(() => img.remove(), 1600); });
   const img = document.createElement('img');
   img.src = p.url;
   img.alt = `Photo by ${p.uploader_name}`;
   img.onclick = () => slideshowTogglePause();
   container.appendChild(img);
-
-  // Force reflow then add active class
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => img.classList.add('active'));
-  });
-
+  requestAnimationFrame(() => { requestAnimationFrame(() => img.classList.add('active')); });
   const caption = document.getElementById('slideshowCaption');
-  const yearText = p.year ? ` \u00B7 ${p.year}` : '';
-  caption.textContent = `${p.uploader_name}${yearText}`;
+  caption.textContent = `${p.uploader_name}${p.year ? ' \u00B7 ' + p.year : ''}`;
 }
 
 function slideshowTogglePause() {
@@ -2450,9 +2333,7 @@ function slideshowSetSpeed(val) {
   slideshowSpeed = parseInt(val);
   if (slideshowInterval) {
     clearInterval(slideshowInterval);
-    slideshowInterval = setInterval(() => {
-      if (!slideshowPaused) slideshowNext();
-    }, slideshowSpeed);
+    slideshowInterval = setInterval(() => { if (!slideshowPaused) slideshowNext(); }, slideshowSpeed);
   }
 }
 
@@ -2462,6 +2343,8 @@ function exitSlideshow() {
   document.getElementById('slideshowFullscreen').classList.remove('active');
   document.getElementById('slideshowTitle').classList.remove('active');
   try { document.exitFullscreen?.(); } catch {}
+  // If we came from /slideshow route, go home
+  if (currentRoute === '/slideshow') navigate('/');
 }
 
 document.addEventListener('keydown', (e) => {
@@ -2494,11 +2377,7 @@ function escapeHtml(str) {
 // INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-  loadPhotos();
-  loadGuestbook();
-  loadFunFacts();
-  loadTree();
-  initSignaturePad();
+  routeTo(window.location.pathname);
 });
 </script>
 </body>
