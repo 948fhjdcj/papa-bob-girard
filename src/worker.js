@@ -60,6 +60,16 @@ function slugify(name) {
   return name.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
 }
 
+// --- Relationship classifier ---
+function classifyRelationship(relationship) {
+  const rel = relationship.split(' \u2014 ')[0]; // strip "Other — detail"
+  const tier1 = ['Wife / Partner', 'Son', 'Daughter', 'Brother', 'Sister'];
+  const tier2 = ['Grandson', 'Granddaughter', 'Great-Grandson', 'Great-Granddaughter', 'Son-in-Law', 'Daughter-in-Law', 'Brother-in-Law', 'Sister-in-Law', 'Nephew', 'Niece', 'Cousin', 'Uncle', 'Aunt'];
+  if (tier1.includes(rel)) return { tier: 1, category: 'family' };
+  if (tier2.includes(rel)) return { tier: 2, category: 'family' };
+  return { tier: 3, category: 'friends' };
+}
+
 // --- Random string ---
 function rand4() {
   return Math.random().toString(36).substring(2, 6);
@@ -337,20 +347,20 @@ async function handleAPI(request, env, url, path) {
     const formData = await request.formData();
     const name = formData.get('name')?.trim();
     const relationship = formData.get('relationship')?.trim();
-    const relationshipCategory = formData.get('relationship_category')?.trim();
     const note = formData.get('note')?.trim() || null;
     const photo = formData.get('photo');
 
-    if (!name || !relationship || !relationshipCategory) {
-      return jsonResponse({ error: 'name, relationship, and relationship_category are required' }, 400);
+    if (!name || !relationship) {
+      return jsonResponse({ error: 'name and relationship are required' }, 400);
     }
+
+    const { tier, category } = classifyRelationship(relationship);
 
     // Check for existing entry by name (case-insensitive)
     const existing = await env.DB.prepare(
       'SELECT id, photo_key FROM family_tree WHERE LOWER(name) = LOWER(?)'
     ).bind(name).first();
 
-    // Handle photo — preserve existing if no new photo provided
     let photoKey = existing?.photo_key || null;
     if (photo && photo instanceof File && photo.size > 0) {
       photoKey = `tree/${Date.now()}-${rand4()}.jpg`;
@@ -363,37 +373,35 @@ async function handleAPI(request, env, url, path) {
 
     if (existing) {
       await env.DB.prepare(
-        'UPDATE family_tree SET relationship = ?, relationship_category = ?, note = ?, photo_key = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
-      ).bind(relationship, relationshipCategory, note, photoKey, existing.id).run();
-
+        'UPDATE family_tree SET relationship = ?, relationship_category = ?, tier = ?, note = ?, photo_key = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
+      ).bind(relationship, category, tier, note, photoKey, existing.id).run();
       return jsonResponse({ success: true, action: 'updated', id: existing.id });
     } else {
       const result = await env.DB.prepare(
-        'INSERT INTO family_tree (name, relationship, relationship_category, note, photo_key) VALUES (?, ?, ?, ?, ?)'
-      ).bind(name, relationship, relationshipCategory, note, photoKey).run();
-
+        'INSERT INTO family_tree (name, relationship, relationship_category, tier, note, photo_key) VALUES (?, ?, ?, ?, ?, ?)'
+      ).bind(name, relationship, category, tier, note, photoKey).run();
       return jsonResponse({ success: true, action: 'inserted', id: result.meta.last_row_id });
     }
   }
 
   if (method === 'GET' && path === '/api/tree') {
     const { results } = await env.DB.prepare(
-      'SELECT * FROM family_tree ORDER BY created_at DESC'
+      'SELECT * FROM family_tree ORDER BY tier ASC, name ASC'
     ).all();
 
-    const grouped = { family: [], friends: [], other: [] };
-    for (const node of results) {
-      const cat = node.relationship_category.toLowerCase();
-      const entry = {
-        ...node,
-        photo_url: node.photo_key ? `/api/photos/view/${node.photo_key}` : null,
-      };
-      if (cat === 'family') grouped.family.push(entry);
-      else if (cat === 'friend') grouped.friends.push(entry);
-      else grouped.other.push(entry);
-    }
+    const nodes = results.map(r => ({
+      ...r,
+      photo_url: r.photo_key ? `/api/photos/view/${r.photo_key}` : null,
+    }));
 
-    return jsonResponse(grouped);
+    return jsonResponse({
+      nodes,
+      grouped: {
+        tier1: nodes.filter(r => r.tier === 1),
+        tier2: nodes.filter(r => r.tier === 2),
+        tier3: nodes.filter(r => !r.tier || r.tier === 3),
+      }
+    });
   }
 
   // --- Phase 2: Admin delete stubs ---

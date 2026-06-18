@@ -7,7 +7,7 @@
 <meta name="description" content="A celebration of PaPa Bob Girard — share photos, messages, and memories.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================
    RESET & BASE
@@ -599,45 +599,201 @@ nav {
 .fact-card-meta { font-size: 0.8rem; color: var(--text-sec); }
 
 /* ============================================
-   CONSTELLATION TREE
+   POLAROID WEB TREE
    ============================================ */
-.constellation-wrap {
+.polaroid-web-container {
+  position: relative;
   width: 100%;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: #050505;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
 }
 
-.constellation-legend {
+.polaroid-web-bob-row {
   display: flex;
-  gap: 24px;
   justify-content: center;
-  margin-bottom: 16px;
-  font-size: 0.8rem;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 2;
 }
 
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-item.family { color: #d4d0c8; }
-.legend-item.friends { color: #a8c4a0; }
-.legend-item.other { color: #a0a0b4; }
-
-.constellation-fallback-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+.connection-lines {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
 }
 
-.constellation-fallback-card {
+.connection-line {
+  fill: none;
+  stroke: rgba(212,208,200,0.18);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.polaroid-tier {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 0 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.polaroid-tier:empty { display: none; }
+
+.polaroid-tier::before {
+  content: attr(data-tier-label);
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-sec);
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.polaroid-card {
+  background: #faf8f4;
+  border-radius: 2px;
+  padding: 8px 8px 20px;
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.3);
+  cursor: default;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.polaroid-card:hover {
+  box-shadow: 4px 8px 28px rgba(0,0,0,0.75), 0 2px 6px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
+.polaroid-card:not(.polaroid-bob):hover {
+  transform: rotate(0deg) scale(1.08) translateY(-4px) !important;
+}
+
+.polaroid-photo-area {
+  width: 100%;
+  overflow: hidden;
+  background: #e8e4dc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.polaroid-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.polaroid-monogram {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8e4dc, #d4cfc5);
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: #8a8070;
+  font-weight: 600;
+  user-select: none;
+}
+
+.polaroid-caption {
+  padding: 8px 4px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.polaroid-name {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2a2420;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.polaroid-relationship {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  color: #6a6460;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+/* Bob's card */
+.polaroid-bob {
+  width: 200px;
+  padding: 10px 10px 28px;
+  border: 2px solid #e8dcc8;
+}
+
+.polaroid-bob .polaroid-photo-area { height: 200px; }
+.polaroid-bob .polaroid-img { object-position: center 20%; }
+.polaroid-bob .polaroid-name { font-size: 1.3rem; font-family: 'Playfair Display', serif; color: #1a1610; }
+.polaroid-bob .polaroid-relationship { font-size: 0.68rem; color: #8a7a60; letter-spacing: 0.1em; }
+
+/* Tier sizes */
+.tier-1 .polaroid-card { width: 140px; }
+.tier-1 .polaroid-photo-area { height: 140px; }
+.tier-1 .polaroid-name { font-size: 0.95rem; }
+
+.tier-2 .polaroid-card { width: 115px; }
+.tier-2 .polaroid-photo-area { height: 115px; }
+.tier-2 .polaroid-name { font-size: 0.85rem; }
+
+.tier-3 .polaroid-card { width: 95px; }
+.tier-3 .polaroid-photo-area { height: 95px; }
+.tier-3 .polaroid-name { font-size: 0.78rem; }
+.tier-3 .polaroid-relationship { font-size: 0.55rem; }
+
+/* Note tooltip */
+.polaroid-note-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
   background: var(--surface-el);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 1rem;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  color: var(--text);
+  white-space: normal;
+  width: 180px;
   text-align: center;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  line-height: 1.4;
+  display: none;
 }
 
-.constellation-fallback-card h4 { color: var(--gold); margin-bottom: 0.25rem; }
-.constellation-fallback-card p { font-size: 0.85rem; color: var(--text-sec); }
+.polaroid-card:hover .polaroid-note-tooltip { display: block; }
+
+/* Entry animation */
+@keyframes polaroidLandIn {
+  0%   { transform: rotate(0deg) scale(0.3) translateY(-30px); opacity: 0; }
+  60%  { transform: rotate(var(--card-rotation)) scale(1.1) translateY(-6px); opacity: 1; }
+  80%  { transform: rotate(var(--card-rotation)) scale(0.97) translateY(1px); }
+  100% { transform: rotate(var(--card-rotation)) scale(1) translateY(0); opacity: 1; }
+}
+
+.polaroid-card.animating-in {
+  animation: polaroidLandIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
 
 .tree-form-hint {
   font-size: 0.78rem;
@@ -646,23 +802,25 @@ nav {
   margin-bottom: 12px;
 }
 
-.constellation-popup {
-  position: fixed;
-  z-index: 1000;
-  background: var(--surface-el);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px 12px;
-  max-width: 220px;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.8);
-  pointer-events: all;
+@media (max-width: 768px) {
+  .polaroid-tier { gap: 12px; padding: 30px 0 8px; }
+  .polaroid-bob { width: 160px; padding: 8px 8px 22px; }
+  .polaroid-bob .polaroid-photo-area { height: 160px; }
+  .tier-1 .polaroid-card { width: 110px; }
+  .tier-1 .polaroid-photo-area { height: 110px; }
+  .tier-2 .polaroid-card { width: 90px; }
+  .tier-2 .polaroid-photo-area { height: 90px; }
+  .tier-3 .polaroid-card { width: 78px; }
+  .tier-3 .polaroid-photo-area { height: 78px; }
+  .tier-3 .polaroid-name { font-size: 0.68rem; }
+  .polaroid-note-tooltip { top: calc(100% + 8px); bottom: auto; width: 150px; }
 }
 
-.popup-name { font-family: var(--font-display); color: var(--gold); font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
-.popup-relationship { color: var(--text-sec); font-size: 0.78rem; margin-bottom: 6px; }
-.popup-note { color: var(--text); font-size: 0.82rem; line-height: 1.4; margin-bottom: 6px; }
-.popup-photo { width: 100%; border-radius: 6px; object-fit: cover; max-height: 120px; display: block; margin-top: 6px; }
-.popup-close { position: absolute; top: 8px; right: 10px; background: none; border: none; color: var(--text-sec); cursor: pointer; font-size: 0.8rem; padding: 0; line-height: 1; }
+@media (hover: none) {
+  .polaroid-card:not(.polaroid-bob):hover { transform: rotate(var(--card-rotation)) !important; }
+}
+
+@media print { .polaroid-web-container { display: none; } }
 
 /* ============================================
    CELEBRATION ANIMATIONS
@@ -1331,40 +1489,34 @@ footer .footer-love {
     <div class="form-group">
       <label for="trRelationship">What's your relationship to Bob?</label>
       <select id="trRelationship" onchange="handleRelationshipChange()">
-        <option value="" disabled selected>Choose one...</option>
-        <optgroup label="Immediate Family">
-          <option value="Son">Son</option>
-          <option value="Daughter">Daughter</option>
-          <option value="Wife / Partner">Wife / Partner</option>
-          <option value="Brother">Brother</option>
-          <option value="Sister">Sister</option>
-          <option value="Grandson">Grandson</option>
-          <option value="Granddaughter">Granddaughter</option>
-          <option value="Great-Grandson">Great-Grandson</option>
-          <option value="Great-Granddaughter">Great-Granddaughter</option>
-        </optgroup>
-        <optgroup label="Extended Family">
-          <option value="Son-in-Law">Son-in-Law</option>
-          <option value="Daughter-in-Law">Daughter-in-Law</option>
-          <option value="Brother-in-Law">Brother-in-Law</option>
-          <option value="Sister-in-Law">Sister-in-Law</option>
-          <option value="Nephew">Nephew</option>
-          <option value="Niece">Niece</option>
-          <option value="Cousin">Cousin</option>
-          <option value="Uncle">Uncle</option>
-          <option value="Aunt">Aunt</option>
-        </optgroup>
-        <optgroup label="Friends &amp; Others">
-          <option value="Best Friend">Best Friend</option>
-          <option value="Old Friend">Old Friend</option>
-          <option value="Neighbor">Neighbor</option>
-          <option value="Coworker">Coworker</option>
-          <option value="Fellow Veteran">Fellow Veteran</option>
-          <option value="Served Together">Served Together</option>
-          <option value="Childhood Friend">Childhood Friend</option>
-          <option value="Friend of the Family">Friend of the Family</option>
-          <option value="Other">Other</option>
-        </optgroup>
+        <option value="" disabled selected>Select your relationship to Bob</option>
+        <option value="Aunt">Aunt</option>
+        <option value="Best Friend">Best Friend</option>
+        <option value="Brother">Brother</option>
+        <option value="Brother-in-Law">Brother-in-Law</option>
+        <option value="Childhood Friend">Childhood Friend</option>
+        <option value="Coworker">Coworker</option>
+        <option value="Cousin">Cousin</option>
+        <option value="Daughter">Daughter</option>
+        <option value="Daughter-in-Law">Daughter-in-Law</option>
+        <option value="Fellow Veteran">Fellow Veteran</option>
+        <option value="Friend of the Family">Friend of the Family</option>
+        <option value="Granddaughter">Granddaughter</option>
+        <option value="Grandson">Grandson</option>
+        <option value="Great-Granddaughter">Great-Granddaughter</option>
+        <option value="Great-Grandson">Great-Grandson</option>
+        <option value="Neighbor">Neighbor</option>
+        <option value="Nephew">Nephew</option>
+        <option value="Niece">Niece</option>
+        <option value="Old Friend">Old Friend</option>
+        <option value="Other">Other</option>
+        <option value="Served Together">Served Together</option>
+        <option value="Sister">Sister</option>
+        <option value="Sister-in-Law">Sister-in-Law</option>
+        <option value="Son">Son</option>
+        <option value="Son-in-Law">Son-in-Law</option>
+        <option value="Uncle">Uncle</option>
+        <option value="Wife / Partner">Wife / Partner</option>
       </select>
     </div>
     <div class="form-group" id="trOtherGroup" style="display:none;">
@@ -1514,9 +1666,6 @@ function routeTo(path) {
 
 function cleanup() {
   if (galleryRefreshInterval) { clearInterval(galleryRefreshInterval); galleryRefreshInterval = null; }
-  stopConstellationLoop();
-  const popup = document.getElementById('constellation-popup');
-  if (popup) popup.remove();
 }
 
 function updateActiveNav() {
@@ -1762,15 +1911,23 @@ function renderWorldPage() {
         <p>Show him where you fit. Every person here is someone whose life he touched.</p>
         <button class="btn btn-gold" style="margin-top:1rem;" onclick="requireMagicWord(() => openModal('treeModal'))">Add Yourself</button>
       </div>
-      <div class="constellation-legend">
-        <span class="legend-item family">&#x2605; Family</span>
-        <span class="legend-item friends">&#x2605; Friends</span>
-        <span class="legend-item other">&#x2605; Others</span>
+      <div class="polaroid-web-container" id="polaroid-web">
+        <div class="polaroid-web-bob-row">
+          <div class="polaroid-card polaroid-bob" id="bob-center-card">
+            <div class="polaroid-photo-area">
+              <img src="hero-bob.jpg" alt="PaPa Bob Girard" class="polaroid-img" />
+            </div>
+            <div class="polaroid-caption">
+              <span class="polaroid-name bob-name">PaPa Bob</span>
+              <span class="polaroid-relationship bob-title">The Man Himself</span>
+            </div>
+          </div>
+        </div>
+        <svg class="connection-lines" id="connection-svg" aria-hidden="true"></svg>
+        <div class="polaroid-tier tier-1" id="tier-1-row" data-tier-label="Family"></div>
+        <div class="polaroid-tier tier-2" id="tier-2-row" data-tier-label="Extended Family"></div>
+        <div class="polaroid-tier tier-3" id="tier-3-row" data-tier-label="Friends &amp; Others"></div>
       </div>
-      <div class="constellation-wrap">
-        <canvas id="constellation-canvas" style="width:100%;display:block;touch-action:none;"></canvas>
-      </div>
-      <div id="constellationFallback" style="display:none;"></div>
     </div>`;
 
   loadTree();
@@ -2354,301 +2511,99 @@ async function submitFunFact() {
 }
 
 // ============================================
-// FAMILY TREE — CONSTELLATION
+// FAMILY TREE — POLAROID WEB
 // ============================================
-const IMMEDIATE_FAMILY = ['Son','Daughter','Wife / Partner','Brother','Sister','Grandson','Granddaughter','Great-Grandson','Great-Granddaughter'];
-const EXTENDED_FAMILY = ['Son-in-Law','Daughter-in-Law','Brother-in-Law','Sister-in-Law','Nephew','Niece','Cousin','Uncle','Aunt'];
 
 function handleRelationshipChange() {
   const val = document.getElementById('trRelationship').value;
   document.getElementById('trOtherGroup').style.display = val === 'Other' ? 'block' : 'none';
 }
 
-function getRelationshipCategory(val) {
-  if (IMMEDIATE_FAMILY.includes(val) || EXTENDED_FAMILY.includes(val)) return 'Family';
-  if (val === 'Other') return 'Other';
-  return 'Friend';
-}
-
-// --- Constellation state ---
-let constellationNodes = [];
-let constellationBob = null;
-let constellationAnimId = null;
-let constellationPulse = 0;
-let constellationCtx = null;
-let constellationCanvas = null;
-
 async function loadTree() {
   try {
     const res = await fetch(`${API_BASE}/tree`);
     treeData = await res.json();
+    renderPolaroidWeb();
   } catch {
-    const wrap = document.querySelector('.constellation-wrap');
-    if (wrap) wrap.innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
-    return;
+    const container = document.getElementById('polaroid-web');
+    if (container) container.innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
   }
-  renderConstellation();
 }
 
-function renderConstellation(animateNodeId) {
-  constellationCanvas = document.getElementById('constellation-canvas');
-  if (!constellationCanvas) return;
-  constellationCtx = constellationCanvas.getContext('2d');
-  if (!constellationCtx) { renderConstellationFallback(); return; }
-
-  const dpr = window.devicePixelRatio || 1;
-  const rect = constellationCanvas.getBoundingClientRect();
-  const W = rect.width;
-  const H = Math.max(W * 0.65, 400);
-  constellationCanvas.width = W * dpr;
-  constellationCanvas.height = H * dpr;
-  constellationCanvas.style.height = H + 'px';
-  constellationCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  const allNodes = [
-    ...(treeData.family || []).map(n => ({ ...n, cat: 'family' })),
-    ...(treeData.friends || []).map(n => ({ ...n, cat: 'friends' })),
-    ...(treeData.other || []).map(n => ({ ...n, cat: 'other' })),
-  ];
-
-  const cx = W / 2, cy = H / 2;
-  constellationBob = { x: cx, y: cy };
-  const baseR = Math.min(W, H) * 0.35;
-
-  const cats = { family: [], friends: [], other: [] };
-  allNodes.forEach(n => cats[n.cat]?.push(n));
-
-  constellationNodes = [];
-  const arcs = { family: [-150, -30], friends: [-20, 100], other: [110, 220] };
-  for (const [cat, list] of Object.entries(cats)) {
-    const [s, e] = arcs[cat].map(d => d * Math.PI / 180);
-    list.forEach((n, i) => {
-      const angle = list.length === 1 ? (s + e) / 2 : s + (i / (list.length - 1)) * (e - s);
-      const r = baseR + (i % 2 === 0 ? 0 : 25);
-      constellationNodes.push({ ...n, x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r, cat });
-    });
-  }
-
-  // Setup interaction
-  constellationCanvas.onmousemove = (e) => {
-    const r = constellationCanvas.getBoundingClientRect();
-    constellationCanvas.style.cursor = getNodeAt(e.clientX - r.left, e.clientY - r.top) ? 'pointer' : 'default';
-  };
-  constellationCanvas.onclick = (e) => {
-    const r = constellationCanvas.getBoundingClientRect();
-    const node = getNodeAt(e.clientX - r.left, e.clientY - r.top);
-    const existing = document.getElementById('constellation-popup');
-    if (existing) existing.remove();
-    if (node) showNodePopup(node, e.clientX, e.clientY);
-  };
-  constellationCanvas.ontouchend = (e) => {
-    e.preventDefault();
-    const t = e.changedTouches[0];
-    const r = constellationCanvas.getBoundingClientRect();
-    const node = getNodeAt(t.clientX - r.left, t.clientY - r.top);
-    const existing = document.getElementById('constellation-popup');
-    if (existing) existing.remove();
-    if (node) showNodePopup(node, t.clientX, t.clientY);
-  };
-
-  if (animateNodeId) {
-    const newNode = constellationNodes.find(n => n.id === animateNodeId);
-    if (newNode) { animateShootingStar(newNode); return; }
-  }
-
-  startConstellationLoop();
+function getCardRotation(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) & 0xffffffff;
+  return ((Math.abs(hash) % 1000) / 1000 - 0.5) * 14;
 }
 
-function startConstellationLoop() {
-  stopConstellationLoop();
-  function frame() {
-    drawConstellationFrame();
-    constellationAnimId = requestAnimationFrame(frame);
-  }
-  frame();
+function buildPolaroidCard(node) {
+  const rotation = getCardRotation(node.name);
+  const initials = node.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const card = document.createElement('div');
+  card.className = 'polaroid-card';
+  card.dataset.nodeId = node.id;
+  card.style.setProperty('--card-rotation', `${rotation}deg`);
+  card.style.transform = `rotate(${rotation}deg)`;
+  const imgUrl = node.photo_url ? photoUrl(node.photo_url) : null;
+  const photoHTML = imgUrl
+    ? `<img src="${imgUrl}" alt="${escapeHtml(node.name)}" class="polaroid-img" loading="lazy">`
+    : `<div class="polaroid-monogram">${initials}</div>`;
+  const noteHTML = node.note ? `<div class="polaroid-note-tooltip">${escapeHtml(node.note)}</div>` : '';
+  card.innerHTML = `<div class="polaroid-photo-area">${photoHTML}</div><div class="polaroid-caption"><span class="polaroid-name">${escapeHtml(node.name)}</span><span class="polaroid-relationship">${escapeHtml(node.relationship)}</span></div>${noteHTML}`;
+  return card;
 }
 
-function stopConstellationLoop() {
-  if (constellationAnimId) { cancelAnimationFrame(constellationAnimId); constellationAnimId = null; }
+function renderPolaroidWeb() {
+  if (!treeData) return;
+  const tier1Row = document.getElementById('tier-1-row');
+  const tier2Row = document.getElementById('tier-2-row');
+  const tier3Row = document.getElementById('tier-3-row');
+  if (!tier1Row || !tier2Row || !tier3Row) return;
+
+  tier1Row.innerHTML = ''; tier2Row.innerHTML = ''; tier3Row.innerHTML = '';
+
+  const g = treeData.grouped || {};
+  (g.tier1 || []).forEach(n => tier1Row.appendChild(buildPolaroidCard(n)));
+  (g.tier2 || []).forEach(n => tier2Row.appendChild(buildPolaroidCard(n)));
+  (g.tier3 || []).forEach(n => tier3Row.appendChild(buildPolaroidCard(n)));
+
+  [tier1Row, tier2Row, tier3Row].forEach(r => r.style.display = r.children.length === 0 ? 'none' : '');
+
+  requestAnimationFrame(() => drawConnectionLines());
 }
 
-function drawConstellationFrame() {
-  if (!constellationCtx || !constellationCanvas) return;
-  const ctx = constellationCtx;
-  const dpr = window.devicePixelRatio || 1;
-  const W = constellationCanvas.width / dpr;
-  const H = constellationCanvas.height / dpr;
-  constellationPulse += 0.02;
+function drawConnectionLines() {
+  const svg = document.getElementById('connection-svg');
+  if (!svg) return;
+  svg.innerHTML = '';
+  const container = document.getElementById('polaroid-web');
+  const bobCard = document.getElementById('bob-center-card');
+  if (!container || !bobCard) return;
+  const cRect = container.getBoundingClientRect();
+  const bRect = bobCard.getBoundingClientRect();
+  const bx = bRect.left - cRect.left + bRect.width / 2;
+  const by = bRect.top - cRect.top + bRect.height;
 
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#050505';
-  ctx.fillRect(0, 0, W, H);
-
-  // Background stars
-  const bgStars = getBgStars(W, H);
-  bgStars.forEach(s => {
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${s.opacity * (0.6 + 0.4 * Math.sin(constellationPulse + s.x))})`;
-    ctx.fill();
+  document.querySelectorAll('.polaroid-card:not(.polaroid-bob)').forEach(card => {
+    const r = card.getBoundingClientRect();
+    const cx = r.left - cRect.left + r.width / 2;
+    const cy = r.top - cRect.top;
+    const cpX = (bx + cx) / 2;
+    const cpY = (by + cy) / 2 - 30;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${bx} ${by} Q ${cpX} ${cpY} ${cx} ${cy}`);
+    path.setAttribute('class', 'connection-line');
+    svg.appendChild(path);
   });
-
-  // Connection lines
-  const bob = constellationBob;
-  constellationNodes.forEach(n => {
-    const colors = { family: 'rgba(212,208,200,0.25)', friends: 'rgba(168,196,160,0.2)', other: 'rgba(160,160,180,0.15)' };
-    ctx.beginPath(); ctx.moveTo(bob.x, bob.y); ctx.lineTo(n.x, n.y);
-    ctx.strokeStyle = colors[n.cat] || colors.other;
-    ctx.lineWidth = 0.8; ctx.setLineDash([4, 6]); ctx.stroke(); ctx.setLineDash([]);
-  });
-
-  // Person nodes
-  const nodeColors = {
-    family: { glow: 'rgba(212,208,200,0.6)', star: '#d4d0c8', text: '#d4d0c8' },
-    friends: { glow: 'rgba(168,196,160,0.5)', star: '#a8c4a0', text: '#a8c4a0' },
-    other: { glow: 'rgba(160,160,180,0.4)', star: '#a0a0b4', text: '#a0a0b4' },
-  };
-
-  constellationNodes.forEach(n => {
-    const c = nodeColors[n.cat] || nodeColors.other;
-    const pulse = 0.15 * Math.sin(constellationPulse + n.x * 0.05);
-    const r = 5 + pulse;
-
-    const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 4);
-    glow.addColorStop(0, c.glow); glow.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath(); ctx.arc(n.x, n.y, r * 4, 0, Math.PI * 2); ctx.fillStyle = glow; ctx.fill();
-
-    drawStar(ctx, n.x, n.y, r, 4, c.star);
-
-    const fs = W < 600 ? 9 : 11;
-    ctx.font = `${fs}px Inter, sans-serif`; ctx.fillStyle = c.text; ctx.textAlign = 'center';
-    ctx.fillText(n.name, n.x, n.y + r + 14);
-    ctx.font = `${fs - 2}px Inter, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.4)';
-    ctx.fillText(n.relationship || '', n.x, n.y + r + 24);
-  });
-
-  // Bob node
-  const bp = 0.3 * Math.sin(constellationPulse * 0.8);
-  const br = 18 + bp;
-  const outerG = ctx.createRadialGradient(bob.x, bob.y, 0, bob.x, bob.y, br * 5);
-  outerG.addColorStop(0, 'rgba(212,208,200,0.4)'); outerG.addColorStop(0.5, 'rgba(212,208,200,0.1)'); outerG.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.beginPath(); ctx.arc(bob.x, bob.y, br * 5, 0, Math.PI * 2); ctx.fillStyle = outerG; ctx.fill();
-  const innerG = ctx.createRadialGradient(bob.x, bob.y, 0, bob.x, bob.y, br * 1.5);
-  innerG.addColorStop(0, 'rgba(255,255,240,0.95)'); innerG.addColorStop(0.5, 'rgba(212,208,200,0.8)'); innerG.addColorStop(1, 'rgba(212,208,200,0.2)');
-  ctx.beginPath(); ctx.arc(bob.x, bob.y, br * 1.5, 0, Math.PI * 2); ctx.fillStyle = innerG; ctx.fill();
-  drawStar(ctx, bob.x, bob.y, br, 6, '#fffffe');
-  const bfs = W < 600 ? 11 : 13;
-  ctx.font = `bold ${bfs}px "Playfair Display", serif`; ctx.fillStyle = '#d4d0c8'; ctx.textAlign = 'center';
-  ctx.fillText('PaPa Bob', bob.x, bob.y + br + 18);
 }
 
-function drawStar(ctx, cx, cy, outerR, points, color) {
-  const innerR = outerR * 0.45;
-  ctx.beginPath();
-  for (let i = 0; i < points * 2; i++) {
-    const angle = (i * Math.PI) / points - Math.PI / 2;
-    const r = i % 2 === 0 ? outerR : innerR;
-    const x = cx + Math.cos(angle) * r, y = cy + Math.sin(angle) * r;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.closePath(); ctx.fillStyle = color; ctx.fill();
-}
+// Redraw lines on resize
+window.addEventListener('resize', () => {
+  clearTimeout(window._lineRedraw);
+  window._lineRedraw = setTimeout(drawConnectionLines, 150);
+});
 
-function getBgStars(W, H) {
-  if (window._bgStars && window._bgW === W) return window._bgStars;
-  const stars = [];
-  for (let i = 0; i < 80; i++) {
-    stars.push({ x: (Math.sin(i * 127.1) * 0.5 + 0.5) * W, y: (Math.sin(i * 311.7) * 0.5 + 0.5) * H, size: 0.3 + (Math.sin(i * 71.3) * 0.5 + 0.5) * 1.2, opacity: 0.1 + (Math.sin(i * 43.7) * 0.5 + 0.5) * 0.25 });
-  }
-  window._bgStars = stars; window._bgW = W; return stars;
-}
 
-function getNodeAt(x, y) {
-  return constellationNodes.find(n => Math.hypot(n.x - x, n.y - y) < 24);
-}
-
-function showNodePopup(node, screenX, screenY) {
-  let popup = document.getElementById('constellation-popup');
-  if (!popup) { popup = document.createElement('div'); popup.id = 'constellation-popup'; popup.className = 'constellation-popup'; document.body.appendChild(popup); }
-  popup.innerHTML = `<div class="popup-name">${escapeHtml(node.name)}</div><div class="popup-relationship">${escapeHtml(node.relationship)}</div>${node.note ? `<div class="popup-note">${escapeHtml(node.note)}</div>` : ''}${node.photo_url ? `<img class="popup-photo" src="${photoUrl(node.photo_url)}" alt="${escapeHtml(node.name)}">` : ''}<button class="popup-close" onclick="this.parentElement.remove()">&#x2715;</button>`;
-  let left = screenX + 12, top = screenY - 60;
-  if (left + 220 > window.innerWidth - 16) left = screenX - 232;
-  if (top < 8) top = 8;
-  popup.style.left = left + 'px'; popup.style.top = top + 'px'; popup.hidden = false;
-}
-
-function animateShootingStar(newNode) {
-  stopConstellationLoop();
-  const bob = constellationBob;
-  const start = performance.now();
-  const dur = 1200;
-
-  function frame(now) {
-    const p = Math.min((now - start) / dur, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    const cx = bob.x + (newNode.x - bob.x) * ease;
-    const cy = bob.y + (newNode.y - bob.y) * ease;
-
-    drawConstellationFrame();
-
-    const ctx = constellationCtx;
-    // Trail
-    const tl = 20 * (1 - ease);
-    if (tl > 1) {
-      const tx = cx - (newNode.x - bob.x) * 0.08 * (1 - ease);
-      const ty = cy - (newNode.y - bob.y) * 0.08 * (1 - ease);
-      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(tx, ty);
-      const tg = ctx.createLinearGradient(cx, cy, tx, ty);
-      tg.addColorStop(0, 'rgba(255,255,240,0.9)'); tg.addColorStop(1, 'rgba(255,255,240,0)');
-      ctx.strokeStyle = tg; ctx.lineWidth = 2; ctx.stroke();
-    }
-    drawStar(ctx, cx, cy, 6 + 4 * (1 - ease), 4, '#fffffe');
-
-    if (p < 1) requestAnimationFrame(frame);
-    else {
-      // Arrival pulse
-      const ps = performance.now();
-      function pulse(now2) {
-        const pp = Math.min((now2 - ps) / 600, 1);
-        drawConstellationFrame();
-        ctx.beginPath(); ctx.arc(newNode.x, newNode.y, 6 + pp * 40, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(212,208,200,${(1 - pp) * 0.8})`; ctx.lineWidth = 2; ctx.stroke();
-        // Bob ripple
-        ctx.beginPath(); ctx.arc(bob.x, bob.y, 20 + pp * 60, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255,255,240,${(1 - pp) * 0.5})`; ctx.lineWidth = 1.5; ctx.stroke();
-        if (pp < 1) requestAnimationFrame(pulse);
-        else startConstellationLoop();
-      }
-      requestAnimationFrame(pulse);
-    }
-  }
-  requestAnimationFrame(frame);
-}
-
-function renderConstellationFallback() {
-  const fallback = document.getElementById('constellationFallback');
-  const wrap = document.querySelector('.constellation-wrap');
-  if (!fallback || !wrap) return;
-  wrap.style.display = 'none'; fallback.style.display = 'block';
-
-  const allNodes = [...(treeData.family||[]).map(n=>({...n,cat:'family'})),...(treeData.friends||[]).map(n=>({...n,cat:'friends'})),...(treeData.other||[]).map(n=>({...n,cat:'other'}))];
-  let html = '<div style="text-align:center;padding:1.5rem;margin-bottom:2rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-el);"><h3 style="font-family:var(--font-display);color:var(--gold);font-size:1.5rem;margin-bottom:0.25rem;">PaPa Bob Girard</h3><p style="color:var(--text-sec);font-size:0.95rem;">The Man Himself</p></div>';
-
-  const groups = [{ label: 'Immediate Family', items: [] }, { label: 'Extended Family', items: [] }, { label: 'Friends & Others', items: [] }];
-  for (const n of allNodes) {
-    const rel = n.relationship?.split(' \u2014 ')[0] || '';
-    if (IMMEDIATE_FAMILY.includes(rel)) groups[0].items.push(n);
-    else if (EXTENDED_FAMILY.includes(rel)) groups[1].items.push(n);
-    else groups[2].items.push(n);
-  }
-  for (const g of groups) {
-    if (!g.items.length) continue;
-    html += `<h3 style="color:var(--gold);margin:1.5rem 0 0.75rem;">${g.label}</h3><div class="constellation-fallback-grid">`;
-    html += g.items.map(n => `<div class="constellation-fallback-card"><h4>${escapeHtml(n.name)}</h4><p>${escapeHtml(n.relationship)}</p>${n.note ? `<p style="margin-top:0.5rem;color:var(--text);">${escapeHtml(n.note)}</p>` : ''}</div>`).join('') + '</div>';
-  }
-  if (!allNodes.length) html += '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
-  fallback.innerHTML = html;
-}
 
 async function submitTreeNode() {
   const name = document.getElementById('trName').value.trim();
@@ -2660,7 +2615,6 @@ async function submitTreeNode() {
   if (relationshipVal === 'Other' && !otherDetail) { showToast('Please tell us your relationship to Bob.', true); return; }
 
   const relationship = relationshipVal === 'Other' ? `Other \u2014 ${otherDetail}` : relationshipVal;
-  const category = getRelationshipCategory(relationshipVal);
 
   const btn = document.getElementById('trSubmitBtn');
   btn.disabled = true;
@@ -2670,7 +2624,6 @@ async function submitTreeNode() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('relationship', relationship);
-    formData.append('relationship_category', category);
     if (note) formData.append('note', note);
     const photoFile = document.getElementById('trPhoto').files[0];
     if (photoFile) { const processed = await processImage(photoFile); formData.append('photo', processed, photoFile.name); }
@@ -2681,10 +2634,11 @@ async function submitTreeNode() {
 
     closeModal('treeModal');
     if (result.action === 'updated') {
-      showToast('Your entry has been updated \u{1F49B}');
+      showToast("Your spot in PaPa Bob's World has been updated \u{1F49B}");
     } else {
       showToast("You've been added to PaPa Bob's World \u{1F49B}");
     }
+    const submittedName = name;
     document.getElementById('trName').value = '';
     document.getElementById('trRelationship').value = '';
     document.getElementById('trOtherDetail').value = '';
@@ -2692,10 +2646,22 @@ async function submitTreeNode() {
     document.getElementById('trNote').value = '';
     document.getElementById('trPhoto').value = '';
 
-    // Re-fetch tree and animate new node
+    // Re-fetch and animate
     const treeRes = await fetch(`${API_BASE}/tree`);
     treeData = await treeRes.json();
-    renderConstellation(result.id);
+    renderPolaroidWeb();
+    // Animate the new/updated card
+    requestAnimationFrame(() => {
+      const cards = document.querySelectorAll('.polaroid-card:not(.polaroid-bob)');
+      cards.forEach(c => {
+        const nameEl = c.querySelector('.polaroid-name');
+        if (nameEl && nameEl.textContent.trim().toLowerCase() === submittedName.toLowerCase()) {
+          c.classList.add('animating-in');
+          c.addEventListener('animationend', () => c.classList.remove('animating-in'), { once: true });
+          c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    });
   } catch (err) {
     showToast(err.message || 'Something went wrong. Try again.', true);
   } finally {
