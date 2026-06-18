@@ -1261,7 +1261,7 @@ let slideshowSpeed = 5000;
 let slideshowPhotos = [];
 let slideshowIndex = -1;
 let controlsTimeout = null;
-let d3Available = typeof d3 !== 'undefined';
+function d3Available() { return typeof d3 !== 'undefined'; }
 let currentRoute = null;
 let treeData = null;
 let sigCanvas, sigCtx, sigDrawing = false;
@@ -2160,10 +2160,22 @@ async function loadTree() {
   try {
     const res = await fetch(`${API_BASE}/tree`);
     treeData = await res.json();
-    renderTree();
   } catch {
     const c = document.getElementById('treeContainer');
     if (c) c.innerHTML = '<div class="empty-state">Could not load the tree right now.</div>';
+    return;
+  }
+  try {
+    renderTree();
+  } catch (err) {
+    console.error('Tree render error:', err);
+    // Fall back to card grid on D3 error
+    const allNodes = [
+      ...treeData.family.map(n => ({ ...n, category: 'family' })),
+      ...treeData.friends.map(n => ({ ...n, category: 'friend' })),
+      ...treeData.other.map(n => ({ ...n, category: 'other' })),
+    ];
+    renderTreeFallback(allNodes);
   }
 }
 
@@ -2175,13 +2187,13 @@ function renderTree() {
     ...treeData.other.map(n => ({ ...n, category: 'other' })),
   ];
 
-  if (allNodes.length === 0 && !d3Available) {
+  if (allNodes.length === 0 && !d3Available()) {
     const c = document.getElementById('treeContainer');
     if (c) c.innerHTML = '<div class="empty-state">No one has added themselves yet. Be the first! &#x1F49B;</div>';
     return;
   }
 
-  if (!d3Available) { renderTreeFallback(allNodes); return; }
+  if (!d3Available()) { renderTreeFallback(allNodes); return; }
   renderTreeD3(allNodes);
 }
 
