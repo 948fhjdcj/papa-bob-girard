@@ -1033,6 +1033,7 @@ footer .footer-love {
   border-radius: 4px;
   box-shadow: 0 8px 60px rgba(0,0,0,0.9);
   display: block;
+  cursor: pointer;
 }
 
 .lightbox-meta {
@@ -2743,6 +2744,7 @@ const Lightbox = (() => {
   function init() {
     document.getElementById('lightbox-close').addEventListener('click', close);
     document.querySelector('.lightbox-backdrop').addEventListener('click', close);
+    document.getElementById('lightbox-img').addEventListener('click', close);
     document.getElementById('lightbox-prev').addEventListener('click', prev);
     document.getElementById('lightbox-next').addEventListener('click', next);
     document.getElementById('lightbox-share-toggle').addEventListener('click', (e) => {
