@@ -11,8 +11,15 @@ binding = "DB"
 database_name = "papa-bob-db"
 database_id = "797d1768-5996-45ce-aa77-07f67d28c220"
 
-[vars]
-MAGIC_WORD = "LoveYou"
+[triggers]
+crons = ["0 13 * * *"]
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+invocation_logs = true
 
 # Route disabled — Pages owns papabob.org, API accessed via workers.dev URL
 # [[routes]]

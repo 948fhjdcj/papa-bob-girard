@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS guestbook (
   message TEXT NOT NULL,
   signature_data TEXT,
   photo_key TEXT,
+  source TEXT DEFAULT 'direct',
+  external_id TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

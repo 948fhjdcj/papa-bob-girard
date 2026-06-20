@@ -7,7 +7,7 @@ export default {
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-Magic-Word',
+      'Access-Control-Allow-Headers': 'Content-Type',
     };
 
     // Handle preflight
@@ -18,7 +18,7 @@ export default {
     // Route API requests
     if (path.startsWith('/api/')) {
       try {
-        const response = await handleAPI(request, env, url, path);
+        const response = await handleAPI(request, env, ctx, url, path);
         // Add CORS headers to every response
         const headers = new Headers(response.headers);
         for (const [k, v] of Object.entries(corsHeaders)) {
@@ -36,16 +36,11 @@ export default {
 
     return new Response('Not found', { status: 404, headers: corsHeaders });
   },
-};
 
-// --- Auth helper ---
-function checkMagicWord(request, env) {
-  const word = request.headers.get('X-Magic-Word');
-  if (word !== env.MAGIC_WORD) {
-    return jsonResponse({ error: 'Wrong magic word' }, 401);
-  }
-  return null; // auth passed
-}
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(importDignityMemorialMemories(env));
+  },
+};
 
 // --- JSON helper ---
 function jsonResponse(data, status = 200, extraHeaders = {}) {
@@ -76,16 +71,13 @@ function rand4() {
 }
 
 // --- Router ---
-async function handleAPI(request, env, url, path) {
+async function handleAPI(request, env, ctx, url, path) {
   const method = request.method;
 
   // --- Photo endpoints ---
 
   // Upload photos
   if (method === 'POST' && path === '/api/photos/upload') {
-    const authErr = checkMagicWord(request, env);
-    if (authErr) return authErr;
-
     const formData = await request.formData();
     const uploaderName = formData.get('uploader_name');
     const year = formData.get('year') || '';
@@ -187,8 +179,8 @@ async function handleAPI(request, env, url, path) {
       return { filename, data };
     });
 
-    const files = (await Promise.all(fetches)).filter(Boolean);
-    const zipData = createZip(files);
+    const zipFiles = (await Promise.all(fetches)).filter(Boolean);
+    const zipData = createZip(zipFiles);
 
     const headers = new Headers();
     headers.set('Content-Type', 'application/zip');
@@ -213,8 +205,8 @@ async function handleAPI(request, env, url, path) {
       return { filename: originalFilename, data };
     });
 
-    const files = (await Promise.all(fetches)).filter(Boolean);
-    const zipData = createZip(files);
+    const zipFiles = (await Promise.all(fetches)).filter(Boolean);
+    const zipData = createZip(zipFiles);
 
     const headers = new Headers();
     headers.set('Content-Type', 'application/zip');
@@ -267,9 +259,6 @@ async function handleAPI(request, env, url, path) {
   // --- Guestbook endpoints ---
 
   if (method === 'POST' && path === '/api/guestbook') {
-    const authErr = checkMagicWord(request, env);
-    if (authErr) return authErr;
-
     const formData = await request.formData();
     const name = formData.get('name');
     const message = formData.get('message');
@@ -302,7 +291,7 @@ async function handleAPI(request, env, url, path) {
 
   if (method === 'GET' && path === '/api/guestbook') {
     const { results } = await env.DB.prepare(
-      'SELECT * FROM guestbook ORDER BY created_at DESC'
+      'SELECT id, name, message, signature_data, photo_key, source, created_at FROM guestbook ORDER BY created_at DESC'
     ).all();
 
     const entries = results.map(r => ({
@@ -316,9 +305,6 @@ async function handleAPI(request, env, url, path) {
   // --- Fun facts endpoints ---
 
   if (method === 'POST' && path === '/api/funfacts') {
-    const authErr = checkMagicWord(request, env);
-    if (authErr) return authErr;
-
     const body = await request.json();
     if (!body.name || !body.fact) {
       return jsonResponse({ error: 'name and fact are required' }, 400);
@@ -341,9 +327,6 @@ async function handleAPI(request, env, url, path) {
   // --- Family tree endpoints ---
 
   if (method === 'POST' && path === '/api/tree') {
-    const authErr = checkMagicWord(request, env);
-    if (authErr) return authErr;
-
     const formData = await request.formData();
     const name = formData.get('name')?.trim();
     const relationship = formData.get('relationship')?.trim();
@@ -404,6 +387,14 @@ async function handleAPI(request, env, url, path) {
     });
   }
 
+  // --- Admin endpoints ---
+
+  // Manual trigger for Dignity Memorial import
+  if (method === 'POST' && path === '/api/admin/import-dignity') {
+    ctx.waitUntil(importDignityMemorialMemories(env));
+    return jsonResponse({ success: true, message: 'Import triggered — check Worker logs' });
+  }
+
   // --- Phase 2: Admin delete stubs ---
 
   // DELETE /api/photos/:key — Phase 2: Admin panel
@@ -427,6 +418,115 @@ async function handleAPI(request, env, url, path) {
   }
 
   return jsonResponse({ error: 'Not found' }, 404);
+}
+
+// --- Dignity Memorial Memory Import ---
+async function importDignityMemorialMemories(env) {
+  const DIGNITY_URL = 'https://www.dignitymemorial.com/obituaries/st-clair-shores-mi/robert-girard-12936510';
+  const SCRAPFLY_URL = `https://api.scrapfly.io/scrape?key=${env.SCRAPFLY_API_KEY}&url=${encodeURIComponent(DIGNITY_URL)}&render_js=true&asp=true`;
+
+  console.log('[DignityImport] Starting daily memory import...');
+
+  let html;
+  try {
+    const response = await fetch(SCRAPFLY_URL);
+    if (!response.ok) {
+      console.error(`[DignityImport] ScrapFly error: ${response.status}`);
+      return;
+    }
+    const data = await response.json();
+    html = data?.result?.content || '';
+    if (!html) {
+      console.error('[DignityImport] ScrapFly returned empty content');
+      return;
+    }
+  } catch (err) {
+    console.error(`[DignityImport] Fetch error: ${err.message}`);
+    return;
+  }
+
+  const memories = parseMemories(html);
+  console.log(`[DignityImport] Found ${memories.length} memories on page`);
+
+  if (memories.length === 0) {
+    console.log('[DignityImport] No memories found — page structure may have changed');
+    return;
+  }
+
+  let imported = 0;
+  let skipped = 0;
+
+  for (const memory of memories) {
+    try {
+      const existing = await env.DB.prepare(
+        'SELECT id FROM guestbook WHERE external_id = ?'
+      ).bind(memory.external_id).first();
+
+      if (existing) {
+        skipped++;
+        continue;
+      }
+
+      await env.DB.prepare(
+        'INSERT INTO guestbook (name, message, source, external_id, created_at) VALUES (?, ?, ?, ?, ?)'
+      ).bind(
+        memory.name,
+        memory.message,
+        'dignity_memorial',
+        memory.external_id,
+        memory.date || new Date().toISOString()
+      ).run();
+
+      imported++;
+      console.log(`[DignityImport] Imported memory from: ${memory.name}`);
+    } catch (err) {
+      console.error(`[DignityImport] Error inserting memory from ${memory.name}: ${err.message}`);
+    }
+  }
+
+  console.log(`[DignityImport] Complete — imported: ${imported}, skipped (already exist): ${skipped}`);
+}
+
+function parseMemories(html) {
+  const memories = [];
+
+  // Dignity Memorial is a Next.js app — memory data is in __NEXT_DATA__ JSON
+  const nextDataMatch = html.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/);
+  if (!nextDataMatch) {
+    console.log('[DignityImport] No __NEXT_DATA__ found in page');
+    console.log('[DignityImport] DEBUG — First 2000 chars:');
+    console.log(html.slice(0, 2000));
+    return memories;
+  }
+
+  let nextData;
+  try {
+    nextData = JSON.parse(nextDataMatch[1]);
+  } catch (err) {
+    console.error(`[DignityImport] Failed to parse __NEXT_DATA__: ${err.message}`);
+    return memories;
+  }
+
+  const memoryList = nextData?.props?.pageProps?.memoryData?.MemoryList;
+  if (!memoryList || !Array.isArray(memoryList)) {
+    console.log('[DignityImport] No MemoryList found in __NEXT_DATA__');
+    return memories;
+  }
+
+  for (const entry of memoryList) {
+    const name = entry.SubmitterName || 'Anonymous';
+    const message = entry.Message?.Text;
+    const id = entry.Id;
+    const date = entry.SubmitDate || null;
+
+    // Skip entries without text (photo-only tributes, tribute videos)
+    if (!message || message.length < 5) continue;
+
+    const external_id = `dignity_${id}`;
+    memories.push({ name, message, external_id, date });
+  }
+
+  return memories;
 }
 
 // --- ZIP creation (Store method, no compression — images are already compressed) ---

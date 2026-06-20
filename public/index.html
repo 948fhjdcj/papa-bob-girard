@@ -242,7 +242,7 @@ nav {
   background-repeat: no-repeat;
   background-position: center top;
   background-size: cover;
-  filter: blur(1.5px) sepia(0.35) brightness(0.85);
+  filter: blur(0.5px) sepia(0.15) brightness(0.9);
   transform: scale(1.05);
   z-index: 0;
   transition: opacity 1.5s ease;
@@ -841,21 +841,7 @@ nav {
 
 .fact-card.new-entry { animation: cardFlipIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-style: preserve-3d; }
 
-.magic-shimmer {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 100%; aspect-ratio: 1;
-  background: radial-gradient(circle, rgba(212,208,200,0.4) 0%, rgba(212,208,200,0) 70%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  pointer-events: none;
-  animation: shimmerRipple 0.6s ease-out forwards;
-}
-
-@keyframes shimmerRipple {
-  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
-  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
-}
+/* (shimmer ripple removed) */
 
 /* ============================================
    SLIDESHOW
@@ -1014,62 +1000,7 @@ nav {
   background: none; border: none;
 }
 
-/* ============================================
-   MAGIC WORD GATE
-   ============================================ */
-.magic-gate {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 10, 10, 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 9000;
-  align-items: center;
-  justify-content: center;
-}
-
-.magic-gate.open { display: flex; }
-
-.magic-gate-card {
-  text-align: center;
-  background: var(--surface-el);
-  background-image: var(--surface-texture);
-  background-blend-mode: overlay;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.5rem 2rem;
-  width: 100%;
-  max-width: 380px;
-}
-
-.magic-gate-card h3 {
-  font-family: var(--font-display);
-  color: var(--gold);
-  font-size: 1.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.magic-gate-card input {
-  text-align: center;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-.magic-gate-error {
-  color: #8b1a1a;
-  font-size: 0.9rem;
-  margin-bottom: 0.75rem;
-  display: none;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-
-.shake { animation: shake 0.4s ease; }
+/* (magic word gate removed) */
 
 /* ============================================
    TOAST
@@ -1153,7 +1084,7 @@ footer .footer-love {
 @media print {
   body { background: #fff !important; color: #000 !important; }
   nav, #hero, .slideshow-fullscreen, footer,
-  .btn, .modal-overlay, .magic-gate, .toast-container, .section-header .btn,
+  .btn, .modal-overlay, .toast-container, .section-header .btn,
   .gallery-controls, .upload-buttons, .name-chips, .collage-section,
   .upload-form, .upload-buttons { display: none !important; }
 
@@ -1380,6 +1311,200 @@ footer .footer-love {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================
+   SERVICE INFO SECTION
+   ============================================ */
+.service-info-section {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 56px 24px;
+}
+
+.service-info-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.service-info-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.service-info-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--gold);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.service-info-dates {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: var(--text-sec);
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+
+.service-info-tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--text-sec);
+  font-style: italic;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.service-info-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--border);
+  margin: 32px auto;
+}
+
+.service-info-cards {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-align: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 260px;
+}
+
+.service-card-icon {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.service-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.service-card-detail {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.service-card-note {
+  font-size: 0.78rem;
+  color: var(--text-sec);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+.service-card-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.service-card-link:hover {
+  border-bottom-color: var(--gold);
+  text-decoration: none;
+}
+
+.service-info-obituary {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.service-info-obituary p {
+  font-size: 0.92rem;
+  color: var(--text-sec);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.service-obit-link {
+  font-size: 0.85rem;
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.service-obit-link:hover {
+  border-bottom-color: var(--gold);
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .service-info-section { padding: 40px 16px; }
+  .service-info-cards { flex-direction: column; align-items: center; }
+  .service-card { width: 100%; max-width: 340px; }
+}
+
+/* ============================================
+   DIGNITY BADGE & MESSAGES INVITATION
+   ============================================ */
+.dignity-badge {
+  font-size: 0.7rem;
+  color: var(--text-sec);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.dignity-badge a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.dignity-badge a:hover {
+  text-decoration: underline;
+}
+
+.messages-invitation {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 36px;
+  padding: 0 16px;
+}
+
+.messages-invitation p {
+  font-size: 0.95rem;
+  color: var(--text-sec);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.messages-dignity-note {
+  font-size: 0.82rem !important;
+  font-style: italic;
+}
+
+.messages-dignity-note a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.messages-dignity-note a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -1389,6 +1514,7 @@ footer .footer-love {
   <div class="nav-inner">
     <a class="nav-logo" href="/" onclick="navigate('/', event)">PaPa Bob Girard</a>
     <div class="nav-links" id="navLinks">
+      <a href="/#service-info" onclick="navigateToServiceInfo(event)">Service Info</a>
       <a href="/photos" onclick="navigate('/photos', event)">Photos</a>
       <a href="/messages" onclick="navigate('/messages', event)">Messages</a>
       <a href="/funfacts" onclick="navigate('/funfacts', event)">Fun Facts</a>
@@ -1401,21 +1527,12 @@ footer .footer-love {
 
 <div class="nav-mobile" id="mobileNav">
   <button class="nav-mobile-close" onclick="toggleMobileNav()">&times;</button>
+  <a href="/#service-info" onclick="toggleMobileNav(); navigateToServiceInfo(event)">Service Info</a>
   <a href="/photos" onclick="navigate('/photos', event); toggleMobileNav()">Photos</a>
   <a href="/messages" onclick="navigate('/messages', event); toggleMobileNav()">Messages</a>
   <a href="/funfacts" onclick="navigate('/funfacts', event); toggleMobileNav()">Fun Facts</a>
   <a href="/world" onclick="navigate('/world', event); toggleMobileNav()">His World</a>
   <button class="btn btn-outline" onclick="toggleMobileNav(); startSlideshow()">&#9654; Slideshow</button>
-</div>
-
-<!-- MAGIC WORD GATE -->
-<div class="magic-gate" id="magicGate">
-  <div class="magic-gate-card">
-    <h3>What's the magic word?</h3>
-    <div class="magic-gate-error" id="magicError">Try again &#x1F49B;</div>
-    <input type="text" id="magicInput" placeholder="Type it here..." autocomplete="off">
-    <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:0.5rem;" onclick="checkMagicWord()">Unlock</button>
-  </div>
 </div>
 
 <!-- MODALS (persist across pages) -->
@@ -1424,14 +1541,14 @@ footer .footer-love {
 <div class="modal-overlay" id="guestbookModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('guestbookModal')">&times;</button>
-    <h3>Leave Bob a Message</h3>
+    <h3>Share a Memory of Bob</h3>
     <div class="form-group">
       <label for="gbName">Your name</label>
       <input type="text" id="gbName" placeholder="e.g. Sarah" required>
     </div>
     <div class="form-group">
-      <label for="gbMessage">Your message</label>
-      <textarea id="gbMessage" placeholder="Tell PaPa Bob what he means to you..." rows="4"></textarea>
+      <label for="gbMessage">Your memory</label>
+      <textarea id="gbMessage" placeholder="Share a memory, a story, or what Bob meant to you..." rows="4"></textarea>
     </div>
     <div class="form-group signature-area">
       <label>Sign your name (draw with your finger)</label>
@@ -1442,7 +1559,7 @@ footer .footer-love {
       <label>Add a photo of you and Bob (optional)</label>
       <input type="file" id="gbPhoto" accept="image/jpeg,image/png,image/gif,image/webp,.heic">
     </div>
-    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="gbSubmitBtn" onclick="submitGuestbook()">Send Bob Your Message &#x1F49B;</button>
+    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="gbSubmitBtn" onclick="submitGuestbook()">Share This Memory &#x1F49B;</button>
   </div>
 </div>
 
@@ -1459,7 +1576,7 @@ footer .footer-love {
       <label for="ffFact">The fun fact</label>
       <textarea id="ffFact" placeholder="e.g. Bob once drove 14 hours to see the Stones and never told anyone..." rows="4"></textarea>
     </div>
-    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="ffSubmitBtn" onclick="submitFunFact()">Add This Fact &#x1F49B;</button>
+    <button class="btn btn-gold" style="width:100%;justify-content:center;" id="ffSubmitBtn" onclick="submitFunFact()">Share This &#x1F49B;</button>
   </div>
 </div>
 
@@ -1484,7 +1601,7 @@ footer .footer-love {
     <div class="form-group">
       <label for="trName">Your name</label>
       <input type="text" id="trName" placeholder="e.g. Sarah Girard" required>
-      <p class="tree-form-hint">Already added yourself? Enter your name again to update your entry. &#x1F49B;</p>
+      <p class="tree-form-hint">Already added yourself? Enter your name again to update your entry.</p>
     </div>
     <div class="form-group">
       <label for="trRelationship">What's your relationship to Bob?</label>
@@ -1595,8 +1712,8 @@ footer .footer-love {
 
 <!-- FOOTER -->
 <footer>
-  <p class="footer-title">PaPa Bob Girard</p>
-  <p class="footer-love">Made with love by his family &#x1F49B;</p>
+  <p class="footer-title">Robert Carl Girard Jr.</p>
+  <p class="footer-love">March 1, 1950 &ndash; June 19, 2026</p>
 </footer>
 
 <!-- Toast container -->
@@ -1617,8 +1734,6 @@ function photoUrl(relativeUrl) {
   if (relativeUrl.startsWith('http')) return relativeUrl;
   return API_HOST + relativeUrl;
 }
-let isUnlocked = sessionStorage.getItem('unlocked') === 'true';
-let pendingAction = null;
 let allPhotos = [];
 let galleryView = 'all';
 let gallerySort = 'newest';
@@ -1693,11 +1808,56 @@ function renderHomePage() {
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <h1>PaPa Bob Girard</h1>
-        <!-- BOB BIO: Phase 2 -->
-        <p>Share your love. Share your memories. He'd love to see them.</p>
+        <p>In loving memory of PaPa Bob. Share your photos, your stories, and your love.</p>
       </div>
-      <div class="hero-scroll" onclick="document.querySelector('.collage-section').scrollIntoView({behavior:'smooth'})">&#x25BC;</div>
+      <div class="hero-scroll" onclick="document.getElementById('service-info').scrollIntoView({behavior:'smooth'})">&#x25BC;</div>
     </section>
+    <div class="service-info-section" id="service-info">
+      <div class="service-info-inner">
+        <div class="service-info-header">
+          <h2 class="service-info-title">Robert Carl Girard Jr.</h2>
+          <p class="service-info-dates">March 1, 1950 &ndash; June 19, 2026</p>
+          <p class="service-info-tagline">Beloved husband, father, grandfather, and veteran. A man who loved deeply and lived fully.</p>
+        </div>
+        <div class="service-info-divider"></div>
+        <div class="service-info-cards">
+          <div class="service-card">
+            <div class="service-card-icon">\u{1F56F}\u{FE0F}</div>
+            <h3 class="service-card-title">Visitation</h3>
+            <p class="service-card-detail">Thursday, June 25, 2026</p>
+            <p class="service-card-detail">3:00 PM \u2013 8:00 PM</p>
+            <p class="service-card-note">Memory sharing service at 6:30 PM</p>
+          </div>
+          <div class="service-card">
+            <div class="service-card-icon">\u{1F4CD}</div>
+            <h3 class="service-card-title">Location</h3>
+            <p class="service-card-detail">Kaul Funeral Home</p>
+            <p class="service-card-detail">28433 Jefferson Ave.</p>
+            <p class="service-card-detail">St. Clair Shores, MI</p>
+            <a href="https://maps.google.com/?q=Kaul+Funeral+Home+28433+Jefferson+Ave+St+Clair+Shores+MI" target="_blank" rel="noopener" class="service-card-link">Get Directions \u2192</a>
+          </div>
+          <div class="service-card">
+            <div class="service-card-icon">\u{1F397}\u{FE0F}</div>
+            <h3 class="service-card-title">In Lieu of Flowers</h3>
+            <p class="service-card-detail">Donations may be made to the</p>
+            <a href="https://www.cancer.org/involved/donate.html" target="_blank" rel="noopener" class="service-card-link">American Cancer Society \u2192</a>
+          </div>
+          <!-- BURIAL PLACEHOLDER \u2014 add burial details here when available -->
+          <!--
+          <div class="service-card">
+            <div class="service-card-icon">\u2698</div>
+            <h3 class="service-card-title">Burial</h3>
+            <p class="service-card-detail">Details to be announced</p>
+          </div>
+          -->
+        </div>
+        <div class="service-info-divider"></div>
+        <div class="service-info-obituary">
+          <p>Robert Carl Girard Jr., age 76, passed away on June 19, 2026. He was born on March 1, 1950 in Detroit, Michigan. Robert is survived by his beloved wife of 49 years, Joan; loving children: John (Carol), Renee (Christopher) Burgess, Robert Girard III, and Julie (Daniel) Skielnik; dear grandchildren: John, Alex, Bret, Ian, Hadley, Elodie, Celine, Auden, Chloe, and Harrison; and caring siblings: Nora Stringer, Mark (Michelle), and Daniel. Robert loved fishing and sitting outside by the fire with a beer. He enjoyed playing games with his grandchildren. Robert was a United States Army Veteran and received a National Defense Service Medal.</p>
+          <a href="https://www.dignitymemorial.com/obituaries/st-clair-shores-mi/robert-girard-12936510" target="_blank" rel="noopener" class="service-obit-link">View Full Obituary at Dignity Memorial \u2192</a>
+        </div>
+      </div>
+    </div>
     <div class="collage-section">
       <h2 class="collage-heading">A Few Memories</h2>
       <div class="collage-container" id="collageContainer">
@@ -1798,7 +1958,7 @@ function renderPhotosPage() {
     <div class="section-container">
       <div class="section-header">
         <h2>Photos of PaPa Bob</h2>
-        <p>Every photo tells a story. Here are some of the best ones.</p>
+        <p>Every photo tells a story. If you have one of Bob &mdash; from any chapter of his life &mdash; please share it here.</p>
       </div>
 
       <div style="text-align:center;margin-bottom:1.5rem;">
@@ -1827,11 +1987,11 @@ function renderPhotosPage() {
       <div class="section-container">
         <div class="section-header">
           <h2>Share a Photo of PaPa Bob</h2>
-          <p>Got a photo of Bob on your phone? From an old album? Upload it here.</p>
+          <p>Have a photo of Bob on your phone, or an old one you've scanned? This is the place for it. Every photo is a gift to the family.</p>
         </div>
         <div class="upload-buttons">
-          <button class="btn btn-gold" onclick="triggerUpload(false)">Upload a Photo</button>
-          <button class="btn btn-outline" onclick="triggerUpload(true)">Upload a Folder</button>
+          <button class="btn btn-gold" onclick="pickFiles(false)">Upload a Photo</button>
+          <button class="btn btn-outline" onclick="pickFiles(true)">Upload a Folder</button>
         </div>
         <div class="upload-form" id="uploadForm">
           <div class="file-info" id="fileInfo"></div>
@@ -1864,12 +2024,16 @@ function renderMessagesPage() {
   app.innerHTML = `
     <div class="section-container">
       <div class="section-header">
-        <h2>Leave Bob a Message</h2>
-        <p>Tell him what he means to you. He'll read every single one.</p>
+        <h2>Share a Memory of Bob</h2>
+        <p>Tell the family what Bob meant to you. Every message will be treasured.</p>
         <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
-          <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('guestbookModal'))">Leave a Message</button>
-          <button class="btn btn-outline btn-sm" onclick="printSection('guestbook')">&#x1F5A8; Print Guestbook</button>
+          <button class="btn btn-gold" onclick="openModal('guestbookModal')">Share a Memory</button>
+          <button class="btn btn-outline btn-sm" onclick="printSection('guestbook')">&#x1F5A8; Print Messages</button>
         </div>
+      </div>
+      <div class="messages-invitation">
+        <p>Whether you knew Bob for decades or just crossed paths once &mdash; your memory matters. Leave a message for the family here.</p>
+        <p class="messages-dignity-note">Already shared a memory on <a href="https://www.dignitymemorial.com/obituaries/st-clair-shores-mi/robert-girard-12936510" target="_blank" rel="noopener">Dignity Memorial</a>? It may appear here automatically. If not, we'd love for you to share it here too.</p>
       </div>
       <div class="guestbook-feed" id="guestbookFeed">
         <div class="empty-state">Loading messages...</div>
@@ -1887,9 +2051,9 @@ function renderFunFactsPage() {
     <div class="section-container">
       <div class="section-header">
         <h2>Things You Might Not Know About PaPa Bob</h2>
-        <p>Drop a fun fact. A story. Something only you know about him.</p>
+        <p>Help us paint the full picture of who Bob was. Share something only you might know.</p>
         <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
-          <button class="btn btn-gold" onclick="requireMagicWord(() => openModal('funfactModal'))">Share a Fun Fact</button>
+          <button class="btn btn-gold" onclick="openModal('funfactModal')">Share a Fun Fact</button>
           <button class="btn btn-outline btn-sm" onclick="printSection('funfacts')">&#x1F5A8; Print Fun Facts</button>
         </div>
       </div>
@@ -1908,9 +2072,9 @@ function renderWorldPage() {
     <div class="section-container">
       <div class="section-header">
         <h2>PaPa Bob's World</h2>
-        <p>Show him where you fit. Every person here is someone whose life he touched.</p>
-        <button class="btn btn-gold" style="margin-top:1rem;" onclick="requireMagicWord(() => openModal('treeModal'))">Add Yourself</button>
-        <p class="tree-form-hint" style="margin-top:0.5rem;">Already added yourself? Enter your name again to update your entry. &#x1F49B;</p>
+        <p>Every person here is someone whose life Bob touched. Whether you're family, a lifelong friend, or someone who knew him briefly &mdash; add yourself and show the family how wide his world reached.</p>
+        <button class="btn btn-gold" style="margin-top:1rem;" onclick="openModal('treeModal')">Add Yourself</button>
+        <p class="tree-form-hint" style="margin-top:0.5rem;">Already added yourself? Enter your name again to update your entry.</p>
       </div>
       <div class="polaroid-web-container" id="polaroid-web">
         <div class="polaroid-web-bob-row">
@@ -1941,45 +2105,21 @@ function renderSlideshowPage() {
 }
 
 // ============================================
-// MAGIC WORD
+// SERVICE INFO NAV
 // ============================================
-function requireMagicWord(callback) {
-  if (isUnlocked) { callback(); return; }
-  pendingAction = callback;
-  document.getElementById('magicGate').classList.add('open');
-  setTimeout(() => document.getElementById('magicInput').focus(), 100);
-}
-
-function checkMagicWord() {
-  const input = document.getElementById('magicInput');
-  const val = input.value.trim();
-  if (val.toLowerCase() === 'loveyou') {
-    isUnlocked = true;
-    sessionStorage.setItem('unlocked', 'true');
-    input.value = '';
-    document.getElementById('magicError').style.display = 'none';
-    const card = document.querySelector('.magic-gate-card');
-    playUnlockShimmer(card, () => {
-      document.getElementById('magicGate').classList.remove('open');
-      if (pendingAction) { pendingAction(); pendingAction = null; }
-    });
+function navigateToServiceInfo(event) {
+  if (event) event.preventDefault();
+  if (currentRoute === '/') {
+    const el = document.getElementById('service-info');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   } else {
-    document.getElementById('magicError').style.display = 'block';
-    input.classList.add('shake');
-    setTimeout(() => input.classList.remove('shake'), 400);
-    input.value = '';
-    input.focus();
+    history.pushState(null, '', '/#service-info');
+    routeTo('/');
+    setTimeout(() => {
+      const el = document.getElementById('service-info');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
   }
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && document.getElementById('magicGate').classList.contains('open')) {
-    checkMagicWord();
-  }
-});
-
-function getMagicHeader() {
-  return { 'X-Magic-Word': 'LoveYou' };
 }
 
 // ============================================
@@ -2063,7 +2203,7 @@ function renderGallery() {
   currentFilteredPhotos = photos;
 
   if (photos.length === 0 && allPhotos.length === 0) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Be the first to share a photo of PaPa Bob — he\'d love it &#x1F49B;</div>';
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Be the first to share a photo of PaPa Bob &#x1F49B;</div>';
     chipsContainer.style.display = 'none';
     return;
   }
@@ -2198,11 +2338,9 @@ function showMobileDownloadHint() {
 // ============================================
 // UPLOAD PHOTOS
 // ============================================
-function triggerUpload(isFolder) {
-  requireMagicWord(() => {
-    if (isFolder) document.getElementById('filePickerFolder').click();
-    else document.getElementById('filePickerSingle').click();
-  });
+function pickFiles(isFolder) {
+  if (isFolder) document.getElementById('filePickerFolder').click();
+  else document.getElementById('filePickerSingle').click();
 }
 
 function handleFileSelection(fileList) {
@@ -2292,7 +2430,7 @@ async function submitUpload() {
       progressBar.style.width = Math.round(((i + 1) / selectedFiles.length) * 80) + '%';
     }
     progressBar.style.width = '90%';
-    const res = await fetch(`${API_BASE}/photos/upload`, { method: 'POST', headers: getMagicHeader(), body: formData });
+    const res = await fetch(`${API_BASE}/photos/upload`, { method: 'POST', body: formData });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Upload failed');
     progressBar.style.width = '100%';
@@ -2326,7 +2464,7 @@ async function loadGuestbook() {
     if (!feed) return;
 
     if (entries.length === 0) {
-      feed.innerHTML = '<div class="empty-state">Be the first to leave Bob a message &#x1F49B;</div>';
+      feed.innerHTML = '<div class="empty-state">Be the first to share a memory of Bob &#x1F49B;</div>';
       return;
     }
 
@@ -2341,6 +2479,7 @@ async function loadGuestbook() {
           <div class="guestbook-card-message">${escapeHtml(e.message)}</div>`;
       if (e.signature_data) html += `<img class="guestbook-card-signature" src="${e.signature_data}" alt="Signature">`;
       if (e.photo_url) html += `<img class="guestbook-card-photo" src="${photoUrl(e.photo_url)}" alt="Photo with Bob" loading="lazy">`;
+      if (e.source === 'dignity_memorial') html += `<div class="dignity-badge"><span>Shared via</span> <a href="https://www.dignitymemorial.com/obituaries/st-clair-shores-mi/robert-girard-12936510" target="_blank" rel="noopener">Dignity Memorial</a></div>`;
       html += '</div>';
       return html;
     }).join('');
@@ -2432,11 +2571,11 @@ async function submitGuestbook() {
     const photoFile = document.getElementById('gbPhoto').files[0];
     if (photoFile) { const processed = await processImage(photoFile); formData.append('photo', processed, photoFile.name); }
 
-    const res = await fetch(`${API_BASE}/guestbook`, { method: 'POST', headers: getMagicHeader(), body: formData });
+    const res = await fetch(`${API_BASE}/guestbook`, { method: 'POST', body: formData });
     if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to submit'); }
 
     closeModal('guestbookModal');
-    showToast("Bob's going to love this \u{1F49B}");
+    showToast("Thank you for sharing. The family will treasure this. \u{1F49B}");
     launchHearts(btn);
     document.getElementById('gbName').value = '';
     document.getElementById('gbMessage').value = '';
@@ -2447,7 +2586,7 @@ async function submitGuestbook() {
     showToast(err.message || 'Something went wrong. Try again.', true);
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Send Bob Your Message \u{1F49B}';
+    btn.textContent = 'Share This Memory \u{1F49B}';
   }
 }
 
@@ -2462,7 +2601,7 @@ async function loadFunFacts() {
     if (!grid) return;
 
     if (facts.length === 0) {
-      grid.innerHTML = '<div class="empty-state">Be the first to share something about PaPa Bob that the rest of us don\'t know &#x1F49B;</div>';
+      grid.innerHTML = '<div class="empty-state">Be the first to share something about PaPa Bob that the rest of us might not know &#x1F49B;</div>';
       return;
     }
 
@@ -2492,7 +2631,7 @@ async function submitFunFact() {
   try {
     const res = await fetch(`${API_BASE}/funfacts`, {
       method: 'POST',
-      headers: { ...getMagicHeader(), 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, fact }),
     });
     if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to submit'); }
@@ -2507,7 +2646,7 @@ async function submitFunFact() {
     showToast(err.message || 'Something went wrong. Try again.', true);
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Add This Fact \u{1F49B}';
+    btn.textContent = 'Share This \u{1F49B}';
   }
 }
 
@@ -2635,14 +2774,14 @@ async function submitTreeNode() {
     const photoFile = document.getElementById('trPhoto').files[0];
     if (photoFile) { const processed = await processImage(photoFile); formData.append('photo', processed, photoFile.name); }
 
-    const res = await fetch(`${API_BASE}/tree`, { method: 'POST', headers: getMagicHeader(), body: formData });
+    const res = await fetch(`${API_BASE}/tree`, { method: 'POST', body: formData });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to add');
 
     if (result.action === 'updated') {
-      showToast("Your spot in PaPa Bob's World has been updated \u{1F49B}");
+      showToast("Your entry has been updated \u{1F49B}");
     } else {
-      showToast("You've been added to PaPa Bob's World \u{1F49B}");
+      showToast("You're part of PaPa Bob's World \u{1F49B}");
     }
     closeModal('treeModal');
 
@@ -2957,15 +3096,6 @@ function launchSparkles(triggerEl) {
   requestAnimationFrame(anim);
 }
 
-function playUnlockShimmer(modalEl, onComplete) {
-  const shimmer = document.createElement('div');
-  shimmer.className = 'magic-shimmer';
-  modalEl.style.position = 'relative';
-  modalEl.style.overflow = 'hidden';
-  modalEl.appendChild(shimmer);
-  setTimeout(() => { shimmer.remove(); onComplete(); }, 600);
-}
-
 // ============================================
 // UTIL
 // ============================================
@@ -2981,6 +3111,13 @@ function escapeHtml(str) {
 document.addEventListener('DOMContentLoaded', () => {
   Lightbox.init();
   routeTo(window.location.pathname);
+  // Handle #service-info hash on load
+  if (window.location.hash === '#service-info') {
+    setTimeout(() => {
+      const el = document.getElementById('service-info');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 400);
+  }
 });
 </script>
 </body>
