@@ -1505,6 +1505,50 @@ footer .footer-love {
 .messages-dignity-note a:hover {
   text-decoration: underline;
 }
+
+/* ============================================
+   MILITARY HONOR NOTE
+   ============================================ */
+.military-honor-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto 28px;
+  max-width: 520px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.military-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.military-honor-note p {
+  font-size: 0.82rem;
+  color: var(--text-sec);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.military-sub {
+  font-size: 0.75rem;
+  color: var(--text-sec);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .military-honor-note {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
 </style>
 </head>
 <body>
@@ -1842,18 +1886,18 @@ function renderHomePage() {
             <p class="service-card-detail">Donations may be made to the</p>
             <a href="https://www.cancer.org/involved/donate.html" target="_blank" rel="noopener" class="service-card-link">American Cancer Society \u2192</a>
           </div>
-          <!-- BURIAL PLACEHOLDER \u2014 add burial details here when available -->
-          <!--
           <div class="service-card">
             <div class="service-card-icon">\u2698</div>
             <h3 class="service-card-title">Burial</h3>
-            <p class="service-card-detail">Details to be announced</p>
+            <p class="service-card-detail">Great Lakes National Cemetery</p>
+            <p class="service-card-detail">Holly, Michigan</p>
+            <p class="service-card-note">Later in 2026</p>
+            <a href="https://maps.google.com/?q=Great+Lakes+National+Cemetery+Holly+MI" target="_blank" rel="noopener" class="service-card-link">Get Directions \u2192</a>
           </div>
-          -->
         </div>
         <div class="service-info-divider"></div>
         <div class="service-info-obituary">
-          <p>Robert Carl Girard Jr., age 76, passed away on June 19, 2026. He was born on March 1, 1950 in Detroit, Michigan. Robert is survived by his beloved wife of 49 years, Joan; loving children: John (Carol), Renee (Christopher) Burgess, Robert Girard III, and Julie (Daniel) Skielnik; dear grandchildren: John, Alex, Bret, Ian, Hadley, Elodie, Celine, Auden, Chloe, and Harrison; and caring siblings: Nora Stringer, Mark (Michelle), and Daniel. Robert loved fishing and sitting outside by the fire with a beer. He enjoyed playing games with his grandchildren. Robert was a United States Army Veteran and received a National Defense Service Medal.</p>
+          <p>Robert Carl Girard Jr., age 76, passed away on June 19, 2026. He was born on March 1, 1950 in Detroit, Michigan. Robert is survived by his beloved wife of 49 years, Joan; loving children: John (Carol), Renee (Christopher) Burgess, Robert Girard III, and Julie (Daniel) Skielnik; dear grandchildren: John, Alex, Bret, Ian, Hadley, Elodie, Celine, Auden, Chloe, and Harrison; and caring siblings: Nora Stringer, Mark (Michelle), and Daniel. Robert loved fishing and sitting outside by the fire with a beer. He enjoyed playing games with his grandchildren. Robert proudly served in the United States Army during the Vietnam War era, stationed in Germany. He received the National Defense Service Medal. He will be laid to rest with full military honors at Great Lakes National Cemetery in Holly, Michigan later in 2026.</p>
           <a href="https://www.dignitymemorial.com/obituaries/st-clair-shores-mi/robert-girard-12936510" target="_blank" rel="noopener" class="service-obit-link">View Full Obituary at Dignity Memorial \u2192</a>
         </div>
       </div>
@@ -2073,6 +2117,11 @@ function renderWorldPage() {
       <div class="section-header">
         <h2>PaPa Bob's World</h2>
         <p>Every person here is someone whose life Bob touched. Whether you're family, a lifelong friend, or someone who knew him briefly &mdash; add yourself and show the family how wide his world reached.</p>
+        <div class="military-honor-note">
+          <span class="military-icon">\u{1F396}\u{FE0F}</span>
+          <p>United States Army Veteran &mdash; Vietnam War Era &mdash; Stationed in Germany<br>
+          <span class="military-sub">National Defense Service Medal recipient</span></p>
+        </div>
         <button class="btn btn-gold" style="margin-top:1rem;" onclick="openModal('treeModal')">Add Yourself</button>
         <p class="tree-form-hint" style="margin-top:0.5rem;">Already added yourself? Enter your name again to update your entry.</p>
       </div>
