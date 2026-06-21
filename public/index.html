@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>PaPa Bob Girard</title>
 <meta name="description" content="A celebration of PaPa Bob Girard — share photos, messages, and memories.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,8 @@
    RESET & BASE
    ============================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { overflow-x: hidden; }
+img { max-width: 100%; height: auto; }
 
 :root {
   --bg: #0a0a0a;
@@ -78,8 +80,10 @@ option { color: var(--text); font-weight: 400; }
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 4rem 2rem;
 }
+@media (max-width: 768px) { .section-container { padding: 2.5rem 1rem; } }
+@media (max-width: 390px) { .section-container { padding: 2rem 0.75rem; } }
 
 .section-header {
   text-align: center;
@@ -153,7 +157,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem max(1.5rem, env(safe-area-inset-right, 0px)) 0.75rem max(1.5rem, env(safe-area-inset-left, 0px));
 }
 
 .nav-logo {
@@ -187,6 +191,8 @@ nav {
   background: none;
   border: none;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .nav-mobile {
@@ -202,7 +208,7 @@ nav {
 }
 
 .nav-mobile.open { display: flex; }
-.nav-mobile a { font-size: 1.5rem; color: var(--text); text-decoration: none; }
+.nav-mobile a { font-size: 1.5rem; color: var(--text); text-decoration: none; min-height: 48px; display: flex; align-items: center; }
 .nav-mobile a.active { color: var(--gold); }
 
 .nav-mobile-close {
@@ -213,7 +219,7 @@ nav {
   background: none; border: none; cursor: pointer;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .nav-links { display: none; }
   .nav-hamburger { display: block; }
 }
@@ -251,7 +257,7 @@ nav {
 @media (max-width: 768px) {
   .hero-fallback-bg {
     top: 48px;
-    background-size: contain;
+    background-size: cover;
     background-position: center top;
   }
 }
@@ -339,10 +345,25 @@ nav {
   position: relative;
   width: 100%;
   min-height: 600px;
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
-  .collage-container { min-height: 800px; }
+  .collage-container {
+    min-height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .collage-photo {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 0.85;
+  }
+  .collage-photo:hover { transform: none !important; }
 }
 
 .collage-photo {
@@ -393,6 +414,7 @@ nav {
   color: var(--text-sec);
   border: none;
   transition: all 0.2s;
+  min-height: 44px;
 }
 
 .gallery-toggle button.active {
@@ -427,11 +449,12 @@ nav {
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  gap: 12px;
 }
 
-@media (min-width: 600px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1024px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 769px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1025px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 390px) { .photo-grid { gap: 8px; } }
 
 .photo-card {
   cursor: zoom-in;
@@ -551,7 +574,7 @@ nav {
 
 .guestbook-card-name { font-weight: 600; color: var(--gold); }
 .guestbook-card-date { font-size: 0.8rem; color: var(--text-sec); }
-.guestbook-card-message { margin-bottom: 0.75rem; white-space: pre-wrap; }
+.guestbook-card-message { margin-bottom: 0.75rem; white-space: pre-wrap; word-break: break-word; }
 
 .guestbook-card-signature {
   max-height: 80px;
@@ -595,7 +618,7 @@ nav {
   margin-bottom: 1rem;
 }
 
-.fact-card-text { margin-bottom: 0.75rem; font-size: 1rem; }
+.fact-card-text { margin-bottom: 0.75rem; font-size: 1rem; word-break: break-word; }
 .fact-card-meta { font-size: 0.8rem; color: var(--text-sec); }
 
 /* ============================================
@@ -607,6 +630,7 @@ nav {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px 60px;
+  overflow: hidden;
 }
 
 .polaroid-web-bob-row {
@@ -803,16 +827,17 @@ nav {
 }
 
 @media (max-width: 768px) {
-  .polaroid-tier { gap: 12px; padding: 30px 0 8px; }
-  .polaroid-bob { width: 160px; padding: 8px 8px 22px; }
-  .polaroid-bob .polaroid-photo-area { height: 160px; }
-  .tier-1 .polaroid-card { width: 110px; }
-  .tier-1 .polaroid-photo-area { height: 110px; }
-  .tier-2 .polaroid-card { width: 90px; }
-  .tier-2 .polaroid-photo-area { height: 90px; }
-  .tier-3 .polaroid-card { width: 78px; }
-  .tier-3 .polaroid-photo-area { height: 78px; }
-  .tier-3 .polaroid-name { font-size: 0.68rem; }
+  .polaroid-tier { gap: 10px; padding: 30px 0 8px; }
+  .polaroid-bob { width: 140px; padding: 8px 8px 22px; }
+  .polaroid-bob .polaroid-photo-area { height: 140px; }
+  .tier-1 .polaroid-card { width: 100px; }
+  .tier-1 .polaroid-photo-area { height: 100px; }
+  .tier-2 .polaroid-card { width: 85px; }
+  .tier-2 .polaroid-photo-area { height: 85px; }
+  .tier-3 .polaroid-card { width: 72px; }
+  .tier-3 .polaroid-photo-area { height: 72px; }
+  .tier-3 .polaroid-name { font-size: 0.7rem; }
+  .polaroid-name { font-size: 0.75rem; }
   .polaroid-note-tooltip { top: calc(100% + 8px); bottom: auto; width: 150px; }
 }
 
@@ -927,7 +952,16 @@ nav {
   font-size: 0.9rem;
   cursor: pointer;
   width: auto;
+  min-height: 48px;
+  min-width: 48px;
 }
+
+@media (hover: none) {
+  .slideshow-controls.hidden { opacity: 1; pointer-events: all; }
+  .slideshow-nav.hidden { opacity: 1; pointer-events: all; }
+}
+
+.slideshow-caption { font-size: clamp(0.8rem, 2.5vw, 0.9rem); }
 
 .slideshow-nav {
   position: absolute;
@@ -979,9 +1013,14 @@ nav {
   padding: 2rem;
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
   position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 768px) {
+  .modal { border-radius: var(--radius-sm); padding: 1.5rem; max-width: calc(100vw - 24px); }
+  .modal .btn { min-height: 48px; }
 }
 
 .modal h3 {
@@ -1007,7 +1046,7 @@ nav {
    ============================================ */
 .toast-container {
   position: fixed;
-  bottom: 2rem;
+  bottom: max(2rem, env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 11000;
@@ -1015,6 +1054,7 @@ nav {
   flex-direction: column;
   gap: 0.5rem;
   align-items: center;
+  max-width: 90vw;
 }
 
 .toast {
@@ -1025,7 +1065,8 @@ nav {
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   animation: toastIn 0.3s ease;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
 }
 
 .toast.error { border-left-color: #8b1a1a; }
@@ -1323,7 +1364,7 @@ footer .footer-love {
 }
 
 .service-info-inner {
-  max-width: 860px;
+  max-width: 1060px;
   margin: 0 auto;
 }
 
@@ -1378,9 +1419,8 @@ footer .footer-love {
   border-radius: 12px;
   padding: 28px 24px;
   text-align: center;
-  flex: 1;
-  min-width: 200px;
-  max-width: 260px;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .service-card-icon {
@@ -1409,6 +1449,13 @@ footer .footer-love {
   color: var(--text-sec);
   font-style: italic;
   margin-top: 6px;
+}
+
+.service-card-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+  margin: 14px auto;
 }
 
 .service-card-link {
@@ -1452,10 +1499,15 @@ footer .footer-love {
   text-decoration: none;
 }
 
+@media (max-width: 1024px) {
+  .service-info-cards { gap: 16px; }
+  .service-card { min-width: 180px; flex: 1 1 calc(33% - 16px); }
+}
 @media (max-width: 768px) {
   .service-info-section { padding: 40px 16px; }
   .service-info-cards { flex-direction: column; align-items: center; }
-  .service-card { width: 100%; max-width: 340px; }
+  .service-card { width: 100%; max-width: 340px; flex: none; }
+  .service-card-link { min-height: 44px; display: inline-flex; align-items: center; }
 }
 
 /* ============================================
@@ -1871,10 +1923,7 @@ function renderHomePage() {
             <p class="service-card-detail">Thursday, June 25, 2026</p>
             <p class="service-card-detail">3:00 PM \u2013 8:00 PM</p>
             <p class="service-card-note">Memory sharing service at 6:30 PM</p>
-          </div>
-          <div class="service-card">
-            <div class="service-card-icon">\u{1F4CD}</div>
-            <h3 class="service-card-title">Location</h3>
+            <div class="service-card-divider"></div>
             <p class="service-card-detail">Kaul Funeral Home</p>
             <p class="service-card-detail">28433 Jefferson Ave.</p>
             <p class="service-card-detail">St. Clair Shores, MI</p>
@@ -1932,67 +1981,75 @@ function renderCollage() {
     return;
   }
 
-  // Pick up to 16 random photos
   const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
   const photos = shuffled.slice(0, 20);
-
   const isMobile = window.innerWidth < 768;
-  const containerW = container.clientWidth;
-  const padding = 20;
-  const minSize = isMobile ? 130 : 160;
-  const maxSize = isMobile ? 200 : 260;
-
-  // Place photos with scatter algorithm
-  const placed = [];
-  const positions = [];
-
-  for (let i = 0; i < photos.length; i++) {
-    const w = minSize + Math.random() * (maxSize - minSize);
-    const h = w * (0.75 + Math.random() * 0.5); // vary aspect
-    const rotation = (Math.random() - 0.5) * 16; // -8 to +8 deg
-    let x, y, attempts = 0, ok = false;
-
-    while (attempts < 80) {
-      x = padding + Math.random() * (containerW - w - padding * 2);
-      y = padding + i * (isMobile ? 70 : 55) + Math.random() * 40;
-      ok = true;
-
-      for (const p of positions) {
-        const dx = (x + w/2) - (p.x + p.w/2);
-        const dy = (y + h/2) - (p.y + p.h/2);
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 80) { ok = false; break; }
-      }
-
-      if (ok) break;
-      attempts++;
-    }
-
-    if (!ok) {
-      x = padding + Math.random() * (containerW - w - padding * 2);
-      y = padding + i * (isMobile ? 80 : 60);
-    }
-
-    positions.push({ x, y, w, h });
-    placed.push({ photo: photos[i], x, y, w, h, rotation });
-  }
-
-  // Calculate container height
-  const maxBottom = Math.max(...placed.map(p => p.y + p.h)) + padding;
-  container.style.height = Math.max(isMobile ? 800 : 600, maxBottom) + 'px';
 
   container.innerHTML = '';
-  placed.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'collage-photo';
-    div.style.cssText = `left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rotation}deg);cursor:zoom-in;`;
-    div.innerHTML = `<img src="${photoUrl(p.photo.url)}" alt="Photo of PaPa Bob" loading="lazy">`;
-    div.addEventListener('click', (e) => {
-      e.stopPropagation();
-      Lightbox.open([{ key: p.photo.key, url: photoUrl(p.photo.url), uploader_name: p.photo.uploader_name, year: p.photo.year }], 0, false);
+  container.style.height = '';
+
+  if (isMobile) {
+    // Mobile: CSS grid handles layout, just add photos with slight rotation
+    photos.forEach((photo, idx) => {
+      const rotation = (Math.random() - 0.5) * 8; // -4 to +4 deg
+      const div = document.createElement('div');
+      div.className = 'collage-photo';
+      div.style.transform = `rotate(${rotation}deg)`;
+      div.style.cursor = 'zoom-in';
+      div.innerHTML = `<img src="${photoUrl(photo.url)}" alt="Photo of PaPa Bob" loading="lazy">`;
+      div.addEventListener('click', (e) => {
+        e.stopPropagation();
+        Lightbox.open([{ key: photo.key, url: photoUrl(photo.url), uploader_name: photo.uploader_name, year: photo.year }], 0, false);
+      });
+      container.appendChild(div);
     });
-    container.appendChild(div);
-  });
+  } else {
+    // Desktop: absolute scatter layout
+    const containerW = container.clientWidth;
+    const padding = 20;
+    const minSize = 160;
+    const maxSize = 260;
+    const placed = [];
+    const positions = [];
+
+    for (let i = 0; i < photos.length; i++) {
+      const w = minSize + Math.random() * (maxSize - minSize);
+      const h = w * (0.75 + Math.random() * 0.5);
+      const rotation = (Math.random() - 0.5) * 16;
+      let x, y, attempts = 0, ok = false;
+
+      while (attempts < 80) {
+        x = padding + Math.random() * (containerW - w - padding * 2);
+        y = padding + i * 55 + Math.random() * 40;
+        ok = true;
+        for (const p of positions) {
+          const dx = (x + w/2) - (p.x + p.w/2);
+          const dy = (y + h/2) - (p.y + p.h/2);
+          if (Math.sqrt(dx*dx + dy*dy) < 80) { ok = false; break; }
+        }
+        if (ok) break;
+        attempts++;
+      }
+      if (!ok) { x = padding + Math.random() * (containerW - w - padding * 2); y = padding + i * 60; }
+      positions.push({ x, y, w, h });
+      placed.push({ photo: photos[i], x, y, w, h, rotation });
+    }
+
+    const maxBottom = Math.max(...placed.map(p => p.y + p.h)) + padding;
+    container.style.height = Math.max(600, maxBottom) + 'px';
+
+    placed.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'collage-photo';
+      div.style.cssText = `left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rotation}deg);cursor:zoom-in;`;
+      div.innerHTML = `<img src="${photoUrl(p.photo.url)}" alt="Photo of PaPa Bob" loading="lazy">`;
+      div.addEventListener('click', (e) => {
+        e.stopPropagation();
+        Lightbox.open([{ key: p.photo.key, url: photoUrl(p.photo.url), uploader_name: p.photo.uploader_name, year: p.photo.year }], 0, false);
+      });
+      container.appendChild(div);
+    });
+  }
 }
 
 // --- PHOTOS PAGE ---
@@ -2764,7 +2821,7 @@ function renderPolaroidWeb() {
 
   [tier1Row, tier2Row, tier3Row].forEach(r => r.style.display = r.children.length === 0 ? 'none' : '');
 
-  requestAnimationFrame(() => drawConnectionLines());
+  requestAnimationFrame(() => setTimeout(() => drawConnectionLines(), 100));
 }
 
 function drawConnectionLines() {
@@ -2923,11 +2980,15 @@ function showSlideshowControls() {
   prev.classList.remove('hidden');
   next.classList.remove('hidden');
   clearTimeout(controlsTimeout);
-  controlsTimeout = setTimeout(() => {
-    controls.classList.add('hidden');
-    prev.classList.add('hidden');
-    next.classList.add('hidden');
-  }, 3000);
+  // On touch devices, keep controls always visible
+  const isTouchDevice = window.matchMedia('(hover: none)').matches;
+  if (!isTouchDevice) {
+    controlsTimeout = setTimeout(() => {
+      controls.classList.add('hidden');
+      prev.classList.add('hidden');
+      next.classList.add('hidden');
+    }, 3000);
+  }
 }
 
 function slideshowNext() {
